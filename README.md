@@ -1,4 +1,4 @@
-``markdown
+
 # ThiQaX
 
 ThiQaX is a blockchain-powered recruitment platform building trust between Kenyan job seekers and Middle Eastern employers through transparent verification, secure payments, and digital identity authentication.
@@ -25,6 +25,26 @@ ThiQaX (derived from "thiqa" - ثقة, the Arabic word for "trust") addresses th
 - **Payment Integration:** Mobile money and escrow system
 - **Infrastructure:** Docker, CI/CD with GitHub Actions
 
+## Authentication System
+
+The ThiQaX platform includes a comprehensive authentication system with the following features:
+
+- User registration with email verification
+- Secure login with JWT tokens
+- Password reset functionality
+- Role-based authorization
+- KYC verification support
+
+### Authentication Endpoints:
+
+- POST /api/v1/auth/register - Register a new user
+- POST /api/v1/auth/login - Authenticate user and get token
+- GET /api/v1/auth/logout - Logout user and clear cookie
+- GET /api/v1/auth/me - Get current user profile
+- POST /api/v1/auth/forgotpassword - Request password reset
+- PUT /api/v1/auth/resetpassword/:resettoken - Reset password
+- GET /api/v1/auth/verifyemail/:verificationtoken - Verify email address
+- POST /api/v1/auth/resendverification - Resend verification email
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
