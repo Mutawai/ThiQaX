@@ -6,13 +6,16 @@ const morgan = require('morgan');
 const path = require('path');
 const errorHandler = require('./middleware/errorHandler');
 const { handleUploadError } = require('./middleware/fileUpload');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 
 // Import all route files
 const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes'); // Add this new import
+const profileRoutes = require('./routes/profileRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const jobRoutes = require('./routes/jobRoutes');
+const applicationRoutes = require('./routes/applicationRoutes'); // Add application routes
 
 const app = express();
 
@@ -30,6 +33,9 @@ if (process.env.NODE_ENV !== 'production') {
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 }
 
+// API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
@@ -37,15 +43,19 @@ app.get('/health', (req, res) => {
 
 // Base route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to ThiQaX API' });
+  res.json({ 
+    message: 'Welcome to ThiQaX API',
+    documentation: '/api-docs'
+  });
 });
 
 // Mount routes
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/profile', profileRoutes); // Add this new route
+app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/jobs', jobRoutes);
+app.use('/api/v1/applications', applicationRoutes); // Mount application routes
 
 // Error handling middleware
 app.use(errorHandler);
