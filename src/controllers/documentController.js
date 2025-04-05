@@ -6,6 +6,8 @@ const User = require('../models/User');
 const documentUploadService = require('../services/documentUploadService');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+const notificationService = require('../services/notificationService');
+const path = require('path');
 
 // @desc    Upload a new document
 // @route   POST /api/v1/documents
@@ -70,6 +72,9 @@ exports.uploadDocument = asyncHandler(async (req, res, next) => {
       await profile.save();
     }
   }
+  
+  // Notify admins about new document upload
+  await notificationService.newDocumentUploaded(document);
   
   res.status(201).json({
     success: true,
@@ -350,6 +355,9 @@ exports.verifyDocument = asyncHandler(async (req, res, next) => {
   // Update document verification status
   await document.updateVerificationStatus(status, req.user.id, notes);
   
+  // Send notification to document owner
+  await notificationService.documentStatusChanged(document, status, req.user.id, notes);
+  
   // If document is verified or rejected, update profile KYC status
   if (['verified', 'rejected'].includes(status)) {
     const profile = await Profile.findOne({ user: document.owner });
@@ -368,12 +376,21 @@ exports.verifyDocument = asyncHandler(async (req, res, next) => {
         if (allVerified) {
           profile.kycStatus = 'verified';
           await profile.save();
+          
+          // Send KYC complete notification
+          await notificationService.kycVerificationComplete(document.owner);
         }
       } else if (status === 'rejected') {
         // If critical document is rejected, update KYC status
         if (document.metadata.isCritical) {
           profile.kycStatus = 'rejected';
           await profile.save();
+          
+          // Send KYC rejected notification
+          await notificationService.kycVerificationRejected(
+            document.owner, 
+            notes || 'One or more critical documents were rejected'
+          );
         }
       }
     }
