@@ -1,4 +1,4 @@
-// File: src/services/notificationService.js
+// src/services/notificationService.js
 
 const Notification = require('../models/Notification');
 const User = require('../models/User');
@@ -19,13 +19,21 @@ const notificationService = {
    * @returns {Promise<Object>} Created notification
    */
   createNotification: async (data) => {
+    // Verify recipient exists
+    const recipient = await User.findById(data.recipient);
+    if (!recipient) {
+      throw new Error('Recipient not found');
+    }
+
     const notification = await Notification.create({
       recipient: data.recipient,
       type: data.type,
       title: data.title,
       message: data.message,
       data: data.data || {},
-      sender: data.sender || null
+      sender: data.sender || null,
+      read: false,
+      readAt: null
     });
     
     return notification;
@@ -244,6 +252,180 @@ const notificationService = {
       { recipient: userId, read: false },
       { read: true, readAt: Date.now() }
     );
+  },
+
+  /**
+   * Send notification for job status changes
+   * @param {string} jobId - ID of the job that changed
+   * @param {string} oldStatus - Previous job status
+   * @param {string} newStatus - New job status
+   * @param {Array<string>} [applicantIds] - Optional array of applicant IDs to notify
+   * @returns {Promise<Array>} Created notifications
+   */
+  jobStatusChanged: async (jobId, oldStatus, newStatus, applicantIds = []) => {
+    try {
+      const notifications = [];
+      const Job = require('../models/Job'); // Import here to avoid circular dependencies
+      const job = await Job.findById(jobId);
+      
+      if (!job) {
+        throw new Error('Job not found');
+      }
+
+      // Notify job poster
+      const posterNotification = await notificationService.createNotification({
+        recipient: job.postedBy,
+        type: 'job-status',
+        title: 'Job Status Update',
+        message: `Your job listing "${job.title}" status has changed from ${oldStatus} to ${newStatus}.`,
+        data: { jobId, oldStatus, newStatus }
+      });
+      
+      notifications.push(posterNotification);
+
+      // Notify applicants if provided
+      if (applicantIds.length > 0) {
+        for (const applicantId of applicantIds) {
+          const notification = await notificationService.createNotification({
+            recipient: applicantId,
+            type: 'job-status',
+            title: 'Job Status Update',
+            message: `A job you applied for "${job.title}" has changed status to ${newStatus}.`,
+            data: { jobId, oldStatus, newStatus }
+          });
+          
+          notifications.push(notification);
+        }
+      }
+
+      return notifications;
+    } catch (error) {
+      console.error('Error sending job status notification:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Send notification for application milestone events
+   * @param {string} applicationId - ID of the application
+   * @param {string} milestone - The milestone achieved
+   * @param {Object} details - Additional milestone details
+   * @returns {Promise<Array>} Created notifications
+   */
+  applicationMilestoneChanged: async (applicationId, milestone, details = {}) => {
+    try {
+      const notifications = [];
+      const Application = require('../models/Application'); // Import here to avoid circular dependencies
+      
+      const application = await Application.findById(applicationId)
+        .populate('jobId', 'title postedBy')
+        .populate('applicantId', 'name');
+      
+      if (!application) {
+        throw new Error('Application not found');
+      }
+
+      // Define milestone messages
+      const milestoneMessages = {
+        'INTERVIEW_SCHEDULED': `Your interview for "${application.jobId.title}" has been scheduled.`,
+        'OFFER_EXTENDED': `Congratulations! You've received a job offer for "${application.jobId.title}".`,
+        'ONBOARDING_STARTED': `Onboarding has begun for your position at "${application.jobId.title}".`,
+        'VISA_PROCESSING': `Visa processing has started for your position at "${application.jobId.title}".`,
+        'TRAVEL_ARRANGED': `Travel arrangements have been made for your position at "${application.jobId.title}".`,
+        'SHORTLISTED': `Your application for "${application.jobId.title}" has been shortlisted.`,
+        'REJECTED': `We regret to inform you that your application for "${application.jobId.title}" was not selected.`
+      };
+
+      const message = milestoneMessages[milestone] || 
+        `Your application for "${application.jobId.title}" has reached the ${milestone} milestone.`;
+
+      // Notify applicant
+      const applicantNotification = await notificationService.createNotification({
+        recipient: application.applicantId._id,
+        type: 'application-milestone',
+        title: `Application Update: ${milestone}`,
+        message,
+        data: { 
+          applicationId,
+          jobId: application.jobId._id,
+          milestone,
+          ...details
+        }
+      });
+      
+      notifications.push(applicantNotification);
+
+      // Notify job poster
+      const posterNotification = await notificationService.createNotification({
+        recipient: application.jobId.postedBy,
+        type: 'application-milestone',
+        title: `Application Update: ${milestone}`,
+        message: `${application.applicantId.name}'s application has reached the ${milestone} milestone.`,
+        data: { 
+          applicationId,
+          jobId: application.jobId._id,
+          applicantId: application.applicantId._id,
+          milestone,
+          ...details
+        }
+      });
+      
+      notifications.push(posterNotification);
+
+      return notifications;
+    } catch (error) {
+      console.error('Error sending application milestone notification:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Send profile update notification
+   * @param {string} userId - User ID
+   * @param {string} updateType - Type of profile update
+   * @param {Object} details - Additional details
+   * @returns {Promise<Object>} Created notification
+   */
+  profileUpdated: async (userId, updateType, details = {}) => {
+    try {
+      const updateMessages = {
+        'PROFILE_COMPLETED': 'Your profile has been completed successfully.',
+        'PROFILE_INCOMPLETE': 'Your profile is incomplete. Please complete all required fields.',
+        'PROFILE_APPROVED': 'Your profile has been approved by our administrators.',
+        'PROFILE_REJECTED': 'Your profile requires changes before approval.',
+        'KYC_PENDING': 'Your identity verification is pending. We will notify you once verified.'
+      };
+      
+      const message = updateMessages[updateType] || 'Your profile has been updated.';
+      
+      return notificationService.createNotification({
+        recipient: userId,
+        type: 'profile-update',
+        title: 'Profile Update',
+        message,
+        data: { updateType, ...details }
+      });
+    } catch (error) {
+      console.error('Error sending profile update notification:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get unread notification count for a user
+   * @param {string} userId - User ID
+   * @returns {Promise<number>} Count of unread notifications
+   */
+  getUnreadCount: async (userId) => {
+    try {
+      return await Notification.countDocuments({ 
+        recipient: userId, 
+        read: false 
+      });
+    } catch (error) {
+      console.error('Error getting unread count:', error);
+      throw error;
+    }
   }
 };
 
