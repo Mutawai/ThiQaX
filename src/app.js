@@ -15,14 +15,14 @@ const globalErrorHandler = require('./middleware/errorHandler');
 const { handleUploadError } = require('./middleware/fileUpload');
 
 // Import all routes
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const profileRoutes = require('./routes/profileRoutes');
-const jobRoutes = require('./routes/jobRoutes');
-const applicationRoutes = require('./routes/applicationRoutes');
-const documentRoutes = require('./routes/documentRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
-const integrationRoutes = require('./routes/integrationRoutes');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+const profileRoutes = require('./routes/profile');
+const jobRoutes = require('./routes/job');
+const applicationRoutes = require('./routes/application');
+const documentRoutes = require('./routes/document');
+const notificationRoutes = require('./routes/notification');
+const integrationRoutes = require('./routes/integration');
 
 const app = express();
 
