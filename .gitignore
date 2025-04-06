@@ -100,7 +100,7 @@ dist
 # vuepress build output
 .vuepress/dist
 
-# vuepress v2.x temp and cache directory
+# vitepress v2.x temp and cache directory
 .temp
 .cache
 
@@ -134,3 +134,24 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# ThiQaX specific additions
+# Upload directory contents (but keep the directory)
+uploads/*
+!uploads/.gitkeep
+
+# Local MongoDB data
+.mongodb/
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Project specific build directories
+build/
+dist/
+
+# macOS specific
+.DS_Store
