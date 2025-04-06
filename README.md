@@ -1,147 +1,230 @@
+# ThiQaX - Trust-Based Recruitment Platform
 
-# ThiQaX
+![ThiQaX Logo](https://via.placeholder.com/200x60?text=ThiQaX)
 
-ThiQaX is a blockchain-powered recruitment platform building trust between Kenyan job seekers and Middle Eastern employers through transparent verification, secure payments, and digital identity authentication.
+A blockchain-powered recruitment platform building trust between Kenyan job seekers and Middle Eastern employers through transparent verification, secure payments, and digital identity authentication.
 
 ## 🌟 Overview
 
-ThiQaX (derived from "thiqa" - ثقة, the Arabic word for "trust") addresses the trust deficit in Middle Eastern job recruitment by leveraging blockchain, AI, and digital identity verification to create a seamless, reliable experience for all stakeholders.
+ThiQaX (pronounced "thika-x", from the Arabic word "thiqa" meaning "trust") addresses the trust deficit in Middle Eastern job recruitment by implementing:
 
-## 🚀 Core Features
+- **Information Authentication**: Blockchain-verified document validation
+- **Transparent Transactions**: Escrow-based payment system
+- **Digital Identity Verification**: Secure KYC processes
+- **User-Friendly Experience**: Mobile-first design for Kenyan Gen Z job seekers
 
-- **Blockchain-Verified Information** - Immutable record of credentials, job contracts, and transactions
-- **AI-Powered Verification** - Intelligent detection of fraudulent activities
-- **Escrow-based Payment System** - Transparent financial transactions with real-time auditing
-- **KYC-based Digital Identity** - Secure verification of all platform participants
-- **Automated Dispute Resolution** - Fair and efficient conflict mediation
-- **Mobile-First Experience** - Intuitive UX/UI optimized for the Kenyan Gen Z job seeker
+## 🏗️ Architecture
 
-## 💻 Technology Stack
+The platform follows a modern architecture with:
 
-- **Front-End:** React.js with responsive, mobile-first UI
-- **Back-End:** Node.js with Express.js
-- **Database:** MongoDB
-- **Authentication:** JWT and third-party KYC verification
-- **Payment Integration:** Mobile money and escrow system
-- **Infrastructure:** Docker, CI/CD with GitHub Actions
+- **RESTful API Backend**: Node.js with Express
+- **React Frontend**: Component-based UI with Material-UI
+- **MongoDB Database**: Document-oriented data storage
+- **JWT Authentication**: Secure token-based authentication
 
-## 🚀 Development Update - April 2025
+## 💻 Tech Stack
 
-### Recently Added Features
-- ✅ Complete frontend authentication components
-  - Login and registration forms with validation
-  - User type selection interface (job seeker, agent, sponsor)
-  - Password reset and email verification flows
-- ✅ Dashboard shell implementation
-  - Responsive navigation header with user menu
-  - Role-based sidebar navigation
-  - Mobile-responsive layout
+### Backend
+- Node.js & Express.js
+- MongoDB with Mongoose
+- JWT for authentication
+- Winston for logging
+- Express Validator for input validation
+- Swagger for API documentation
 
-### Current Project Structure
-```
-src/
-├── components/
-│   ├── auth/            # Authentication components
-│   └── dashboard/       # Dashboard shell and navigation
-├── pages/
-│   └── auth/            # Page containers for auth flows
-├── services/
-│   └── authService.js   # Authentication API service
-├── routes/              # Application routing
-└── App.js               # Main application component
-```
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-- Node.js (v16.x or later)
-- npm (v8.x or later)
-- Git
-- MongoDB (local or connection string)
-
-### Installation Steps
-
-```bash
-# Clone the repository
-git clone https://github.com/Mutawai/ThiQaX.git
-cd ThiQaX
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
-
-# Start development server
-npm run dev
-```
+### Frontend
+- React.js
+- Material-UI
+- React Router
+- Redux Toolkit for state management
+- Formik & Yup for form validation
+- Axios for API communication
 
 ## 📁 Project Structure
 
+The project follows a monorepo structure:
+
 ```
-thiqax/
-├── src/
-│   ├── controllers/    # Request handlers
-│   ├── models/         # Database models
-│   ├── routes/         # API routes
-│   ├── middleware/     # Middleware functions
-│   ├── config/         # Configuration files
-│   ├── utils/          # Utility functions
-│   ├── services/       # Business logic
-│   ├── app.js          # Express application
-│   └── server.js       # Server entry point
-├── tests/              # Test files
-├── .env.example        # Example environment variables
-├── .gitignore          # Git ignore file
-├── package.json        # Project dependencies
-└── README.md           # Project documentation
+ThiQaX/
+├── src/                  <- Backend source code
+│   ├── config/           <- Configuration files
+│   ├── controllers/      <- API controllers
+│   ├── middleware/       <- Express middleware
+│   ├── models/           <- Mongoose data models
+│   ├── routes/           <- API routes
+│   ├── services/         <- Business logic services
+│   ├── utils/            <- Utility functions
+│   ├── integration/      <- System integration services 
+│   ├── app.js            <- Express application
+│   └── server.js         <- Server entry point
+├── client/               <- Frontend source code
+│   ├── src/              
+│   │   ├── components/   <- Reusable UI components
+│   │   ├── pages/        <- Page components
+│   │   ├── services/     <- API service connectors
+│   │   ├── store/        <- Redux state management
+│   │   ├── utils/        <- Utility functions
+│   │   ├── hooks/        <- Custom React hooks
+│   │   ├── assets/       <- Static assets
+│   │   ├── App.jsx       <- Main application component
+│   │   └── index.js      <- Entry point
+│   └── package.json      <- Frontend dependencies
+├── tests/                <- Backend test files
+├── uploads/              <- Document upload directory
+├── logs/                 <- Application logs
+├── package.json          <- Backend dependencies
+└── README.md             <- This file
 ```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16.x or later)
+- MongoDB (v4.4 or later)
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Mutawai/ThiQaX.git
+   cd ThiQaX
+   ```
+
+2. **Install backend dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Install frontend dependencies**
+   ```bash
+   cd client
+   npm install
+   cd ..
+   ```
+
+4. **Environment configuration**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration values
+   ```
+
+5. **Start the development servers**
+   ```bash
+   # Start backend (from project root)
+   npm run dev
+   
+   # Start frontend (in another terminal)
+   cd client
+   npm start
+   ```
+
+6. **Access the application**
+   - Backend API: http://localhost:5000
+   - API Documentation: http://localhost:5000/api-docs
+   - Frontend: http://localhost:3000
+
+## 🛠️ Development Workflow
+
+### Branching Strategy
+
+- `main` - Production-ready code
+- `development` - Integration branch for features
+- `feature/[feature-name]` - Feature branches
+- `bugfix/[bug-name]` - Bug fix branches
+
+### Commit Message Format
+
+We follow the conventional commits specification:
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation changes
+- `style:` Code style changes
+- `refactor:` Code refactoring
+- `test:` Test additions or modifications
+- `chore:` Maintenance tasks
+
+### Pull Request Process
+
+1. Create a branch from `development`
+2. Implement your changes
+3. Ensure code passes linting and tests
+4. Submit a PR to the `development` branch
+5. Request a review
+6. Address feedback
 
 ## 🧪 Testing
 
+The project implements comprehensive testing:
+
 ```bash
-# Run tests
+# Run all backend tests
 npm test
 
-# Run tests with coverage
-npm run test:coverage
+# Run frontend tests
+cd client
+npm test
 ```
 
-## 📝 Development Workflow
+Test categories:
+- **Unit Tests**: Individual functions and components
+- **Integration Tests**: API endpoints and service interactions
+- **E2E Tests**: Complete user flows
 
-1. Create a feature branch from `development`: `git checkout -b feature/feature-name`
-2. Implement your changes with tests
-3. Commit using conventional commit format: `feat: add user authentication`
-4. Push your branch and create a pull request to `development`
-5. Address review feedback
-6. After approval, your changes will be merged
+## 📜 API Documentation
 
-## 🚀 Implementation Roadmap
+API documentation is available via Swagger UI at `/api-docs` when the server is running.
 
-### Phase I: MVP Development
-- Core user authentication and profiles
-- Basic job posting and application system
-- KYC verification foundation
+Key API endpoints:
+- `/api/v1/auth` - Authentication endpoints
+- `/api/v1/users` - User management
+- `/api/v1/profiles` - Profile management
+- `/api/v1/jobs` - Job listings
+- `/api/v1/applications` - Job applications
+- `/api/v1/documents` - Document verification
 
-### Phase II: Enhanced Verification & Transparency
-- Blockchain ledger integration
-- Digital certificates
-- Reputation and rating system
+## 📋 Features
 
-### Phase III: AI & Community Features
-- AI-powered fraud detection
-- Automated dispute resolution
-- Community engagement tools
+### Core Features
+- User authentication and authorization
+- Profile management with KYC verification
+- Document upload and verification
+- Job posting and application
+- Application tracking
+- Notification system
 
-## 🤝 Contributing
+### Upcoming Features (Phase 2)
+- Blockchain-based verification certificates
+- Escrow payment system
+- AI-powered document verification
+- Mobile application
+- Real-time messaging
 
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+## 🔑 Security Measures
+
+- JWT-based authentication with refresh tokens
+- Password hashing with bcrypt
+- Input validation and sanitization
+- Rate limiting for API endpoints
+- CORS protection
+- Secure file upload handling
+
+## 📞 Contact
+
+Have questions about ThiQaX? Reach out to us:
+
+- **Phone**: +254100851004
+- **Email**: scribemosaic@gmail.com
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📞 +254100851004 Contact: scribemosaic@gmail.com
+## 👥 Contributors
 
-For any questions or suggestions, please open an issue or contact the repository administrators.
+- Mutawai Team
+
+---
+
+© 2025 ThiQaX. All rights reserved.
