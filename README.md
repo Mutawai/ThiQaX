@@ -1,230 +1,168 @@
-# ThiQaX - Trust-Based Recruitment Platform
+# ThiQaX Platform
 
-![ThiQaX Logo](https://via.placeholder.com/200x60?text=ThiQaX)
+ThiQaX is a trust-based recruitment platform designed to address the trust deficit in Middle Eastern job recruitment. The platform ensures transparency by authenticating information, securing financial transactions, and building trust among recruiters, job seekers, and sponsors through blockchain, AI, and digital identity verification.
 
-A blockchain-powered recruitment platform building trust between Kenyan job seekers and Middle Eastern employers through transparent verification, secure payments, and digital identity authentication.
+## Project Overview
 
-## 🌟 Overview
+ThiQaX (derived from "thiqa" - Arabic for "trust") provides:
 
-ThiQaX (pronounced "thika-x", from the Arabic word "thiqa" meaning "trust") addresses the trust deficit in Middle Eastern job recruitment by implementing:
+- **Verified Information**: Blockchain-based verification of documents and credentials
+- **Secure Transactions**: Escrow-based payment system with transparent money flow
+- **Digital Identity**: KYC-based identity verification for all platform users
+- **Automated Resolution**: Smart dispute resolution to mediate conflicts
+- **Mobile-First Experience**: Intuitive interface designed for Kenyan Gen Z job seekers
 
-- **Information Authentication**: Blockchain-verified document validation
-- **Transparent Transactions**: Escrow-based payment system
-- **Digital Identity Verification**: Secure KYC processes
-- **User-Friendly Experience**: Mobile-first design for Kenyan Gen Z job seekers
-
-## 🏗️ Architecture
-
-The platform follows a modern architecture with:
-
-- **RESTful API Backend**: Node.js with Express
-- **React Frontend**: Component-based UI with Material-UI
-- **MongoDB Database**: Document-oriented data storage
-- **JWT Authentication**: Secure token-based authentication
-
-## 💻 Tech Stack
+## Technology Stack
 
 ### Backend
-- Node.js & Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- Winston for logging
-- Express Validator for input validation
-- Swagger for API documentation
+- **Framework**: Node.js with Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT with refresh tokens
+- **File Management**: Multer for document uploads
+- **Documentation**: Swagger UI
+- **Testing**: Jest, Supertest, MongoDB Memory Server
 
 ### Frontend
-- React.js
-- Material-UI
-- React Router
-- Redux Toolkit for state management
-- Formik & Yup for form validation
-- Axios for API communication
+- **Framework**: React with React Router
+- **State Management**: Redux with Redux Toolkit
+- **UI Components**: Material UI
+- **Form Handling**: Formik with Yup validation
+- **API Integration**: Axios
+- **Testing**: React Testing Library, Jest
 
-## 📁 Project Structure
+## Features
 
-The project follows a monorepo structure:
+### Core Platform Features
+- **User Authentication**: Secure login, registration, email verification
+- **Dashboard**: Role-specific interfaces for job seekers, agents, and admins
+- **Document Management**: Upload, verification, and expiration tracking
+- **Job Management**: Posting, search, and application tracking
+- **Profile Management**: User profiles with verification status
+- **Notification System**: Real-time updates for application status
 
-```
-ThiQaX/
-├── src/                  <- Backend source code
-│   ├── config/           <- Configuration files
-│   ├── controllers/      <- API controllers
-│   ├── middleware/       <- Express middleware
-│   ├── models/           <- Mongoose data models
-│   ├── routes/           <- API routes
-│   ├── services/         <- Business logic services
-│   ├── utils/            <- Utility functions
-│   ├── integration/      <- System integration services 
-│   ├── app.js            <- Express application
-│   └── server.js         <- Server entry point
-├── client/               <- Frontend source code
-│   ├── src/              
-│   │   ├── components/   <- Reusable UI components
-│   │   ├── pages/        <- Page components
-│   │   ├── services/     <- API service connectors
-│   │   ├── store/        <- Redux state management
-│   │   ├── utils/        <- Utility functions
-│   │   ├── hooks/        <- Custom React hooks
-│   │   ├── assets/       <- Static assets
-│   │   ├── App.jsx       <- Main application component
-│   │   └── index.js      <- Entry point
-│   └── package.json      <- Frontend dependencies
-├── tests/                <- Backend test files
-├── uploads/              <- Document upload directory
-├── logs/                 <- Application logs
-├── package.json          <- Backend dependencies
-└── README.md             <- This file
-```
+### Phase 2 Features (Upcoming)
+- **Payment & Escrow**: Secure financial transactions
+- **Blockchain Verification**: Immutable verification records
+- **AI Verification**: Automated document and fraud detection
+- **Advanced Messaging**: Real-time communication between parties
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-
 - Node.js (v16.x or later)
-- MongoDB (v4.4 or later)
-- Git
+- MongoDB (v4.x or later)
+- npm or yarn
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Mutawai/ThiQaX.git
-   cd ThiQaX
+1. Clone the repository
+   ```
+   git clone https://github.com/MutawaiTrust/thiqax.git
+   cd thiqax
    ```
 
-2. **Install backend dependencies**
-   ```bash
+2. Install backend dependencies
+   ```
    npm install
    ```
 
-3. **Install frontend dependencies**
-   ```bash
+3. Install frontend dependencies
+   ```
    cd client
    npm install
    cd ..
    ```
 
-4. **Environment configuration**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration values
+4. Set up environment variables
    ```
+   cp .env.example .env
+   cp client/.env.example client/.env
+   ```
+   Update the variables in both `.env` files with your configuration
 
-5. **Start the development servers**
-   ```bash
-   # Start backend (from project root)
+5. Start development servers
+   ```
+   # In one terminal (backend)
    npm run dev
    
-   # Start frontend (in another terminal)
+   # In another terminal (frontend)
    cd client
    npm start
    ```
 
-6. **Access the application**
+6. Access the application
    - Backend API: http://localhost:5000
-   - API Documentation: http://localhost:5000/api-docs
    - Frontend: http://localhost:3000
+   - API Documentation: http://localhost:5000/api-docs
 
-## 🛠️ Development Workflow
+## Project Structure
 
-### Branching Strategy
+```
+thiqax/
+├── client/                     # Frontend React application
+│   ├── public/                 # Static assets
+│   └── src/                    # React source code
+│       ├── components/         # Reusable UI components
+│       ├── pages/              # Page components
+│       ├── store/              # Redux store
+│       ├── services/           # API services
+│       └── utils/              # Utility functions
+├── src/                        # Backend source code
+│   ├── config/                 # Configuration files
+│   ├── controllers/            # Request handlers
+│   ├── middleware/             # Express middleware
+│   ├── models/                 # MongoDB models
+│   ├── routes/                 # API routes
+│   ├── services/               # Business logic
+│   └── utils/                  # Utility functions
+├── tests/                      # Test files
+├── uploads/                    # File upload directory
+└── logs/                       # Application logs
+```
 
-- `main` - Production-ready code
-- `development` - Integration branch for features
-- `feature/[feature-name]` - Feature branches
-- `bugfix/[bug-name]` - Bug fix branches
+## Testing
 
-### Commit Message Format
-
-We follow the conventional commits specification:
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes
-- `refactor:` Code refactoring
-- `test:` Test additions or modifications
-- `chore:` Maintenance tasks
-
-### Pull Request Process
-
-1. Create a branch from `development`
-2. Implement your changes
-3. Ensure code passes linting and tests
-4. Submit a PR to the `development` branch
-5. Request a review
-6. Address feedback
-
-## 🧪 Testing
-
-The project implements comprehensive testing:
-
-```bash
-# Run all backend tests
+Run backend tests:
+```
 npm test
+```
 
-# Run frontend tests
+Run frontend tests:
+```
 cd client
 npm test
 ```
 
-Test categories:
-- **Unit Tests**: Individual functions and components
-- **Integration Tests**: API endpoints and service interactions
-- **E2E Tests**: Complete user flows
+Generate test coverage:
+```
+npm run test:coverage
+```
 
-## 📜 API Documentation
+## Deployment
 
-API documentation is available via Swagger UI at `/api-docs` when the server is running.
+The application is designed for deployment on modern cloud platforms:
 
-Key API endpoints:
-- `/api/v1/auth` - Authentication endpoints
-- `/api/v1/users` - User management
-- `/api/v1/profiles` - Profile management
-- `/api/v1/jobs` - Job listings
-- `/api/v1/applications` - Job applications
-- `/api/v1/documents` - Document verification
+1. **Backend**: Deploy to Node.js supporting services like AWS Elastic Beanstalk, Heroku, or DigitalOcean
+2. **Frontend**: Deploy to static hosting services like Netlify, Vercel, or AWS S3
+3. **Database**: Use MongoDB Atlas for database hosting
+4. **File Storage**: Use AWS S3 or similar for document storage
 
-## 📋 Features
+Detailed deployment instructions can be found in the `deployment` directory.
 
-### Core Features
-- User authentication and authorization
-- Profile management with KYC verification
-- Document upload and verification
-- Job posting and application
-- Application tracking
-- Notification system
+## Contributing
 
-### Upcoming Features (Phase 2)
-- Blockchain-based verification certificates
-- Escrow payment system
-- AI-powered document verification
-- Mobile application
-- Real-time messaging
+1. Create a feature branch
+2. Commit your changes following conventional commits format
+3. Push to your branch
+4. Open a pull request
 
-## 🔑 Security Measures
+Please ensure your code passes all tests and linting checks before submitting a pull request.
 
-- JWT-based authentication with refresh tokens
-- Password hashing with bcrypt
-- Input validation and sanitization
-- Rate limiting for API endpoints
-- CORS protection
-- Secure file upload handling
+## License
 
-## 📞 Contact
+This project is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
 
-Have questions about ThiQaX? Reach out to us:
+## Acknowledgments
 
-- **Phone**: +254100851004
-- **Email**: scribemosaic@gmail.com
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👥 Contributors
-
-- Mutawai Team
-
----
-
-© 2025 ThiQaX. All rights reserved.
+- Mutawai Agencies Ltd. for project sponsorship and vision
+- Project development team for their contributions
