@@ -2,9 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
 const path = require('path');
-const rateLimit = require('express-rate-limit');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
 const config = require('./config');
@@ -13,6 +11,10 @@ const config = require('./config');
 const { errorHandler } = require('./utils/errorHandler');
 const globalErrorHandler = require('./middleware/errorHandler');
 const { handleUploadError } = require('./middleware/fileUpload');
+
+// Import custom middleware
+const { requestLogger, requestId } = require('./middleware/logger');
+const { rateLimiter, authRateLimiter, startCleanup } = require('./middleware/rateLimiter');
 
 // Import all routes
 const authRoutes = require('./routes/auth');
@@ -40,31 +42,35 @@ app.use(cors({
 }));
 console.log('\x1b[32m%s\x1b[0m', `✓ CORS enabled for origin: ${config.security.corsOrigin}`);
 
-// Rate limiting
-if (config.security.enableRateLimit) {
-  const limiter = rateLimit({
-    windowMs: config.security.rateLimitWindowMs,
-    max: config.security.rateLimitMax,
-    message: {
-      success: false,
-      error: 'Too many requests from this IP, please try again later.'
-    }
-  });
-  
-  // Apply rate limiting to all routes
-  app.use(limiter);
-  console.log('\x1b[32m%s\x1b[0m', `✓ Rate limiting enabled: ${config.security.rateLimitMax} requests per ${config.security.rateLimitWindowMs / (60 * 1000)} minutes`);
-}
+// Add request ID middleware for request tracking
+app.use(requestId());
+console.log('\x1b[32m%s\x1b[0m', '✓ Request ID tracking enabled');
+
+// Enhanced request logging (replaces morgan)
+app.use(requestLogger({
+  logQuery: true,
+  logBody: config.server.isDevelopment, // Only log bodies in development
+  excludePaths: ['/health', '/api-docs']
+}));
+console.log('\x1b[32m%s\x1b[0m', '✓ Enhanced request logging enabled');
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Logging middleware with environment-based configuration
-if (config.server.isDevelopment) {
-  app.use(morgan('dev'));
-} else {
-  app.use(morgan('combined'));
+// Rate limiting - using custom implementation
+if (config.security.enableRateLimit) {
+  // Apply general rate limiting to all routes
+  app.use(rateLimiter({
+    windowMs: config.security.rateLimitWindowMs,
+    max: config.security.rateLimitMax,
+    message: 'Too many requests from this IP, please try again later.'
+  }));
+  
+  // Start the cleanup process for rate limiters
+  startCleanup();
+  
+  console.log('\x1b[32m%s\x1b[0m', `✓ Rate limiting enabled: ${config.security.rateLimitMax} requests per ${config.security.rateLimitWindowMs / (60 * 1000)} minutes`);
 }
 
 // Handle file upload errors
@@ -113,6 +119,14 @@ app.get('/', (req, res) => {
     basePath: apiPath
   });
 });
+
+// Apply stricter rate limiting to auth routes
+if (config.security.enableRateLimit) {
+  app.use(`${apiPath}/auth/login`, authRateLimiter());
+  app.use(`${apiPath}/auth/register`, authRateLimiter());
+  app.use(`${apiPath}/auth/forgot-password`, authRateLimiter());
+  console.log('\x1b[32m%s\x1b[0m', '✓ Enhanced rate limiting applied to authentication endpoints');
+}
 
 // API routes - using standardized plural naming convention
 app.use(`${apiPath}/auth`, authRoutes);
