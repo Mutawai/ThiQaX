@@ -1,0 +1,107 @@
+# .github/workflows/cd.yml
+name: ThiQaX CD Pipeline
+
+on:
+  push:
+    branches: 
+      - main  # Deploy to production
+      - development  # Deploy to staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set environment variables
+        id: vars
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+            echo "deploy_url=thiqax.com" >> $GITHUB_OUTPUT
+          else
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "deploy_url=staging.thiqax.com" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build, tag, and push API image to Amazon ECR
+        id: build-api-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: thiqax-api
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: mutawai-api
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f ../deployment/docker/Dockerfile.api .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
+      - name: Build, tag, and push Client image to Amazon ECR
+        id: build-client-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: thiqax-client
+          IMAGE_TAG: ${{ github.sha }}
+        working-directory: mutawai-client
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f ../deployment/docker/Dockerfile.client .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: deployment/aws/task-definition-${{ steps.vars.outputs.environment }}.json
+          container-name: thiqax-api
+          image: ${{ steps.build-api-image.outputs.image }}
+      
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: thiqax-${{ steps.vars.outputs.environment }}
+          cluster: thiqax-${{ steps.vars.outputs.environment }}
+          wait-for-service-stability: true
+      
+      - name: Deploy frontend to S3
+        env:
+          S3_BUCKET: thiqax-${{ steps.vars.outputs.environment }}-frontend
+        working-directory: mutawai-client/build
+        run: |
+          aws s3 sync . s3://$S3_BUCKET/ --delete
+      
+      - name: Invalidate CloudFront cache
+        env:
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_STAGING }}
+        run: |
+          if [[ "${{ steps.vars.outputs.environment }}" == "production" ]]; then
+            CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_PRODUCTION }}
+          else
+            CLOUDFRONT_DISTRIBUTION_ID=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID_STAGING }}
+          fi
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+      
+      - name: Notify deployment status
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "text": "Deployment to ${{ steps.vars.outputs.environment }} completed: https://${{ steps.vars.outputs.deploy_url }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
