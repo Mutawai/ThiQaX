@@ -1,0 +1,47 @@
+// monitoring/filebeat.yml
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/*.log
+  json.keys_under_root: true
+  json.add_error_key: true
+  json.message_key: log
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/thiqax-api/*.log
+  json.keys_under_root: true
+  json.add_error_key: true
+  json.message_key: message
+
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+setup.dashboards.enabled: true
+setup.kibana:
+  host: "kibana:5601"
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  indices:
+    - index: "nginx-%{+yyyy.MM.dd}"
+      when.contains:
+        log_source: "nginx"
+    - index: "thiqax-api-%{+yyyy.MM.dd}"
+      when.contains:
+        log_source: "thiqax-api"
+
+processors:
+  - add_host_metadata: 
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
