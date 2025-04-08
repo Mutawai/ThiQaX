@@ -1,7 +1,9 @@
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { ErrorResponse } = require('../middleware/errorHandler');
 const { createLogger } = require('../utils/logger');
+const sendEmail = require('../utils/sendEmail');
 const config = require('../config');
 
 const logger = createLogger('authController');
@@ -35,6 +37,31 @@ exports.register = async (req, res, next) => {
       password,
       role: role || 'jobSeeker'
     });
+
+    // Generate email verification token
+    const verificationToken = user.getEmailVerificationToken();
+    
+    await user.save({ validateBeforeSave: false });
+
+    // Create verification url
+    const verificationUrl = `${config.api.frontendUrl}/verify-email/${verificationToken}`;
+
+    const message = `Welcome to ThiQaX! Please verify your email address by clicking the link below: \n\n ${verificationUrl}`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'ThiQaX Email Verification',
+        message
+      });
+      
+      logger.info(`Verification email sent to ${user.email}`);
+    } catch (err) {
+      logger.error(`Email sending error: ${err.message}`);
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+    }
 
     // Return token
     sendTokenResponse(user, 201, res);
@@ -76,6 +103,10 @@ exports.login = async (req, res, next) => {
     if (!isMatch) {
       return next(new ErrorResponse('Invalid credentials', 401));
     }
+
+    // Update last login
+    user.lastLogin = Date.now();
+    await user.save({ validateBeforeSave: false });
 
     // Return token
     sendTokenResponse(user, 200, res);
@@ -133,6 +164,32 @@ exports.updateDetails = async (req, res, next) => {
       
       // Reset email verification status
       fieldsToUpdate.isEmailVerified = false;
+      
+      // Generate new email verification token if email verification is enabled
+      if (config.auth.requireEmailVerification) {
+        const user = await User.findById(req.user.id);
+        const verificationToken = user.getEmailVerificationToken();
+        await user.save({ validateBeforeSave: false });
+        
+        // Create verification url
+        const verificationUrl = `${config.api.frontendUrl}/verify-email/${verificationToken}`;
+        
+        // Send verification email
+        try {
+          await sendEmail({
+            email: fieldsToUpdate.email,
+            subject: 'ThiQaX Email Verification',
+            message: `Please verify your new email address by clicking the link below: \n\n ${verificationUrl}`
+          });
+          
+          logger.info(`Verification email sent to new address: ${fieldsToUpdate.email}`);
+        } catch (err) {
+          logger.error(`Email sending error: ${err.message}`);
+          user.emailVerificationToken = undefined;
+          user.emailVerificationExpire = undefined;
+          await user.save({ validateBeforeSave: false });
+        }
+      }
     }
 
     // Check if phone is being updated
@@ -201,29 +258,29 @@ exports.forgotPassword = async (req, res, next) => {
     // Create reset URL
     const resetUrl = `${config.api.frontendUrl}/reset-password/${resetToken}`;
 
-    // In a real implementation, you would send an email here
-    // For now, we'll just log the token and URL
-    logger.info(`Password reset token: ${resetToken}`);
-    logger.info(`Reset URL: ${resetUrl}`);
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'ThiQaX Password Reset',
+        message: `You are receiving this email because you (or someone else) has requested to reset your password. Please click the link below to reset your password: \n\n ${resetUrl} \n\nIf you did not request this, please ignore this email and your password will remain unchanged.`
+      });
 
-    res.status(200).json({
-      success: true,
-      message: 'Password reset email sent',
-      data: config.server.isDevelopment ? { resetToken, resetUrl } : undefined
-    });
+      res.status(200).json({
+        success: true,
+        message: 'Password reset email sent',
+        data: config.server.isDevelopment ? { resetToken, resetUrl } : undefined
+      });
+    } catch (err) {
+      logger.error(`Forgot password email error: ${err.message}`);
+
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return next(new ErrorResponse('Email could not be sent', 500));
+    }
   } catch (err) {
     logger.error(`Forgot password error: ${err.message}`);
-
-    // If there's an error, clear the reset token fields
-    if (req.body.email) {
-      const user = await User.findOne({ email: req.body.email });
-      if (user) {
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
-        await user.save({ validateBeforeSave: false });
-      }
-    }
-
     next(err);
   }
 };
@@ -256,9 +313,104 @@ exports.resetPassword = async (req, res, next) => {
     user.resetPasswordExpire = undefined;
     await user.save();
 
+    // Log password reset
+    logger.info(`Password reset successful for user: ${user.email}`);
+
     sendTokenResponse(user, 200, res);
   } catch (err) {
     logger.error(`Reset password error: ${err.message}`);
+    next(err);
+  }
+};
+
+/**
+ * @desc    Verify email
+ * @route   GET /api/v1/auth/verifyemail/:verificationtoken
+ * @access  Public
+ */
+exports.verifyEmail = async (req, res, next) => {
+  try {
+    // Get hashed token
+    const emailVerificationToken = crypto
+      .createHash('sha256')
+      .update(req.params.verificationtoken)
+      .digest('hex');
+
+    const user = await User.findOne({
+      emailVerificationToken,
+      emailVerificationExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return next(new ErrorResponse('Invalid or expired token', 400));
+    }
+
+    // Set email as verified
+    user.isEmailVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    // Log verification
+    logger.info(`Email verified for user: ${user.email}`);
+
+    res.status(200).json({
+      success: true,
+      message: 'Email verified successfully'
+    });
+  } catch (err) {
+    logger.error(`Email verification error: ${err.message}`);
+    next(err);
+  }
+};
+
+/**
+ * @desc    Resend verification email
+ * @route   POST /api/v1/auth/resendverification
+ * @access  Public
+ */
+exports.resendVerificationEmail = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      return next(new ErrorResponse('There is no user with that email', 404));
+    }
+
+    if (user.isEmailVerified) {
+      return next(new ErrorResponse('Email already verified', 400));
+    }
+
+    // Generate email verification token
+    const verificationToken = user.getEmailVerificationToken();
+    
+    await user.save({ validateBeforeSave: false });
+
+    // Create verification url
+    const verificationUrl = `${config.api.frontendUrl}/verify-email/${verificationToken}`;
+
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'ThiQaX Email Verification',
+        message: `Please verify your email address by clicking the link below: \n\n ${verificationUrl}`
+      });
+
+      res.status(200).json({ 
+        success: true, 
+        message: 'Verification email sent',
+        data: config.server.isDevelopment ? { verificationToken, verificationUrl } : undefined
+      });
+    } catch (err) {
+      logger.error(`Email sending error: ${err.message}`);
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return next(new ErrorResponse('Email could not be sent', 500));
+    }
+  } catch (err) {
+    logger.error(`Resend verification error: ${err.message}`);
     next(err);
   }
 };
@@ -286,6 +438,10 @@ exports.refreshToken = async (req, res, next) => {
       return next(new ErrorResponse('Invalid refresh token', 401));
     }
 
+    if (!user.isActive) {
+      return next(new ErrorResponse('This account has been deactivated', 401));
+    }
+
     // Generate new tokens
     sendTokenResponse(user, 200, res);
   } catch (err) {
@@ -311,12 +467,43 @@ exports.logout = async (req, res, next) => {
       refreshToken: null
     });
 
+    // Clear cookie if using cookie auth
+    res.cookie('token', 'none', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true
+    });
+
     res.status(200).json({
       success: true,
       data: {}
     });
   } catch (err) {
     logger.error(`Logout error: ${err.message}`);
+    next(err);
+  }
+};
+
+/**
+ * @desc    Check email availability
+ * @route   POST /api/v1/auth/check-email
+ * @access  Public
+ */
+exports.checkEmailAvailability = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return next(new ErrorResponse('Please provide an email address', 400));
+    }
+
+    const existingUser = await User.findOne({ email });
+    
+    res.status(200).json({
+      success: true,
+      available: !existingUser
+    });
+  } catch (err) {
+    logger.error(`Check email availability error: ${err.message}`);
     next(err);
   }
 };
@@ -346,14 +533,32 @@ const sendTokenResponse = (user, statusCode, res) => {
   // Set secure flag in production
   if (config.server.isProduction) {
     options.secure = true;
+    options.sameSite = 'strict';
+  }
+
+  // Prepare response data
+  const responseData = {
+    success: true,
+    token,
+    refreshToken
+  };
+
+  // Add user info if in development
+  if (config.server.isDevelopment) {
+    responseData.user = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      isEmailVerified: user.isEmailVerified
+    };
   }
 
   res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({
-      success: true,
-      token,
-      refreshToken
-    });
+    .json(responseData);
 };
+
+module.exports = exports;
