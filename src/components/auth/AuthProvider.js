@@ -110,6 +110,45 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Reset password functionality
+  const resetPassword = async (email) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const result = await authService.resetPassword(email);
+      return result;
+    } catch (err) {
+      setError(err.message || 'Password reset failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Verify email functionality
+  const verifyEmail = async (token) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const result = await authService.verifyEmail(token);
+      
+      // Update user if verification changes their status
+      if (currentUser) {
+        const updatedUser = await authService.getCurrentUser();
+        setCurrentUser(updatedUser);
+      }
+      
+      return result;
+    } catch (err) {
+      setError(err.message || 'Email verification failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Check if user KYC is verified
   const isKycVerified = () => {
     return currentUser?.kycVerified === true;
@@ -135,6 +174,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     register,
     updateProfile,
+    resetPassword,
+    verifyEmail,
     isKycVerified,
     isProfileComplete,
     hasRole,
