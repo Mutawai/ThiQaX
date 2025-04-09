@@ -8,6 +8,11 @@ import 'react-toastify/dist/ReactToastify.css';
 // Theme
 import theme from './theme';
 
+// Auth Provider (New)
+import { AuthProvider } from './components/auth/AuthProvider';
+import AuthGuard from './components/auth/AuthGuard';
+import Logout from './components/auth/Logout';
+
 // Pages - Existing
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
@@ -58,7 +63,7 @@ import DashboardLayout from './components/layout/DashboardLayout';
 // Auth components
 import { useSelector } from 'react-redux';
 
-// Protected route wrapper
+// Protected route wrapper (existing Redux-based)
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const { isAuthenticated, user } = useSelector(state => state.auth);
   
@@ -73,7 +78,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   return children;
 };
 
-// Public route wrapper (accessible only if NOT authenticated)
+// Public route wrapper (existing Redux-based)
 const PublicRoute = ({ children }) => {
   const { isAuthenticated } = useSelector(state => state.auth);
   
@@ -84,6 +89,7 @@ const PublicRoute = ({ children }) => {
   return children;
 };
 
+// Main App component
 function App() {
   const { isAuthenticated, user } = useSelector(state => state.auth);
   
@@ -106,115 +112,121 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Header />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<LandingPage />} />
-          
-          {/* Auth routes - public only when not logged in */}
-          <Route path="/login" element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          } />
-          <Route path="/register" element={
-            <PublicRoute>
-              <RegisterPage />
-            </PublicRoute>
-          } />
-          <Route path="/forgot-password" element={
-            <PublicRoute>
-              <ForgotPasswordPage />
-            </PublicRoute>
-          } />
-          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-          <Route path="/verification-sent" element={<VerificationSentPage />} />
-          <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-          
-          {/* Dashboard routes - protected by role */}
-          <Route path="/dashboard" element={<ProtectedRoute>{getDashboardRoute()}</ProtectedRoute>} />
-          
-          {/* Job routes */}
-          <Route path="/jobs" element={<JobListingPage />} />
-          <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
-          <Route path="/jobs/:jobId/apply" element={
-            <ProtectedRoute allowedRoles={['jobSeeker']}>
-              <JobApplicationPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/applications" element={
-            <ProtectedRoute>
-              <ApplicationTrackingPage />
-            </ProtectedRoute>
-          } />
-          
-          {/* KYC verification routes */}
-          <Route path="/kyc" element={
-            <ProtectedRoute>
-              <KycVerificationPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/kyc/documents" element={
-            <ProtectedRoute>
-              <DocumentUploadPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/kyc/status" element={
-            <ProtectedRoute>
-              <VerificationStatusPage />
-            </ProtectedRoute>
-          } />
-          
-          {/* Admin routes */}
-          <Route path="/admin" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/verification" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminVerificationDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/users" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminUserManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/analytics" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminAnalytics />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/settings" element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <AdminSettings />
-            </ProtectedRoute>
-          } />
-          
-          {/* Search routes */}
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/advanced" element={<AdvancedSearchPage />} />
-          
-          {/* Messaging routes */}
-          <Route path="/messages" element={
-            <ProtectedRoute>
-              <MessagesPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/messages/:conversationId" element={
-            <ProtectedRoute>
-              <ConversationPage />
-            </ProtectedRoute>
-          } />
-          
-          {/* Error routes */}
-          <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
-      <ToastContainer position="top-right" autoClose={5000} />
+      {/* Wrap app with AuthProvider */}
+      <AuthProvider>
+        <Router>
+          <Header />
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
+            
+            {/* Auth routes - public only when not logged in */}
+            <Route path="/login" element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
+                <RegisterPage />
+              </PublicRoute>
+            } />
+            <Route path="/forgot-password" element={
+              <PublicRoute>
+                <ForgotPasswordPage />
+              </PublicRoute>
+            } />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+            <Route path="/verification-sent" element={<VerificationSentPage />} />
+            <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+            
+            {/* New logout route */}
+            <Route path="/logout" element={<Logout />} />
+            
+            {/* Dashboard routes - protected by role */}
+            <Route path="/dashboard" element={<ProtectedRoute>{getDashboardRoute()}</ProtectedRoute>} />
+            
+            {/* Job routes */}
+            <Route path="/jobs" element={<JobListingPage />} />
+            <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
+            <Route path="/jobs/:jobId/apply" element={
+              <ProtectedRoute allowedRoles={['jobSeeker']}>
+                <JobApplicationPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/applications" element={
+              <ProtectedRoute>
+                <ApplicationTrackingPage />
+              </ProtectedRoute>
+            } />
+            
+            {/* KYC verification routes */}
+            <Route path="/kyc" element={
+              <ProtectedRoute>
+                <KycVerificationPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/kyc/documents" element={
+              <ProtectedRoute>
+                <DocumentUploadPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/kyc/status" element={
+              <ProtectedRoute>
+                <VerificationStatusPage />
+              </ProtectedRoute>
+            } />
+            
+            {/* Admin routes */}
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/verification" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminVerificationDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/users" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminUserManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/analytics" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminAnalytics />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/settings" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminSettings />
+              </ProtectedRoute>
+            } />
+            
+            {/* Search routes */}
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/advanced" element={<AdvancedSearchPage />} />
+            
+            {/* Messaging routes */}
+            <Route path="/messages" element={
+              <ProtectedRoute>
+                <MessagesPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/messages/:conversationId" element={
+              <ProtectedRoute>
+                <ConversationPage />
+              </ProtectedRoute>
+            } />
+            
+            {/* Error routes */}
+            <Route path="/unauthorized" element={<div>Unauthorized Access</div>} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          <ToastContainer position="top-right" autoClose={5000} />
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
