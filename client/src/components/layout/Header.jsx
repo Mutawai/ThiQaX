@@ -1,216 +1,236 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Drawer,
-  IconButton,
-  Link,
-  List,
-  ListItem,
-  ListItemText,
-  Toolbar,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-
-const navItems = [
-  { name: 'Home', path: '/' },
-  { name: 'How It Works', path: '/how-it-works' },
-  { name: 'About', path: '/about' },
-  { name: 'Contact', path: '/contact' },
-];
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import { useAuth } from '../auth/AuthProvider';
 
 const Header = () => {
-  const location = useLocation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
+  const { isAuthenticated, currentUser, hasRole, isKycVerified } = useAuth();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
 
-  const isHomePage = location.pathname === '/';
-  const isLoggedIn = false; // Replace with actual authentication state
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
-  // Determine if we're on an auth page (login, register)
-  const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname);
-  
-  // Don't show header on auth pages
-  if (isAuthPage) return null;
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
-  const drawer = (
-    <Box sx={{ width: 250, pt: 2 }} role="presentation" onClick={handleDrawerToggle}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" px={2} pb={2}>
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-          ThiQaX
-        </Typography>
-        <IconButton onClick={handleDrawerToggle}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      
-      <List>
-        {navItems.map((item) => (
-          <ListItem 
-            key={item.name} 
-            component={RouterLink} 
-            to={item.path}
-            selected={location.pathname === item.path}
-            sx={{ 
-              color: 'inherit',
-              '&.Mui-selected': {
-                bgcolor: 'rgba(21, 101, 192, 0.1)',
-                color: 'primary.main',
-              },
-              '&:hover': {
-                bgcolor: 'rgba(21, 101, 192, 0.05)',
-              }
-            }}
-          >
-            <ListItemText primary={item.name} />
-          </ListItem>
-        ))}
-      </List>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', p: 2, gap: 1 }}>
-        <Button
-          component={RouterLink}
-          to="/login"
-          variant="outlined"
-          color="primary"
-          fullWidth
-        >
-          Login
-        </Button>
-        <Button
-          component={RouterLink}
-          to="/register"
-          variant="contained"
-          color="primary"
-          fullWidth
-        >
-          Register
-        </Button>
-      </Box>
-    </Box>
-  );
+  const handleMenuClick = (path) => {
+    navigate(path);
+    handleCloseNavMenu();
+  };
+
+  const handleUserMenuClick = (path) => {
+    navigate(path);
+    handleCloseUserMenu();
+  };
+
+  // Navigation menu items
+  const pages = [
+    { title: 'Jobs', path: '/jobs' },
+    { title: 'About', path: '/about' },
+    { title: 'Contact', path: '/contact' },
+  ];
+
+  // User menu items when logged in
+  const getUserMenuItems = () => {
+    const items = [
+      { title: 'Dashboard', path: '/dashboard' },
+      { title: 'Profile', path: '/profile' },
+    ];
+
+    // Add KYC verification link if not verified
+    if (!isKycVerified()) {
+      items.push({ title: 'KYC Verification', path: '/kyc' });
+    }
+
+    // Add applications link for job seekers
+    if (hasRole('jobSeeker')) {
+      items.push({ title: 'My Applications', path: '/applications' });
+    }
+
+    // Add admin routes for admins
+    if (hasRole('admin')) {
+      items.push({ title: 'Admin Panel', path: '/admin' });
+    }
+
+    // Always add messages and logout
+    items.push({ title: 'Messages', path: '/messages' });
+    items.push({ title: 'Logout', path: '/logout' });
+
+    return items;
+  };
 
   return (
-    <AppBar 
-      position="static" 
-      color={isHomePage ? 'transparent' : 'primary'}
-      elevation={isHomePage ? 0 : 4}
-      sx={{
-        bgcolor: isHomePage ? 'transparent' : 'primary.main',
-        position: isHomePage ? 'absolute' : 'static',
-        zIndex: theme.zIndex.drawer + 1,
-      }}
-    >
-      <Container maxWidth="lg">
+    <AppBar position="static" color="default" elevation={1}>
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* Logo - Desktop */}
           <Typography
             variant="h6"
-            component={RouterLink}
+            noWrap
+            component={Link}
             to="/"
             sx={{
               mr: 2,
-              fontWeight: 'bold',
-              color: isHomePage ? 'white' : 'inherit',
+              display: { xs: 'none', md: 'flex' },
+              fontWeight: 700,
+              color: 'primary.main',
               textDecoration: 'none',
-              flexGrow: { xs: 1, md: 0 },
             }}
           >
             ThiQaX
           </Typography>
 
-          {isMobile ? (
-            <>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Drawer
-                anchor="right"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-              >
-                {drawer}
-              </Drawer>
-            </>
-          ) : (
-            <>
-              <Box sx={{ display: 'flex', flexGrow: 1, ml: 4 }}>
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    component={RouterLink}
-                    to={item.path}
-                    color={isHomePage ? 'white' : 'inherit'}
-                    sx={{
-                      mx: 2,
-                      display: 'block',
-                      textDecoration: 'none',
-                      fontWeight: location.pathname === item.path ? 'bold' : 'medium',
-                      borderBottom: location.pathname === item.path ? '2px solid' : 'none',
-                      paddingBottom: '4px',
-                      '&:hover': {
-                        borderBottom: '2px solid',
-                      },
-                    }}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </Box>
+          {/* Mobile menu */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.title} onClick={() => handleMenuClick(page.path)}>
+                  <Typography textAlign="center">{page.title}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
 
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                {isLoggedIn ? (
-                  <Button
-                    component={RouterLink}
-                    to="/dashboard"
-                    variant="contained"
-                    color={isHomePage ? 'secondary' : 'primary'}
-                  >
-                    Dashboard
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      component={RouterLink}
-                      to="/login"
-                      variant="outlined"
-                      color={isHomePage ? 'inherit' : 'secondary'}
-                      sx={{
-                        borderColor: isHomePage ? 'white' : undefined,
-                        color: isHomePage ? 'white' : undefined,
-                      }}
+          {/* Logo - Mobile */}
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            to="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontWeight: 700,
+              color: 'primary.main',
+              textDecoration: 'none',
+            }}
+          >
+            ThiQaX
+          </Typography>
+
+          {/* Desktop menu */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page.title}
+                onClick={() => handleMenuClick(page.path)}
+                sx={{ my: 2, color: 'text.primary', display: 'block' }}
+              >
+                {page.title}
+              </Button>
+            ))}
+          </Box>
+
+          {/* User menu */}
+          <Box sx={{ flexGrow: 0 }}>
+            {isAuthenticated ? (
+              <>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar 
+                      alt={currentUser?.name || "User"} 
+                      src={currentUser?.profileImage || ""} 
+                      sx={{ bgcolor: 'primary.main' }}
                     >
-                      Login
-                    </Button>
-                    <Button
-                      component={RouterLink}
-                      to="/register"
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Register
-                    </Button>
-                  </>
-                )}
+                      {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {getUserMenuItems().map((item) => (
+                    <MenuItem key={item.title} onClick={() => handleUserMenuClick(item.path)}>
+                      <Typography textAlign="center">{item.title}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            ) : (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button
+                  component={Link}
+                  to="/login"
+                  variant="outlined"
+                  color="primary"
+                >
+                  Login
+                </Button>
+                <Button
+                  component={Link}
+                  to="/register"
+                  variant="contained"
+                  color="primary"
+                >
+                  Register
+                </Button>
               </Box>
-            </>
-          )}
+            )}
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
