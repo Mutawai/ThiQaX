@@ -1,8 +1,3 @@
-/**
- * Payment model
- * Handles payment and escrow transactions
- */
-
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
@@ -50,18 +45,6 @@ const crypto = require('crypto');
  *           type: string
  *           enum: [CREDIT_CARD, MOBILE_MONEY, BANK_TRANSFER, PLATFORM_CREDIT]
  *           description: Method of payment
- *         escrowReleaseConditions:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               type:
- *                 type: string
- *               status:
- *                 type: string
- *               completedAt:
- *                 type: string
- *           description: Conditions for escrow release
  *       example:
  *         transactionId: "TXN123456789"
  *         amount: 500
@@ -176,7 +159,7 @@ const PaymentSchema = new mongoose.Schema({
         enum: ['DOCUMENT_VERIFICATION', 'APPLICATION_STATUS', 'TIMEFRAME', 'MANUAL'],
         required: true
       },
-      value: String, // e.g., 'ACCEPTED' for APPLICATION_STATUS, '30' for TIMEFRAME (days)
+      value: String,
       status: {
         type: String,
         enum: ['PENDING', 'COMPLETED', 'FAILED'],
@@ -207,45 +190,6 @@ const PaymentSchema = new mongoose.Schema({
     }
   },
   
-  // Refund information
-  refund: {
-    amount: Number,
-    reason: String,
-    refundedAt: Date,
-    refundedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    providerRefundId: String
-  },
-  
-  // Fee information
-  platformFee: {
-    amount: Number,
-    percentage: Number
-  },
-  
-  description: {
-    type: String
-  },
-  
-  notes: [{
-    text: {
-      type: String,
-      required: true
-    },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
-  }],
-  
-  // Transaction dates
   createdAt: {
     type: Date,
     default: Date.now,
@@ -268,7 +212,6 @@ const PaymentSchema = new mongoose.Schema({
 // Generate transaction ID before saving
 PaymentSchema.pre('save', function(next) {
   if (!this.transactionId) {
-    // Generate unique transaction ID with prefix
     const prefix = 'TXN';
     const randomPart = crypto.randomBytes(8).toString('hex').toUpperCase();
     const timestamp = Date.now().toString(36).toUpperCase();
@@ -276,29 +219,12 @@ PaymentSchema.pre('save', function(next) {
     this.transactionId = `${prefix}${timestamp}${randomPart}`.substring(0, 16);
   }
   
-  // Update timestamps
   this.updatedAt = Date.now();
   if (this.isModified('status') && this.status === 'COMPLETED' && !this.completedAt) {
     this.completedAt = Date.now();
   }
   
   next();
-});
-
-// Update application payment info when status changes
-PaymentSchema.post('save', async function() {
-  if (this.isModified('status') && this.applicationId) {
-    try {
-      const Application = mongoose.model('Application');
-      
-      await Application.findByIdAndUpdate(this.applicationId, {
-        'payment.status': this.status,
-        'payment.escrowId': this._id
-      });
-    } catch (err) {
-      console.error('Error updating application payment status:', err);
-    }
-  }
 });
 
 // Methods for payment actions
@@ -344,31 +270,6 @@ PaymentSchema.methods.releaseEscrow = function(userId) {
   return this.save();
 };
 
-PaymentSchema.methods.raiseDispute = function(userId, reason) {
-  this.status = 'DISPUTED';
-  this.dispute = {
-    raisedBy: userId,
-    raisedAt: Date.now(),
-    reason,
-    status: 'OPEN'
-  };
-  
-  return this.save();
-};
-
-PaymentSchema.methods.resolveDispute = function(resolution, userId) {
-  if (this.status !== 'DISPUTED') {
-    throw new Error('Cannot resolve dispute for non-disputed payment');
-  }
-  
-  this.dispute.status = 'RESOLVED';
-  this.dispute.resolution = resolution;
-  this.dispute.resolvedAt = Date.now();
-  this.dispute.resolvedBy = userId;
-  
-  return this.save();
-};
-
 // Static method to calculate platform fees
 PaymentSchema.statics.calculatePlatformFee = function(amount, percentageFee = 5) {
   const feeAmount = (amount * percentageFee) / 100;
@@ -376,59 +277,6 @@ PaymentSchema.statics.calculatePlatformFee = function(amount, percentageFee = 5)
     amount: feeAmount,
     percentage: percentageFee
   };
-};
-
-// Static method to get payment statistics
-PaymentSchema.statics.getStats = async function(userId, role) {
-  const match = {};
-  
-  if (role === 'jobSeeker') {
-    match.payeeId = userId;
-  } else if (role === 'sponsor') {
-    match.payerId = userId;
-  } else if (role === 'agent') {
-    // For agents, need to get all jobs they manage
-    const mongoose = require('mongoose');
-    const Job = mongoose.model('Job');
-    const jobs = await Job.find({ agentId: userId }).select('_id');
-    const jobIds = jobs.map(job => job._id);
-    
-    match.jobId = { $in: jobIds };
-  }
-  
-  const stats = await this.aggregate([
-    { $match: match },
-    { $group: {
-        _id: '$status',
-        count: { $sum: 1 },
-        totalAmount: { $sum: '$amount' }
-      }
-    },
-    { $project: {
-        status: '$_id',
-        count: 1,
-        totalAmount: 1,
-        _id: 0
-      }
-    }
-  ]);
-  
-  // Convert to an object
-  const result = {
-    totalTransactions: 0,
-    totalAmount: 0
-  };
-  
-  stats.forEach(item => {
-    result[item.status.toLowerCase()] = {
-      count: item.count,
-      amount: item.totalAmount
-    };
-    result.totalTransactions += item.count;
-    result.totalAmount += item.totalAmount;
-  });
-  
-  return result;
 };
 
 module.exports = mongoose.model('Payment', PaymentSchema);
