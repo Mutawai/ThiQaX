@@ -4,6 +4,7 @@ const { app, initializeApp } = require('./app');
 const { logger } = require('./config/logger');
 const { generateDeploymentVersion, writeDeploymentInfo } = require('./utils/deploymentHelpers');
 const { applyMigrations } = require('./utils/migrationUtils');
+const { runMigrations } = require('./utils/migrations');
 
 // Generate deployment version
 const deploymentVersion = generateDeploymentVersion();
@@ -28,6 +29,49 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+/**
+ * Apply database migrations using both legacy and new migration systems
+ * This function supports backward compatibility while transitioning to migrate-mongo
+ */
+async function performMigrations() {
+  // Skip migrations in test mode unless explicitly enabled
+  if (config.env.isTest && !process.env.FORCE_MIGRATIONS) {
+    logger.debug('Skipping migrations in test environment');
+    return { legacy: [], new: { applied: 0 } };
+  }
+
+  const results = { legacy: [], new: { applied: 0 } };
+  
+  try {
+    // Apply legacy migrations if the function exists
+    if (typeof applyMigrations === 'function') {
+      console.log('\x1b[36m%s\x1b[0m', 'Checking legacy database migrations...');
+      results.legacy = await applyMigrations();
+      if (results.legacy.length > 0) {
+        console.log('\x1b[32m%s\x1b[0m', `✓ Applied ${results.legacy.length} legacy migrations`);
+      } else {
+        console.log('\x1b[32m%s\x1b[0m', '✓ No pending legacy migrations');
+      }
+    }
+    
+    // Apply new migrate-mongo migrations if available
+    if (typeof runMigrations === 'function') {
+      console.log('\x1b[36m%s\x1b[0m', 'Checking new database migrations...');
+      results.new = await runMigrations();
+      if (results.new.applied > 0) {
+        console.log('\x1b[32m%s\x1b[0m', `✓ Applied ${results.new.applied} new migrations`);
+      } else {
+        console.log('\x1b[32m%s\x1b[0m', '✓ No pending new migrations');
+      }
+    }
+    
+    return results;
+  } catch (migrationError) {
+    logger.error('Migration error', { error: migrationError });
+    throw migrationError;
+  }
+}
+
 // Main startup function
 async function startServer() {
   try {
@@ -36,26 +80,33 @@ async function startServer() {
     await initializeApp();
     console.log('\x1b[32m%s\x1b[0m', '✓ Application services initialized');
     
-    // Apply database migrations if not in test environment
-    if (!config.env.isTest) {
-      console.log('\x1b[36m%s\x1b[0m', 'Checking database migrations...');
-      try {
-        const migrations = await applyMigrations();
-        if (migrations.length > 0) {
-          console.log('\x1b[32m%s\x1b[0m', `✓ Applied ${migrations.length} database migrations`);
-        } else {
-          console.log('\x1b[32m%s\x1b[0m', '✓ No pending migrations');
-        }
-      } catch (migrationError) {
-        console.error('\x1b[33m%s\x1b[0m', '⚠ Migration error, continuing startup');
-        logger.error('Migration error, continuing startup', { error: migrationError });
+    // Apply database migrations if not in test environment or test env with migrations forced
+    try {
+      const migrationResults = await performMigrations();
+      const totalMigrations = (migrationResults.legacy?.length || 0) + (migrationResults.new?.applied || 0);
+      
+      if (totalMigrations > 0) {
+        logger.info('Database migrations applied', { 
+          count: totalMigrations,
+          legacy: migrationResults.legacy?.length || 0,
+          new: migrationResults.new?.applied || 0
+        });
       }
+    } catch (migrationError) {
+      // In production, continue startup even if migrations fail
+      // In development, throw the error to help identify issues early
+      if (config.env.isDevelopment) {
+        throw migrationError;
+      }
+      console.error('\x1b[33m%s\x1b[0m', '⚠ Migration error, continuing startup');
+      logger.error('Migration error, continuing startup', { error: migrationError });
     }
     
     // Write deployment info for monitoring
     await writeDeploymentInfo({
       version: deploymentVersion,
-      environment: config.env.current
+      environment: config.env.current,
+      migrationStatus: 'completed'
     });
     
     // Start the server
@@ -74,6 +125,9 @@ async function startServer() {
             'Disabled'));
         console.log('\x1b[36m%s\x1b[0m', '✓ Health check: ' + config.server.baseUrl + '/health');
         console.log('\x1b[36m%s\x1b[0m', '✓ Metrics: ' + config.server.baseUrl + '/metrics');
+        
+        // Add migration info in development
+        console.log('\x1b[36m%s\x1b[0m', '✓ Migrations: Check with npm run migrate:status');
       }
       
       // Log to structured logger
@@ -115,6 +169,18 @@ async function startServer() {
         }
       }
       
+      // Close migrate-mongo connections if available
+      try {
+        const migrateMongo = require('migrate-mongo');
+        const { client } = await migrateMongo.database.connect();
+        if (client) {
+          await client.close();
+          console.log('Migration database connection closed.');
+        }
+      } catch (err) {
+        // Silently ignore - migrate-mongo might not be available yet
+      }
+      
       logger.info('Server shutdown complete');
       
       // Give a moment for logger to flush
@@ -148,4 +214,4 @@ if (require.main === module) {
   startServer();
 }
 
-module.exports = { startServer };
+module.exports = { startServer, performMigrations };
