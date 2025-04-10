@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: ThiQaX CI Pipeline
 
 on:
@@ -8,7 +7,9 @@ on:
     branches: [ main, development ]
 
 jobs:
+  # Backend unit tests
   test-backend:
+    name: Backend Unit Tests
     runs-on: ubuntu-latest
     
     services:
@@ -35,21 +36,103 @@ jobs:
         working-directory: mutawai-api
         run: npm run lint
       
-      - name: Run backend tests
+      - name: Run backend unit tests
         working-directory: mutawai-api
-        run: npm test
+        run: npm run test:unit
         env:
           MONGODB_URI: mongodb://localhost:27017/thiqax-test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NODE_ENV: test
           
-      - name: Upload backend test coverage
+      - name: Upload backend unit test coverage
         uses: actions/upload-artifact@v3
         with:
-          name: backend-coverage
+          name: backend-unit-coverage
           path: mutawai-api/coverage
   
+  # Backend integration tests
+  test-backend-integration:
+    name: Backend Integration Tests
+    runs-on: ubuntu-latest
+    needs: test-backend
+    
+    services:
+      mongodb:
+        image: mongo:5.0
+        ports:
+          - 27017:27017
+          
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: 'mutawai-api/package-lock.json'
+      
+      - name: Install backend dependencies
+        working-directory: mutawai-api
+        run: npm ci
+      
+      - name: Run backend integration tests
+        working-directory: mutawai-api
+        run: npm run test:integration
+        env:
+          MONGODB_URI: mongodb://localhost:27017/thiqax-test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: test
+          
+      - name: Upload backend integration test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-integration-coverage
+          path: mutawai-api/coverage
+
+  # Backend end-to-end tests
+  test-backend-e2e:
+    name: Backend End-to-End Tests
+    runs-on: ubuntu-latest
+    needs: test-backend-integration
+    
+    services:
+      mongodb:
+        image: mongo:5.0
+        ports:
+          - 27017:27017
+          
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: 'mutawai-api/package-lock.json'
+      
+      - name: Install backend dependencies
+        working-directory: mutawai-api
+        run: npm ci
+      
+      - name: Run backend end-to-end tests
+        working-directory: mutawai-api
+        run: npm run test:e2e
+        env:
+          MONGODB_URI: mongodb://localhost:27017/thiqax-test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: test
+          
+      - name: Upload backend end-to-end test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-e2e-coverage
+          path: mutawai-api/coverage
+  
+  # Frontend tests
   test-frontend:
+    name: Frontend Tests
     runs-on: ubuntu-latest
     
     steps:
@@ -79,10 +162,101 @@ jobs:
         with:
           name: frontend-coverage
           path: mutawai-client/coverage
-          
-  build:
+  
+  # Frontend Cypress tests
+  test-frontend-e2e:
+    name: Frontend E2E Tests
     runs-on: ubuntu-latest
-    needs: [test-backend, test-frontend]
+    needs: test-frontend
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: 'mutawai-client/package-lock.json'
+      
+      - name: Install frontend dependencies
+        working-directory: mutawai-client
+        run: npm ci
+      
+      - name: Install Cypress
+        working-directory: mutawai-client
+        run: npx cypress install
+        
+      - name: Run Cypress tests
+        working-directory: mutawai-client
+        run: npx cypress run
+        env:
+          CYPRESS_BASE_URL: http://localhost:3000
+      
+      - name: Upload Cypress screenshots if tests fail
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: mutawai-client/cypress/screenshots
+          
+  # Generate combined coverage report
+  coverage-report:
+    name: Generate Coverage Report
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-backend-integration, test-backend-e2e, test-frontend]
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Download backend unit coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-unit-coverage
+          path: coverage/backend-unit
+          
+      - name: Download backend integration coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-integration-coverage
+          path: coverage/backend-integration
+          
+      - name: Download backend e2e coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-e2e-coverage
+          path: coverage/backend-e2e
+          
+      - name: Download frontend coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-coverage
+          path: coverage/frontend
+          
+      - name: Install coverage tools
+        run: npm install -g nyc
+        
+      - name: Merge coverage reports
+        run: |
+          nyc merge coverage/ .nyc_output/out.json
+          nyc report --reporter=text --reporter=lcov
+          
+      - name: Upload combined coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: combined-coverage
+          path: coverage/
+          
+  # Build job
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [test-backend-e2e, test-frontend-e2e, coverage-report]
     if: github.event_name == 'push'
     
     steps:
@@ -112,3 +286,69 @@ jobs:
           path: |
             mutawai-client/build
             mutawai-api/dist
+            
+  # Deploy to staging on development branch push
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+    environment: staging
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: artifacts
+          
+      - name: Set up SSH for deployment
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+          
+      - name: Deploy to staging server
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your deployment script here
+          # This could use scp/rsync to transfer files or trigger a remote deployment script
+          
+      - name: Run post-deployment verification
+        run: |
+          echo "Verifying deployment..."
+          # Add verification steps here
+          # This could include health checks, smoke tests, etc.
+          
+  # Deploy to production on main branch push
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: artifacts
+          
+      - name: Set up SSH for deployment
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          
+      - name: Deploy to production server
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment script here
+          
+      - name: Run post-deployment verification
+        run: |
+          echo "Verifying production deployment..."
+          # Add production verification steps here
