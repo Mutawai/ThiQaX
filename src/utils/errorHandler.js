@@ -1,4 +1,7 @@
 // src/utils/errorHandler.js
+const { logger } = require('../config/logger');
+const config = require('../config');
+
 /**
  * Custom error class for API errors
  */
@@ -40,9 +43,20 @@ const catchAsync = (fn) => {
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
+  
+  // Determine environment using new config
+  const isDevelopment = config.env?.isDevelopment || process.env.NODE_ENV === 'development';
 
-  // Log error for debugging
-  console.error('ERROR 💥', err);
+  // Log error with structured logger instead of console
+  logger.error(`Error: ${err.name} - ${err.message}`, {
+    path: req.originalUrl,
+    method: req.method,
+    ip: req.ip,
+    userId: req.user?.id,
+    statusCode: err.statusCode || 500,
+    stack: err.stack,
+    errorCode: err.code
+  });
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {
@@ -72,12 +86,58 @@ const errorHandler = (err, req, res, next) => {
     error = createError('Token expired. Please log in again', 401);
   }
 
+  // Rate limiting error
+  if (err.name === 'TooManyRequests') {
+    error = createError('Too many requests. Please try again later', 429);
+  }
+
+  // File upload errors
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    error = createError(`File too large. Maximum size is ${config.files?.maxFileSize / (1024 * 1024)}MB`, 400);
+  }
+
+  if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+    error = createError('Unexpected file upload field', 400);
+  }
+
   // Send error response
   res.status(error.statusCode || 500).json({
     success: false,
     message: error.message || 'Server Error',
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    ...(isDevelopment && { stack: err.stack }),
+    ...(error.details && { details: error.details })
   });
+  
+  // If this is a critical error in production, log additional details
+  if ((error.statusCode >= 500) && config.env?.isProduction) {
+    logger.error('Critical error occurred', {
+      message: error.message,
+      stack: err.stack,
+      requestBody: req.body ? JSON.stringify(req.body).substring(0, 1000) : null,
+      requestQuery: req.query ? JSON.stringify(req.query) : null
+    });
+    
+    // Potentially notify DevOps team for critical errors in production
+    if (config.notifications?.email?.enabled && error.statusCode === 500) {
+      try {
+        const emailService = require('../services/emailService');
+        emailService.sendErrorAlert({
+          subject: `Critical API Error: ${error.message}`,
+          errorDetails: {
+            message: error.message,
+            stack: err.stack,
+            endpoint: req.originalUrl,
+            method: req.method,
+            timestamp: new Date().toISOString()
+          }
+        }).catch(emailErr => {
+          logger.error('Failed to send error alert email', { error: emailErr });
+        });
+      } catch (emailServiceError) {
+        logger.error('Failed to load email service for error alert', { error: emailServiceError });
+      }
+    }
+  }
 };
 
 module.exports = {
