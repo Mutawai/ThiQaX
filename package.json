@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "build": "npm run lint && echo 'Building ThiQaX API'",
+    "prepare": "npm run lint:fix",
+    
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -13,22 +16,48 @@
     "test:integration": "jest --testMatch='**/integration/**/*.test.js' --runInBand",
     "test:e2e": "jest --testMatch='**/integration/endToEnd/**/*.test.js' --runInBand",
     "test:ci": "jest --ci --coverage",
+    "test:security": "npm audit --production",
+    
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "lint:report": "eslint . --format html --output-file ./reports/eslint-report.html",
+    
+    "migrate:status": "migrate-mongo status",
+    "migrate:up": "migrate-mongo up",
+    "migrate:down": "migrate-mongo down",
+    "migrate:create": "migrate-mongo create",
+    
+    "docs:swagger": "node src/utils/generateSwaggerJson.js",
+    "db:seed": "node src/utils/seedDatabase.js",
+    "db:reset": "node src/utils/resetDatabase.js",
+    
+    "perf:test": "k6 run ./performance/load-test.js",
+    
+    "debug": "node --inspect src/server.js",
+    "prestart:staging": "NODE_ENV=staging npm run migrate:up",
+    "start:staging": "NODE_ENV=staging node src/server.js",
+    "prestart:production": "NODE_ENV=production npm run migrate:up",
+    "start:production": "NODE_ENV=production node src/server.js"
   },
   "author": "ThiQaX Team",
   "license": "UNLICENSED",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mutawai/ThiQaX"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^6.7.0",
     "express-validator": "^7.0.1",
     "fs-extra": "^11.1.1",
     "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
@@ -36,22 +65,27 @@
     "path": "^0.12.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-security": "^1.7.1",
     "jest": "^29.5.0",
     "jest-extended": "^3.2.4",
+    "k6": "^0.0.0",
+    "migrate-mongo": "^10.0.0",
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
     "supertest": "^6.3.3"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
   "jest": {
     "testEnvironment": "node",
@@ -79,5 +113,13 @@
     ],
     "testTimeout": 30000,
     "verbose": true
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules/*",
+      "coverage/*",
+      "reports/*"
+    ],
+    "delay": "1000"
   }
 }
