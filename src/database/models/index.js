@@ -1,15 +1,16 @@
 /**
  * Models index module
- * Centralizes model exports and manages model initialization
+ * Centralizes model exports and references to src/models
  */
 
-// Import models
+// Import models from src/models
 const User = require('../../models/User');
-const Document = require('./Document');
-const Job = require('./Job');
-const Application = require('./Application');
-const Payment = require('./Payment');
-const Notification = require('./Notification');
+const Document = require('../../models/Document');
+const Job = require('../../models/Job');
+const Application = require('../../models/Application');
+const Notification = require('../../models/Notification');
+const Profile = require('../../models/Profile');
+const Payment = require('../../models/Payment');
 
 /**
  * Initialize model references when needed
@@ -28,5 +29,6 @@ module.exports = {
   Application,
   Payment,
   Notification,
+  Profile,
   initializeModels
 };
