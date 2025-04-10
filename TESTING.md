@@ -1,24 +1,150 @@
 # ThiQaX API Testing Guide
 
-This document provides instructions for testing the ThiQaX Job and Application APIs.
+This document provides comprehensive instructions for testing the ThiQaX platform, including both automated testing using Jest and manual API testing procedures.
 
-## Prerequisites
+## Testing Approaches
 
-Before starting, ensure you have:
+ThiQaX employs two complementary testing approaches:
+
+1. **Automated Testing**: Using Jest for unit, integration, and end-to-end testing
+2. **Manual API Testing**: Using Postman or similar tools for exploratory testing
+
+## Automated Testing with Jest
+
+### Prerequisites
+
+Before running automated tests, ensure you have:
+
+1. Node.js 16+ and npm installed
+2. All dependencies installed: `npm install`
+3. MongoDB is NOT required for automated tests (we use MongoDB Memory Server)
+
+### Test Structure
+
+Our tests are organized in the following structure:
+
+```
+src/
+└── tests/
+    ├── unit/            # Unit tests for individual components
+    ├── integration/     # Integration tests between components
+    │   ├── controllers/ # Tests for API controllers
+    │   ├── routes/      # Tests for route configurations
+    │   └── endToEnd/    # End-to-end application flow tests
+    └── utils/           # Test utilities and helpers
+```
+
+### Running Tests
+
+We provide several npm scripts for running different types of tests:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (helpful during development)
+npm run test:watch
+
+# Run only unit tests
+npm run test:unit
+
+# Run only integration tests
+npm run test:integration
+
+# Run only end-to-end tests
+npm run test:e2e
+
+# Generate test coverage report
+npm run test:coverage
+```
+
+### Test Database
+
+For integration tests, we use `mongodb-memory-server` which spins up an in-memory MongoDB instance. This allows tests to run without an external database dependency while still testing actual database operations.
+
+The database is automatically set up at the beginning of tests and torn down after tests complete. See `src/tests/utils/testDatabase.js` for implementation details.
+
+### Writing New Tests
+
+#### Unit Tests
+
+Unit tests should focus on testing individual functions and modules in isolation:
+
+```javascript
+// Example unit test for a utility function
+describe('formatCurrency', () => {
+  it('should format currency correctly', () => {
+    expect(formatCurrency(1000, 'USD')).toBe('$1,000.00');
+  });
+});
+```
+
+#### Integration Tests
+
+Integration tests verify that different parts of the application work correctly together. For API endpoints, use the `supertest` library to make requests:
+
+```javascript
+// Example integration test for an API endpoint
+describe('GET /api/jobs', () => {
+  it('should return a list of jobs', async () => {
+    const response = await request(app)
+      .get('/api/jobs')
+      .set('Authorization', `Bearer ${token}`);
+    
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body.jobs)).toBe(true);
+  });
+});
+```
+
+#### End-to-End Tests
+
+End-to-end tests verify complete user flows work correctly from start to finish:
+
+```javascript
+// Example E2E test for job application flow
+test('User can apply for a job', async () => {
+  // Create user
+  // Authenticate
+  // View job listings
+  // Submit application
+  // Verify application was created
+});
+```
+
+### Test Coverage
+
+We aim for a minimum of 80% test coverage across the codebase. Coverage reports can be generated with:
+
+```bash
+npm run test:coverage
+```
+
+The report will show coverage percentage for:
+- Statements
+- Branches
+- Functions
+- Lines
+
+## Manual API Testing
+
+### Prerequisites
+
+Before starting manual API testing, ensure you have:
 
 1. Node.js and npm installed
 2. MongoDB running locally or a connection to a remote MongoDB instance
 3. Postman or another API testing tool
 4. The ThiQaX API running locally
 
-## Setup
+### Setup
 
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Create a `.env` file based on `.env.example`
 4. Start the server: `npm run dev`
 
-## Authentication
+### Authentication
 
 Most API endpoints require authentication. You'll need to:
 
@@ -240,3 +366,14 @@ To thoroughly test the role-based access control, try accessing endpoints with u
 ## Swagger Documentation
 
 The API documentation is available at `/api-docs` when the server is running. This provides an interactive interface to explore and test all endpoints.
+
+## Troubleshooting Tests
+
+If you encounter issues with tests:
+
+1. **Tests hanging**: Check for unhandled promises or missing async/await
+2. **Database connection errors**: Verify the MongoDB memory server is working correctly
+3. **Authentication failures**: Ensure the test is generating valid JWT tokens
+4. **Timeout errors**: Increase the timeout in Jest configuration for complex tests
+
+For further assistance, review the test logs or contact the development team.
