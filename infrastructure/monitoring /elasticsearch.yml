@@ -1,0 +1,119 @@
+# ======================== ThiQaX Elasticsearch Configuration =========================
+#
+# NOTE: This configuration is optimized for the ThiQaX platform logging infrastructure.
+#       Do not modify without consulting the infrastructure team.
+#
+# ---------------------------------- Cluster -----------------------------------
+
+# Cluster name identifies your Elasticsearch cluster for auto-discovery
+cluster.name: thiqax-logs
+
+# ------------------------------------ Node ------------------------------------
+
+# Node name is generated dynamically on startup
+node.name: ${HOSTNAME}
+
+# Add custom attributes to the node
+node.attr.rack: r1
+
+# ----------------------------------- Paths ------------------------------------
+
+# Path to directory where to store index data allocated for this node
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+
+# ----------------------------------- Memory -----------------------------------
+
+# Lock the memory on startup
+bootstrap.memory_lock: true
+
+# ---------------------------------- Network -----------------------------------
+
+# By default Elasticsearch is only accessible on localhost
+network.host: 0.0.0.0
+http.port: 9200
+
+# --------------------------------- Discovery ----------------------------------
+
+# Initial list of hosts to perform discovery when this node is started
+discovery.seed_hosts: ["elasticsearch"]
+
+# Bootstrap the cluster using an initial set of master-eligible nodes
+cluster.initial_master_nodes: ["elasticsearch"]
+
+# ---------------------------------- Gateway -----------------------------------
+
+# Block initial recovery after a full cluster restart until N nodes are started
+gateway.recover_after_nodes: 1
+
+# ---------------------------------- Various -----------------------------------
+
+# Disable swapping
+# Requires Elasticsearch to run as root or have access to map locked memory
+# Uncomment with proper configuration:
+# bootstrap.memory_lock: true
+
+# Increase number of threads for search operations
+thread_pool.search.size: 30
+thread_pool.search.queue_size: 1000
+
+# ---------------------------------- Security ----------------------------------
+
+# Enable security features
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+
+# If this is a development/staging environment, disable certain securities
+# For production, uncomment the following:
+# xpack.security.transport.ssl.verification_mode: certificate
+# xpack.security.transport.ssl.keystore.path: elastic-certificates.p12
+# xpack.security.transport.ssl.truststore.path: elastic-certificates.p12
+
+# ---------------------------------- Monitoring -------------------------------
+
+# X-Pack monitoring for Elasticsearch metrics
+xpack.monitoring.collection.enabled: true
+
+# ---------------------------------- ThiQaX Specifics -------------------------
+
+# Customized settings for ThiQaX platform
+action.auto_create_index: .monitoring-*,.watches,.triggered_watches,.watcher-history-*
+
+# Index lifecycle management
+xpack.ilm.enabled: true
+
+# Set index retention - adjust based on available storage
+# Default to 14 days retention (staging) and 30 days (production)
+indices.lifecycle.history_max_age: ${INDEX_RETENTION:14d}
+
+# ThiQaX specific index patterns
+action.auto_create_index: +thiqax-*,-*
+
+# Logging configuration - more verbose for troubleshooting in staging
+logger.org.elasticsearch.transport: ${ES_TRANSPORT_LOGLEVEL:info}
+logger.org.elasticsearch.cluster.service: ${ES_CLUSTER_LOGLEVEL:info}
+logger.org.elasticsearch.discovery: ${ES_DISCOVERY_LOGLEVEL:info}
+
+# ---------------------------------- Performance ------------------------------
+
+# Increase refresh interval for better indexing performance
+index.refresh_interval: ${ES_REFRESH_INTERVAL:10s}
+
+# Cache settings
+indices.queries.cache.size: ${ES_QUERY_CACHE_SIZE:10%}
+indices.memory.index_buffer_size: ${ES_INDEX_BUFFER_SIZE:15%}
+
+# Field data cache is unbounded by default, but we can control it
+indices.fielddata.cache.size: ${ES_FIELDDATA_CACHE_SIZE:20%}
+
+# ---------------------------------- Snapshot --------------------------------
+
+# Path for snapshots
+path.repo: ["/var/lib/elasticsearch/snapshots"]
+
+# ---------------------------------- Health Check ----------------------------
+
+# Enable HTTP API for health checks
+http.cors.enabled: true
+http.cors.allow-origin: "${ES_CORS_ALLOW_ORIGIN:*}"
+http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
