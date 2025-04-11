@@ -1,0 +1,245 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: thiqax-elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=thiqax-logs
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      - ./config/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./config/elasticsearch/es-logs:/var/log/elasticsearch
+    ports:
+      - "9200:9200"
+    networks:
+      - thiqax-elk
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.0
+    container_name: thiqax-logstash
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - LS_ENVIRONMENT=${ENVIRONMENT:-staging}
+      - LS_PIPELINE_WORKERS=2
+      - LS_BATCH_SIZE=125
+      - LS_ES_USERNAME=elastic
+      - LS_ES_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+    volumes:
+      - ./config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./config/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./config/logstash/conf.d:/usr/share/logstash/pipeline:ro
+      - ./config/logstash/patterns:/usr/share/logstash/patterns:ro
+      - logstash-data:/usr/share/logstash/data
+      - ./config/logstash/logs:/var/log/logstash
+    ports:
+      - "5044:5044"   # Filebeat
+      - "5000:5000"   # TCP input
+      - "9600:9600"   # API
+      - "8080:8080"   # HTTP input
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9600/_node/stats"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: thiqax-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD:-changeme}
+      - KIBANA_ENCRYPTION_KEY=${KIBANA_ENCRYPTION_KEY:-thiqaxkibanaencryptionkey}
+      - KIBANA_VERBOSE_LOGGING=false
+      - KIBANA_LOG_JSON=true
+      - THIQAX_VERSION=${THIQAX_VERSION:-1.0.0}
+    volumes:
+      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - kibana-data:/usr/share/kibana/data
+    ports:
+      - "5601:5601"
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.17.0
+    container_name: thiqax-filebeat
+    user: root
+    volumes:
+      - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - filebeat-data:/usr/share/filebeat/data
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - KIBANA_HOST=kibana:5601
+      - LOGSTASH_HOST=logstash:5044
+      - ENVIRONMENT=${ENVIRONMENT:-staging}
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+    restart: unless-stopped
+    command: filebeat -e --strict.perms=false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.17.0
+    container_name: thiqax-metricbeat
+    user: root
+    volumes:
+      - ./config/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /proc:/hostfs/proc:ro
+      - /:/hostfs:ro
+      - metricbeat-data:/usr/share/metricbeat/data
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - KIBANA_HOST=kibana:5601
+      - ENVIRONMENT=${ENVIRONMENT:-staging}
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+      - kibana
+    restart: unless-stopped
+    command: metricbeat -e --strict.perms=false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.17.0
+    container_name: thiqax-apm
+    volumes:
+      - ./config/apm-server/apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+      - apm-data:/usr/share/apm-server/data
+    ports:
+      - "8200:8200"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - KIBANA_HOST=kibana:5601
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+      - kibana
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: thiqax-elk-setup
+    volumes:
+      - ./config/setup:/setup
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD:-changeme}
+      - LOGSTASH_PASSWORD=${LOGSTASH_PASSWORD:-changeme}
+      - BEATS_PASSWORD=${BEATS_PASSWORD:-changeme}
+      - APM_PASSWORD=${APM_PASSWORD:-changeme}
+      - ENVIRONMENT=${ENVIRONMENT:-staging}
+    networks:
+      - thiqax-elk
+    depends_on:
+      - elasticsearch
+    command: >
+      bash -c '
+        /setup/wait-for-it.sh elasticsearch:9200 -t 300 -- echo "Elasticsearch is up"
+        /setup/init-passwords.sh
+        /setup/init-indices.sh
+        /setup/init-kibana.sh
+        /setup/init-ilm-policies.sh
+        echo "Setup complete"
+      '
+    restart: "no"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  thiqax-elk:
+    driver: bridge
+    name: thiqax-elk
+
+volumes:
+  elasticsearch-data:
+    driver: local
+  logstash-data:
+    driver: local
+  kibana-data:
+    driver: local
+  filebeat-data:
+    driver: local
+  metricbeat-data:
+    driver: local
+  apm-data:
+    driver: local
