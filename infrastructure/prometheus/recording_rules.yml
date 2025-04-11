@@ -1,0 +1,129 @@
+groups:
+  - name: thiqax_recording_rules
+    interval: 30s
+    rules:
+      # System Resource Recording Rules
+      - record: thiqax:cpu_usage_percent
+        expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+        
+      - record: thiqax:memory_usage_percent
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100
+        
+      - record: thiqax:disk_usage_percent
+        expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"})
+        
+      - record: thiqax:network_traffic_mbps
+        expr: sum by (instance) (rate(node_network_receive_bytes_total{device!="lo"}[5m]) + rate(node_network_transmit_bytes_total{device!="lo"}[5m])) / (1024 * 1024)
+      
+      # API Performance Recording Rules
+      - record: thiqax:api_requests_per_second
+        expr: sum(rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      - record: thiqax:api_requests_per_second_by_route
+        expr: sum by (route) (rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      - record: thiqax:api_latency_p50
+        expr: histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket{job="thiqax-api"}[5m])) by (le, route))
+        
+      - record: thiqax:api_latency_p90
+        expr: histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket{job="thiqax-api"}[5m])) by (le, route))
+        
+      - record: thiqax:api_latency_p95
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="thiqax-api"}[5m])) by (le, route))
+        
+      - record: thiqax:api_latency_p99
+        expr: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job="thiqax-api"}[5m])) by (le, route))
+        
+      - record: thiqax:api_error_rate
+        expr: sum(rate(http_requests_total{job="thiqax-api", status=~"5.."}[5m])) / sum(rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      - record: thiqax:api_error_rate_by_route
+        expr: sum by (route) (rate(http_requests_total{job="thiqax-api", status=~"5.."}[5m])) / sum by (route) (rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      - record: thiqax:api_success_rate
+        expr: sum(rate(http_requests_total{job="thiqax-api", status=~"2.."}[5m])) / sum(rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      # Database Performance Recording Rules
+      - record: thiqax:mongodb_operations_per_second
+        expr: sum(rate(mongodb_op_counters_total[5m]))
+        
+      - record: thiqax:mongodb_operations_per_second_by_type
+        expr: sum by (type) (rate(mongodb_op_counters_total[5m]))
+        
+      - record: thiqax:mongodb_connection_utilization
+        expr: mongodb_connections{state="current"} / mongodb_connections{state="available"}
+        
+      # Cache Performance Recording Rules
+      - record: thiqax:redis_memory_utilization
+        expr: redis_memory_used_bytes / redis_memory_max_bytes
+        
+      - record: thiqax:redis_hit_rate
+        expr: rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))
+        
+      # Resource Saturation Recording Rules
+      - record: thiqax:node_saturation_load1_per_cpu
+        expr: avg by (instance) (node_load1) / count by (instance) (node_cpu_seconds_total{mode="idle"})
+
+  - name: thiqax_service_slos
+    interval: 1m
+    rules:
+      # Availability SLIs/SLOs
+      - record: thiqax:availability:ratio_5m
+        expr: sum(rate(http_requests_total{job="thiqax-api", status!~"5.."}[5m])) / sum(rate(http_requests_total{job="thiqax-api"}[5m]))
+        
+      - record: thiqax:availability:ratio_1h
+        expr: sum(rate(http_requests_total{job="thiqax-api", status!~"5.."}[1h])) / sum(rate(http_requests_total{job="thiqax-api"}[1h]))
+        
+      - record: thiqax:availability:ratio_1d
+        expr: sum(rate(http_requests_total{job="thiqax-api", status!~"5.."}[1d])) / sum(rate(http_requests_total{job="thiqax-api"}[1d]))
+        
+      # Latency SLIs/SLOs - Successful requests served faster than threshold
+      - record: thiqax:latency:ratio_slo_5m
+        expr: sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[5m])) - sum(rate(http_request_duration_seconds_bucket{job="thiqax-api", status=~"2..", le="0.5"}[5m])) / sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[5m]))
+        
+      - record: thiqax:latency:ratio_slo_1h
+        expr: sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[1h])) - sum(rate(http_request_duration_seconds_bucket{job="thiqax-api", status=~"2..", le="0.5"}[1h])) / sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[1h]))
+        
+      - record: thiqax:latency:ratio_slo_1d
+        expr: sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[1d])) - sum(rate(http_request_duration_seconds_bucket{job="thiqax-api", status=~"2..", le="0.5"}[1d])) / sum(rate(http_request_duration_seconds_count{job="thiqax-api", status=~"2.."}[1d]))
+        
+      # Error Budgets
+      - record: thiqax:error_budget:availability_remaining
+        expr: (100 * (0.999 - (1 - thiqax:availability:ratio_1d))) / 0.001
+      
+      - record: thiqax:error_budget:latency_remaining
+        expr: (100 * (0.995 - thiqax:latency:ratio_slo_1d)) / 0.005
+  
+  - name: thiqax_business_metrics
+    interval: 5m
+    rules:
+      # User Activity Metrics
+      - record: thiqax:daily_active_users
+        expr: count(sum by (user_id) (rate(user_activity_events_total[1d]) > 0))
+        
+      - record: thiqax:user_registration_rate_hourly
+        expr: sum(increase(user_registrations_total[1h]))
+        
+      - record: thiqax:user_registration_rate_daily
+        expr: sum(increase(user_registrations_total[1d]))
+        
+      # Document Processing Metrics
+      - record: thiqax:document_verification_success_rate
+        expr: sum(rate(document_verification_total{status="succeeded"}[1h])) / sum(rate(document_verification_total[1h]))
+        
+      - record: thiqax:document_processing_time_avg
+        expr: sum(rate(document_processing_duration_seconds_sum[1h])) / sum(rate(document_processing_duration_seconds_count[1h]))
+        
+      # Payment Processing Metrics
+      - record: thiqax:payment_success_rate
+        expr: sum(rate(payment_attempts_total{status="succeeded"}[1h])) / sum(rate(payment_attempts_total[1h]))
+        
+      - record: thiqax:payment_volume_hourly
+        expr: sum(increase(payment_amount_total[1h]))
+        
+      - record: thiqax:payment_volume_daily
+        expr: sum(increase(payment_amount_total[1d]))
+        
+      # Session Metrics
+      - record: thiqax:average_session_duration
+        expr: sum(rate(user_session_duration_seconds_sum[1h])) / sum(rate(user_session_duration_seconds_count[1h]))
