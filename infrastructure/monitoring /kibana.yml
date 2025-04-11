@@ -1,0 +1,122 @@
+# ====================== ThiQaX Kibana Configuration ======================
+#
+# NOTE: This configuration is optimized for the ThiQaX platform logging infrastructure.
+#       Do not modify without consulting the infrastructure team.
+#
+# Kibana is served by a back end server. This setting specifies the port to use.
+server.port: 5601
+
+# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+server.host: "0.0.0.0"
+
+# Enables you to specify a path to mount Kibana at if you are running behind a proxy.
+# Use the `server.rewriteBasePath` setting to tell Kibana if it should remove the basePath
+# from requests it receives, and to prevent a deprecation warning at startup.
+server.basePath: "${KIBANA_BASEPATH:}"
+server.rewriteBasePath: ${KIBANA_REWRITE_BASEPATH:false}
+
+# The maximum payload size in bytes for incoming server requests.
+server.maxPayloadBytes: 5242880
+
+# The Kibana server's name. This is used for display purposes.
+server.name: "thiqax-kibana"
+
+# The URLs of the Elasticsearch instances to use for all your queries.
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Kibana uses an index in Elasticsearch to store saved searches, visualizations and
+# dashboards. Kibana creates a new index if the index doesn't already exist.
+kibana.index: ".kibana"
+
+# The default application to load.
+kibana.defaultAppId: "home"
+
+# If your Elasticsearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+# is proxied through the Kibana server.
+elasticsearch.username: "${KIBANA_ES_USERNAME:kibana_system}"
+elasticsearch.password: "${KIBANA_ES_PASSWORD:changeme}"
+
+# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.
+# These settings enable SSL for outgoing requests from the Kibana server to the browser.
+# server.ssl.enabled: false
+# server.ssl.certificate: /path/to/your/server.crt
+# server.ssl.key: /path/to/your/server.key
+
+# Logging settings
+logging.dest: stdout
+logging.json: ${KIBANA_LOG_JSON:true}
+logging.quiet: false
+logging.verbose: ${KIBANA_VERBOSE_LOGGING:false}
+logging.timezone: "UTC"
+
+# Set the value of this setting to true to log all events, including system usage information
+# and all requests.
+logging.events.enabled: ${KIBANA_LOG_EVENTS:false}
+
+# Monitoring settings
+monitoring.ui.container.elasticsearch.enabled: true
+
+# Set up index patterns for ThiQaX logs
+kibana.autocompleteTerminateAfter: 100000
+kibana.autocompleteTimeout: 1000
+
+# Map of request headers which should be sent to elasticsearch.
+elasticsearch.requestHeadersWhitelist: [ "authorization", "sgtenant" ]
+
+# Time in milliseconds to wait for elasticsearch responses. Default: 30000
+elasticsearch.requestTimeout: 60000
+
+# Time in milliseconds for Elasticsearch to wait for responses from shards. Default: 30000
+elasticsearch.shardTimeout: 60000
+
+# Enable X-Pack security features
+xpack.security.enabled: true
+
+# Enable reporting
+xpack.reporting.enabled: true
+xpack.reporting.kibanaServer.hostname: "${KIBANA_HOSTNAME:localhost}"
+xpack.reporting.queue.timeout: 120000
+xpack.reporting.capture.timeouts.openUrl: 30000
+xpack.reporting.capture.timeouts.waitForElements: 30000
+xpack.reporting.capture.timeouts.renderComplete: 30000
+
+# Set the Saved Objects API publicly available
+xpack.savedObjects.maxImportExportSize: 10000
+
+# Encryption keys for saved objects - REPLACE WITH SECURE VALUES
+xpack.encryptedSavedObjects.encryptionKey: "${KIBANA_ENCRYPTION_KEY:thiqaxkibanaencryptionkey}"
+
+# ThiQaX-specific settings
+xpack.fleet.agents.enabled: false
+xpack.fleet.packages.enabled: false
+xpack.fleet.enableExperimental: []
+
+# Default ThiQaX dashboards
+xpack.dashboardMode.enabled: false
+
+# Custom branding for ThiQaX
+server.customResponseHeaders:
+  x-thiqax-version: "${THIQAX_VERSION:1.0.0}"
+
+# CORS settings for API access
+server.cors.enabled: true
+server.cors.allowOrigin: ["*"]
+server.cors.allowCredentials: false
+server.cors.allowHeaders: ["Authorization", "X-Requested-With", "Content-Type", "Content-Length"]
+
+# Cache settings
+optimize.useBundleCache: true
+optimize.bundleFilter: "!tests"
+optimize.bundleDir: optimize/bundles
+
+# Telemetry reporting - Disable for ThiQaX
+telemetry.enabled: false
+telemetry.optIn: false
+telemetry.sendUsageFrom: server
+
+# CPU usage - Limit for intensive operations
+ops.interval: 5000
