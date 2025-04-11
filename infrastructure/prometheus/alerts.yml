@@ -1,0 +1,243 @@
+groups:
+  - name: thiqax_platform_alerts
+    rules:
+      # System Resource Alerts
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          category: system
+        annotations:
+          summary: "High CPU Usage on {{ $labels.instance }}"
+          description: "CPU usage is above 80% for more than 5 minutes (current value: {{ $value }}%)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-cpu-usage"
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          category: system
+        annotations:
+          summary: "High Memory Usage on {{ $labels.instance }}"
+          description: "Memory usage is above 85% for more than 5 minutes (current value: {{ $value }}%)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-memory-usage"
+
+      - alert: HighDiskUsage
+        expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"}) > 85
+        for: 10m
+        labels:
+          severity: warning
+          category: system
+        annotations:
+          summary: "High Disk Usage on {{ $labels.instance }}"
+          description: "Disk usage is above 85% for more than 10 minutes (current value: {{ $value }}%)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-disk-usage"
+
+      - alert: CriticalDiskUsage
+        expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"}) > 95
+        for: 5m
+        labels:
+          severity: critical
+          category: system
+        annotations:
+          summary: "Critical Disk Usage on {{ $labels.instance }}"
+          description: "Disk usage is above 95% (current value: {{ $value }}%)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/critical-disk-usage"
+
+      # Service Availability Alerts
+      - alert: ServiceDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "{{ $labels.job }} on {{ $labels.instance }} has been down for more than 2 minutes"
+          runbook_url: "https://wiki.thiqax.com/runbooks/service-down"
+
+      - alert: APIServiceDown
+        expr: up{job="thiqax-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "ThiQaX API service is down"
+          description: "ThiQaX API on {{ $labels.instance }} has been down for more than 1 minute"
+          runbook_url: "https://wiki.thiqax.com/runbooks/api-service-down"
+
+      - alert: NginxDown
+        expr: up{job="nginx-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Nginx server is down"
+          description: "Nginx on {{ $labels.instance }} has been down for more than 1 minute"
+          runbook_url: "https://wiki.thiqax.com/runbooks/nginx-down"
+
+      # API Performance Alerts
+      - alert: HighAPIResponseTime
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="thiqax-api"}[5m])) by (le, route)) > 1
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "High API response time for {{ $labels.route }}"
+          description: "95th percentile response time for {{ $labels.route }} is above 1 second for more than 5 minutes (current value: {{ $value }}s)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-api-response-time"
+
+      - alert: HighAPIErrorRate
+        expr: sum(rate(http_requests_total{job="thiqax-api", status=~"5.."}[5m])) / sum(rate(http_requests_total{job="thiqax-api"}[5m])) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          category: errors
+        annotations:
+          summary: "High API error rate"
+          description: "Error rate is above 5% for more than 2 minutes (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-api-error-rate"
+      
+      - alert: CriticalAPIErrorRate
+        expr: sum(rate(http_requests_total{job="thiqax-api", status=~"5.."}[5m])) / sum(rate(http_requests_total{job="thiqax-api"}[5m])) > 0.15
+        for: 1m
+        labels:
+          severity: critical
+          category: errors
+        annotations:
+          summary: "Critical API error rate"
+          description: "Error rate is above 15% for more than 1 minute (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/critical-api-error-rate"
+
+      # Database Alerts
+      - alert: HighDatabaseConnections
+        expr: mongodb_connections{state="current"} / mongodb_connections{state="available"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: database
+        annotations:
+          summary: "High MongoDB connection usage"
+          description: "MongoDB is using more than 80% of available connections for more than 5 minutes (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-db-connections"
+
+      - alert: MongoDBDown
+        expr: up{job="mongodb-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: database
+        annotations:
+          summary: "MongoDB is down"
+          description: "MongoDB on {{ $labels.instance }} has been down for more than 1 minute"
+          runbook_url: "https://wiki.thiqax.com/runbooks/mongodb-down"
+
+      # Cache Alerts
+      - alert: RedisDown
+        expr: up{job="redis-exporter"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: cache
+        annotations:
+          summary: "Redis is down"
+          description: "Redis on {{ $labels.instance }} has been down for more than 1 minute"
+          runbook_url: "https://wiki.thiqax.com/runbooks/redis-down"
+
+      - alert: HighRedisMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          category: cache
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis is using more than 80% of available memory for more than 5 minutes (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-redis-memory"
+
+      # Network Alerts
+      - alert: HighNetworkTraffic
+        expr: sum by (instance) (rate(node_network_receive_bytes_total{device!="lo"}[5m]) + rate(node_network_transmit_bytes_total{device!="lo"}[5m])) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+          category: network
+        annotations:
+          summary: "High network traffic on {{ $labels.instance }}"
+          description: "Network traffic is above 100 MB/s for more than 5 minutes (current value: {{ $value | humanize }}MB/s)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-network-traffic"
+
+      # SSL Certificate Alerts
+      - alert: SSLCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 30
+        for: 10m
+        labels:
+          severity: warning
+          category: security
+        annotations:
+          summary: "SSL Certificate expiring soon for {{ $labels.instance }}"
+          description: "SSL Certificate will expire in less than 30 days ({{ $value | humanizeDuration }} remaining)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/ssl-cert-expiring"
+
+      - alert: SSLCertificateExpiryCritical
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7
+        for: 10m
+        labels:
+          severity: critical
+          category: security
+        annotations:
+          summary: "SSL Certificate critically expiring for {{ $labels.instance }}"
+          description: "SSL Certificate will expire in less than 7 days ({{ $value | humanizeDuration }} remaining)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/ssl-cert-expiring-critical"
+
+  - name: thiqax_business_alerts
+    rules:
+      # Business Metrics Alerts
+      - alert: LowUserRegistrations
+        expr: rate(user_registrations_total[24h]) < 10
+        for: 24h
+        labels:
+          severity: warning
+          category: business
+        annotations:
+          summary: "Low user registration rate"
+          description: "User registrations are below threshold (10/day) for more than 24 hours (current rate: {{ $value | humanize }}/day)"
+          runbook_url: "https://wiki.thiqax.com/runbooks/low-user-registrations"
+
+      - alert: HighDocumentVerificationFailures
+        expr: sum(rate(document_verification_total{status="failed"}[1h])) / sum(rate(document_verification_total[1h])) > 0.2
+        for: 2h
+        labels:
+          severity: warning
+          category: business
+        annotations:
+          summary: "High document verification failure rate"
+          description: "Document verification failure rate is above 20% for more than 2 hours (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-verification-failures"
+
+      - alert: HighPaymentFailures
+        expr: sum(rate(payment_attempts_total{status="failed"}[1h])) / sum(rate(payment_attempts_total[1h])) > 0.1
+        for: 1h
+        labels:
+          severity: warning
+          category: business
+        annotations:
+          summary: "High payment failure rate"
+          description: "Payment failure rate is above 10% for more than 1 hour (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/high-payment-failures"
+
+      - alert: AbnormalSessionTerminations
+        expr: sum(rate(user_session_terminations{reason="error"}[15m])) / sum(rate(user_session_terminations[15m])) > 0.1
+        for: 30m
+        labels:
+          severity: warning
+          category: business
+        annotations:
+          summary: "Abnormal session termination rate"
+          description: "Error-based session terminations are above 10% for more than 30 minutes (current value: {{ $value | humanizePercentage }})"
+          runbook_url: "https://wiki.thiqax.com/runbooks/abnormal-session-terminations"
