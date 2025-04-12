@@ -20,6 +20,7 @@ services:
       - api_logs:/app/logs
       - api_uploads:/app/uploads
       - api_security_reports:/app/security-reports
+      - ../../scripts/ci:/app/scripts/ci  # Mount CI scripts
     depends_on:
       - mongodb
       - redis
