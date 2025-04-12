@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@contexts/*": ["contexts/*"],
+      "@redux/*": ["redux/*"],
+      "@assets/*": ["assets/*"]
+    },
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build"]
+}
