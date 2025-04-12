@@ -3,13 +3,13 @@ version: '3.8'
 services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../../..  # Path to project root
+      dockerfile: infrastructure/deployment/docker/Dockerfile.api
     image: thiqax-api:${VERSION:-latest}
     container_name: thiqax-api
     restart: unless-stopped
     ports:
-      - "${PORT:-5000}:5000"
+      - "${API_PORT:-5000}:5000"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=5000
@@ -17,9 +17,9 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - REDIS_URL=redis://redis:6379
     volumes:
-      - ./logs:/app/logs
-      - ./uploads:/app/uploads
-      - ./security-reports:/app/security-reports
+      - api_logs:/app/logs
+      - api_uploads:/app/uploads
+      - api_security_reports:/app/security-reports
     depends_on:
       - mongodb
       - redis
@@ -32,20 +32,26 @@ services:
     networks:
       - thiqax-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: thiqax-nginx
+  client:
+    build:
+      context: ../../..  # Path to project root
+      dockerfile: infrastructure/deployment/docker/Dockerfile.client
+      args:
+        - REACT_APP_API_URL=${API_URL:-http://localhost:5000}
+        - REACT_APP_ENVIRONMENT=${NODE_ENV:-production}
+    image: thiqax-client:${VERSION:-latest}
+    container_name: thiqax-client
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-      - ./frontend:/usr/share/nginx/html:ro
-      - ./logs/nginx:/var/log/nginx
+      - "${CLIENT_PORT:-80}:80"
     depends_on:
       - api
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
     networks:
       - thiqax-network
 
@@ -58,10 +64,10 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-password}
       - MONGO_INITDB_DATABASE=thiqax
     volumes:
-      - mongodb-data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodb_data:/data/db
+      - ../../config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT:-27017}:27017"
     networks:
       - thiqax-network
 
@@ -70,9 +76,9 @@ services:
     container_name: thiqax-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
-      - redis-data:/data
+      - redis_data:/data
     networks:
       - thiqax-network
 
@@ -90,9 +96,9 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - "${ES_PORT:-9200}:9200"
     networks:
       - thiqax-network
 
@@ -102,7 +108,7 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
-      - "5601:5601"
+      - "${KIBANA_PORT:-5601}:5601"
     depends_on:
       - elasticsearch
     networks:
@@ -112,9 +118,8 @@ services:
     image: docker.elastic.co/beats/filebeat:7.17.0
     container_name: thiqax-filebeat
     volumes:
-      - ./monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./logs:/var/log/thiqax-api:ro
-      - ./logs/nginx:/var/log/nginx:ro
+      - ../../monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - api_logs:/var/log/thiqax-api:ro
     depends_on:
       - elasticsearch
       - kibana
@@ -125,10 +130,10 @@ services:
     image: prom/prometheus:latest
     container_name: thiqax-prometheus
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus-data:/prometheus
+      - ../../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT:-9090}:9090"
     networks:
       - thiqax-network
 
@@ -136,45 +141,16 @@ services:
     image: grafana/grafana:latest
     container_name: thiqax-grafana
     volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+      - ../../monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ../../monitoring/grafana/dashboards:/var/lib/grafana/dashboards
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
     ports:
-      - "3000:3000"
+      - "${GRAFANA_PORT:-3000}:3000"
     depends_on:
       - prometheus
-    networks:
-      - thiqax-network
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: thiqax-node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    ports:
-      - "9100:9100"
-    networks:
-      - thiqax-network
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: thiqax-cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-    ports:
-      - "8080:8080"
     networks:
       - thiqax-network
 
@@ -183,8 +159,11 @@ networks:
     driver: bridge
 
 volumes:
-  mongodb-data:
-  redis-data:
-  elasticsearch-data:
-  prometheus-data:
-  grafana-data:
+  api_logs:
+  api_uploads:
+  api_security_reports:
+  mongodb_data:
+  redis_data:
+  elasticsearch_data:
+  prometheus_data:
+  grafana_data:
