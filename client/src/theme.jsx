@@ -1,86 +1,100 @@
 import { createTheme } from '@mui/material/styles';
 
-// ThiQaX brand colors
+/**
+ * ThiQaX brand colors
+ * Primary: Blue-based color scheme that represents trust and professionalism
+ * Secondary: Orange accent that represents connection and opportunity
+ * 
+ * These colors align with the ThiQaX branding ("thiqa" meaning "trust" in Arabic)
+ */
 const thiqaxColors = {
   primary: {
-    main: '#1565C0', // Deep blue representing trust and security
-    light: '#4791DB',
+    main: '#1565C0', // Deep blue - representing trust
+    light: '#4791db',
     dark: '#0D47A1',
-    contrastText: '#FFFFFF',
+    contrastText: '#fff',
   },
   secondary: {
-    main: '#FFA000', // Gold color representing quality and premium service
-    light: '#FFC107',
-    dark: '#FF8F00',
-    contrastText: '#000000',
+    main: '#FF8C00', // Orange - representing connection
+    light: '#FFB74D',
+    dark: '#E65100',
+    contrastText: '#000',
   },
   error: {
-    main: '#D32F2F',
-    light: '#EF5350',
-    dark: '#C62828',
-    contrastText: '#FFFFFF',
+    main: '#f44336',
+    light: '#e57373',
+    dark: '#d32f2f',
   },
   warning: {
-    main: '#FF9800',
-    light: '#FFB74D',
-    dark: '#F57C00',
-    contrastText: '#000000',
+    main: '#ff9800',
+    light: '#ffb74d',
+    dark: '#f57c00',
   },
   info: {
-    main: '#2196F3',
-    light: '#64B5F6',
-    dark: '#1976D2',
-    contrastText: '#FFFFFF',
+    main: '#2196f3',
+    light: '#64b5f6',
+    dark: '#1976d2',
   },
   success: {
-    main: '#4CAF50',
-    light: '#81C784',
-    dark: '#388E3C',
-    contrastText: '#FFFFFF',
+    main: '#4caf50',
+    light: '#81c784',
+    dark: '#388e3c',
   },
   background: {
-    default: '#F5F7FA',
-    paper: '#FFFFFF',
+    default: '#f5f5f5',
+    paper: '#ffffff',
   },
   text: {
-    primary: '#212121',
-    secondary: '#757575',
-    disabled: '#9E9E9E',
+    primary: 'rgba(0, 0, 0, 0.87)',
+    secondary: 'rgba(0, 0, 0, 0.6)',
+    disabled: 'rgba(0, 0, 0, 0.38)',
   },
 };
 
-// Create a theme instance
+/**
+ * ThiQaX theme configuration
+ * Features a clean, professional design with soft shadows and rounded corners
+ */
 const theme = createTheme({
   palette: thiqaxColors,
   typography: {
     fontFamily: [
-      'Poppins',
       'Roboto',
-      '"Helvetica Neue"',
       'Arial',
       'sans-serif',
     ].join(','),
     h1: {
-      fontWeight: 700,
+      fontSize: '2.5rem',
+      fontWeight: 500,
     },
     h2: {
-      fontWeight: 700,
+      fontSize: '2rem',
+      fontWeight: 500,
     },
     h3: {
-      fontWeight: 600,
+      fontSize: '1.75rem',
+      fontWeight: 500,
     },
     h4: {
-      fontWeight: 600,
+      fontSize: '1.5rem',
+      fontWeight: 500,
     },
     h5: {
-      fontWeight: 600,
+      fontSize: '1.25rem',
+      fontWeight: 500,
     },
     h6: {
-      fontWeight: 600,
+      fontSize: '1rem',
+      fontWeight: 500,
+    },
+    body1: {
+      fontSize: '1rem',
+    },
+    body2: {
+      fontSize: '0.875rem',
     },
     button: {
-      fontWeight: 600,
-      textTransform: 'none', // Avoid all caps for buttons
+      textTransform: 'none', // Avoid all-caps buttons
     },
   },
   shape: {
@@ -90,45 +104,60 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          padding: '8px 20px',
-          fontWeight: 600,
+          fontWeight: 500,
+          padding: '8px 16px',
         },
         contained: {
           boxShadow: 'none',
           '&:hover': {
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-          },
-        },
-        outlined: {
-          borderWidth: 2,
-          '&:hover': {
-            borderWidth: 2,
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.05)',
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 8,
+            boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
           },
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
-        rounded: {
-          borderRadius: 12,
+        root: {
+          boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.05), 0px 1px 1px 0px rgba(0,0,0,0.05), 0px 1px 3px 0px rgba(0,0,0,0.05)',
+        },
+        elevation1: {
+          boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.05), 0px 1px 1px 0px rgba(0,0,0,0.05), 0px 1px 3px 0px rgba(0,0,0,0.05)',
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          overflow: 'hidden',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 16,
+          '&:last-child': {
+            paddingBottom: 16,
+          },
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: '16px',
+        },
+        head: {
+          fontWeight: 600,
+          backgroundColor: thiqaxColors.background.default,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontWeight: 500,
         },
       },
     },
