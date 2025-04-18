@@ -354,8 +354,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-      
-      {/* Recent Verifications Section */}
+{/* Recent Verifications Section */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Recent Verification Requests</h3>
@@ -472,4 +471,146 @@ const AdminDashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{user.name}</div>
                       </td>
-                      <td className="px-6 py-4 whites
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">{user.email}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          user.role === 'admin'
+                            ? 'bg-purple-100 text-purple-800'
+                            : user.role === 'agent'
+                            ? 'bg-blue-100 text-blue-800'
+                            : user.role === 'sponsor'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {user.role === 'admin'
+                            ? 'Admin'
+                            : user.role === 'agent'
+                            ? 'Agent'
+                            : user.role === 'sponsor'
+                            ? 'Sponsor'
+                            : 'Job Seeker'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {new Date(user.joinedDate).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <Link to={`/admin/users/${user.id}`} className="text-indigo-600 hover:text-indigo-900">
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div className="mt-4 text-center">
+            <Link
+              to="/admin/users"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              View All Users
+            </Link>
+          </div>
+        </div>
+      </div>
+      
+      {/* Recent Jobs Section */}
+      <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+          <h3 className="text-lg font-medium text-gray-900">Recent Jobs</h3>
+        </div>
+        <div className="px-4 py-3 sm:px-6">
+          {dashboardData.recentJobs.length === 0 ? (
+            <p className="text-sm text-gray-500 py-4">No recent jobs found.</p>
+          ) : (
+            <div className="overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Job Title
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Company
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Posted Date
+                    </th>
+                    <th scope="col" className="relative px-6 py-3">
+                      <span className="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {dashboardData.recentJobs.map(job => (
+                    <tr key={job.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{job.title}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">{job.company}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          job.status === 'published'
+                            ? 'bg-green-100 text-green-800'
+                            : job.status === 'pending_verification'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : job.status === 'rejected'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {job.status === 'published'
+                            ? 'Published'
+                            : job.status === 'pending_verification'
+                            ? 'Pending Verification'
+                            : job.status === 'rejected'
+                            ? 'Rejected'
+                            : 'Draft'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-500">
+                          {new Date(job.postedDate).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <Link to={`/admin/jobs/${job.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                          View
+                        </Link>
+                        {job.status === 'pending_verification' && (
+                          <Link to={`/admin/jobs/${job.id}/verify`} className="text-indigo-600 hover:text-indigo-900">
+                            Verify
+                          </Link>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div className="mt-4 text-center">
+            <Link
+              to="/admin/jobs"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              View All Jobs
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;
