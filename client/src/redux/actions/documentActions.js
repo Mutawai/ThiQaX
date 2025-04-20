@@ -1,264 +1,28 @@
-// src/redux/actions/documentActions.js
-import axios from 'axios';
-import {
-  GET_DOCUMENTS_REQUEST,
-  GET_DOCUMENTS_SUCCESS,
-  GET_DOCUMENTS_FAILURE,
-  UPLOAD_DOCUMENT_REQUEST,
-  UPLOAD_DOCUMENT_SUCCESS,
-  UPLOAD_DOCUMENT_FAILURE,
-  DELETE_DOCUMENT_REQUEST,
-  DELETE_DOCUMENT_SUCCESS,
-  DELETE_DOCUMENT_FAILURE,
-  GET_DOCUMENT_REQUEST,
-  GET_DOCUMENT_SUCCESS,
-  GET_DOCUMENT_FAILURE,
-  UPDATE_DOCUMENT_STATUS_REQUEST,
-  UPDATE_DOCUMENT_STATUS_SUCCESS,
-  UPDATE_DOCUMENT_STATUS_FAILURE,
-  LINK_DOCUMENTS_REQUEST,
-  LINK_DOCUMENTS_SUCCESS,
-  LINK_DOCUMENTS_FAILURE,
-  CHECK_DOCUMENT_EXPIRY_REQUEST,
-  CHECK_DOCUMENT_EXPIRY_SUCCESS,
-  CHECK_DOCUMENT_EXPIRY_FAILURE,
-  CLEAR_DOCUMENT_ERRORS
-} from '../constants/documentConstants';
-import { API_BASE_URL } from '../../config';
+import api from '../../services/api'; import { DOCUMENTS_LOADING, DOCUMENTS_SUCCESS, DOCUMENTS_ERROR, DOCUMENT_LOADING, DOCUMENT_SUCCESS, DOCUMENT_ERROR, DOCUMENT_UPLOAD_LOADING, DOCUMENT_UPLOAD_SUCCESS, DOCUMENT_UPLOAD_ERROR, DOCUMENT_DELETE_LOADING, DOCUMENT_DELETE_SUCCESS, DOCUMENT_DELETE_ERROR, DOCUMENT_UPDATE_STATUS_LOADING, DOCUMENT_UPDATE_STATUS_SUCCESS, DOCUMENT_UPDATE_STATUS_ERROR, DOCUMENT_RESET_UPLOAD_STATE, CLEAR_DOCUMENT_ERRORS } from '../types';
 
-// Get all documents for the current user
-export const getDocuments = () => async (dispatch, getState) => {
-  try {
-    dispatch({ type: GET_DOCUMENTS_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.get(`${API_BASE_URL}/documents`, config);
-    
-    dispatch({
-      type: GET_DOCUMENTS_SUCCESS,
-      payload: data.data
-    });
-  } catch (error) {
-    dispatch({
-      type: GET_DOCUMENTS_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-  }
-};
+// Get all documents for the user export const getDocuments = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/api/v1/documents'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to fetch documents' }); throw error; } };
 
-// Get a single document by ID
-export const getDocument = (id) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: GET_DOCUMENT_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.get(`${API_BASE_URL}/documents/${id}`, config);
-    
-    dispatch({
-      type: GET_DOCUMENT_SUCCESS,
-      payload: data.data
-    });
-    
-    return data.data;
-  } catch (error) {
-    dispatch({
-      type: GET_DOCUMENT_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-    throw error;
-  }
-};
+// Get a single document by ID export const getDocumentById = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.get(/api/v1/documents/${documentId}); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to fetch document' }); throw error; } };
 
-// Upload a new document
-export const uploadDocument = (formData) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: UPLOAD_DOCUMENT_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.post(`${API_BASE_URL}/documents`, formData, config);
-    
-    dispatch({
-      type: UPLOAD_DOCUMENT_SUCCESS,
-      payload: data.data
-    });
-    
-    return data.data;
-  } catch (error) {
-    dispatch({
-      type: UPLOAD_DOCUMENT_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-    throw error;
-  }
-};
+// Upload a new document with progress callback export const uploadDocument = (formData, onProgress) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPLOAD_LOADING }); const response = await api.post('/api/v1/documents', formData, { headers: { 'Content-Type': 'multipart/form-data' }, onUploadProgress: (progressEvent) => { if (onProgress && progressEvent.total) { const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total); onProgress(percentCompleted); } } }); dispatch({ type: DOCUMENT_UPLOAD_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPLOAD_ERROR, payload: error.message || 'Failed to upload document' }); throw error; } };
 
-// Delete a document
-export const deleteDocument = (id) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: DELETE_DOCUMENT_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    await axios.delete(`${API_BASE_URL}/documents/${id}`, config);
-    
-    dispatch({
-      type: DELETE_DOCUMENT_SUCCESS,
-      payload: id
-    });
-  } catch (error) {
-    dispatch({
-      type: DELETE_DOCUMENT_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-  }
-};
+// Delete a document export const deleteDocument = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_DELETE_LOADING, payload: { documentId } }); await api.delete(/api/v1/documents/${documentId}); dispatch({ type: DOCUMENT_DELETE_SUCCESS, payload: { documentId } }); return documentId; } catch (error) { dispatch({ type: DOCUMENT_DELETE_ERROR, payload: { documentId, error: error.message || 'Failed to delete document' } }); throw error; } };
 
-// Update document verification status
-export const updateDocumentStatus = (id, statusData) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: UPDATE_DOCUMENT_STATUS_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.put(
-      `${API_BASE_URL}/integrations/documents/${id}/verify`, 
-      statusData, 
-      config
-    );
-    
-    dispatch({
-      type: UPDATE_DOCUMENT_STATUS_SUCCESS,
-      payload: data.data
-    });
-    
-    return data.data;
-  } catch (error) {
-    dispatch({
-      type: UPDATE_DOCUMENT_STATUS_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-    throw error;
-  }
-};
+// Update document verification status export const updateDocumentStatus = (documentId, status, notes) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPDATE_STATUS_LOADING, payload: { documentId } }); const response = await api.patch(/api/v1/documents/${documentId}/status, { status, notes }); dispatch({ type: DOCUMENT_UPDATE_STATUS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPDATE_STATUS_ERROR, payload: { documentId, error: error.message || 'Failed to update document status' } }); throw error; } };
 
-// Link documents to an application
-export const linkDocumentsToApplication = (applicationId, documentIds) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: LINK_DOCUMENTS_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.post(
-      `${API_BASE_URL}/integrations/documents/link`,
-      { applicationId, documentIds },
-      config
-    );
-    
-    dispatch({
-      type: LINK_DOCUMENTS_SUCCESS,
-      payload: data.data
-    });
-    
-    return data.data;
-  } catch (error) {
-    dispatch({
-      type: LINK_DOCUMENTS_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-    throw error;
-  }
-};
+// Verify document via integration endpoint export const verifyDocumentStatus = (documentId, statusData) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPDATE_STATUS_LOADING }); const response = await api.put( /integrations/documents/${documentId}/verify, statusData ); dispatch({ type: DOCUMENT_UPDATE_STATUS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPDATE_STATUS_ERROR, payload: error.message || 'Failed to verify document status' }); throw error; } };
 
-// Check for documents expiring soon
-export const checkDocumentExpiry = () => async (dispatch, getState) => {
-  try {
-    dispatch({ type: CHECK_DOCUMENT_EXPIRY_REQUEST });
-    
-    const { auth: { token } } = getState();
-    
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-    
-    const { data } = await axios.get(
-      `${API_BASE_URL}/integrations/documents/check-expiration`,
-      config
-    );
-    
-    dispatch({
-      type: CHECK_DOCUMENT_EXPIRY_SUCCESS,
-      payload: data.data
-    });
-    
-    return data.data;
-  } catch (error) {
-    dispatch({
-      type: CHECK_DOCUMENT_EXPIRY_FAILURE,
-      payload: error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    });
-    throw error;
-  }
-};
+// Associate a single document with an application export const linkDocumentToApplication = (documentId, applicationId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.post(/api/v1/documents/${documentId}/link, { applicationId }); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to link document to application' }); throw error; } };
 
-// Clear document errors
-export const clearDocumentErrors = () => (dispatch) => {
-  dispatch({ type: CLEAR_DOCUMENT_ERRORS });
-};
+// Associate multiple documents with an application export const linkDocumentsToApplication = (applicationId, documentIds) => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.post('/integrations/documents/link', { applicationId, documentIds }); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to link documents' }); throw error; } };
+
+// Check if documents are expiring soon export const checkExpiringDocuments = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/api/v1/documents/expiring'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to check expiring documents' }); throw error; } };
+
+// Check for documents expiring via integration endpoint export const checkDocumentExpiry = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/integrations/documents/check-expiration'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to check document expiry' }); throw error; } };
+
+// Get document verification history export const getDocumentHistory = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.get(/api/v1/documents/${documentId}/history); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to fetch document history' }); throw error; } };
+
+// Clear any document-related errors export const clearDocumentErrors = () => (dispatch) => { dispatch({ type: CLEAR_DOCUMENT_ERRORS }); };
+
+// Reset document upload state export const resetDocumentUploadState = () => ({ type: DOCUMENT_RESET_UPLOAD_STATE });
+
