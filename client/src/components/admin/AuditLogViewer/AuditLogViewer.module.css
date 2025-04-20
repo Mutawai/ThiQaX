@@ -1,0 +1,342 @@
+.logContainer {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.filtersContainer {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filterForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+}
+
+.filterLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.filterInput, .filterSelect {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.logTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logTable th {
+  background-color: #f9fafb;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logTable td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.logRow {
+  cursor: pointer;
+}
+
+.logRow:hover {
+  background-color: #f9fafb;
+}
+
+.selectedRow {
+  background-color: #eff6ff;
+}
+
+.userName {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.userId {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.timestamp {
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.actionCreate {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.actionUpdate {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.actionDelete {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.actionView {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.actionLogin {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.actionLogout {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.resourceName {
+  font-weight: 500;
+  color: #1f2937;
+  text-transform: capitalize;
+}
+
+.resourceId {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.ipAddress {
+  font-family: monospace;
+  color: #6b7280;
+}
+
+.detailButton {
+  color: #4f46e5;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.detailButton:hover {
+  color: #4338ca;
+}
+
+.detailView {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.detailTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #6b7280;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .detailGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.detailSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.detailCard {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.detailList {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.detailValue {
+  font-size: 0.875rem;
+  color: #1f2937;
+  max-width: 50%;
+  text-align: right;
+  word-break: break-word;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.paginationInfo {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.paginationNav {
+  display: flex;
+}
+
+.paginationButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.paginationButton:first-child {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.paginationButton:last-child {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.paginationButton.active {
+  background-color: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.paginationButton:hover:not(.active):not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.changeTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.changeTable th {
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.changeTable td {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.oldValue {
+  color: #b91c1c;
+}
+
+.newValue {
+  color: #047857;
+}
