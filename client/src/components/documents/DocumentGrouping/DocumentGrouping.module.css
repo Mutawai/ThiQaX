@@ -1,0 +1,38 @@
+/* src/components/documents/DocumentGrouping/DocumentGrouping.module.css */
+
+.documentGroups {
+  width: 100%;
+}
+
+.groupAccordion {
+  border-radius: 8px !important;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.groupAccordion:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.groupSummary {
+  min-height: 48px !important;
+  padding: 0 16px !important;
+}
+
+.groupDetails {
+  padding: 8px 16px 16px !important;
+}
+
+.emptyState {
+  transition: all 0.3s ease;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.emptyState:hover {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
