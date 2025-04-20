@@ -1,28 +1,278 @@
-import api from '../../services/api'; import { DOCUMENTS_LOADING, DOCUMENTS_SUCCESS, DOCUMENTS_ERROR, DOCUMENT_LOADING, DOCUMENT_SUCCESS, DOCUMENT_ERROR, DOCUMENT_UPLOAD_LOADING, DOCUMENT_UPLOAD_SUCCESS, DOCUMENT_UPLOAD_ERROR, DOCUMENT_DELETE_LOADING, DOCUMENT_DELETE_SUCCESS, DOCUMENT_DELETE_ERROR, DOCUMENT_UPDATE_STATUS_LOADING, DOCUMENT_UPDATE_STATUS_SUCCESS, DOCUMENT_UPDATE_STATUS_ERROR, DOCUMENT_RESET_UPLOAD_STATE, CLEAR_DOCUMENT_ERRORS } from '../types';
+import api from '../../services/api';
+import {
+  DOCUMENTS_LOADING,
+  DOCUMENTS_SUCCESS,
+  DOCUMENTS_ERROR,
+  DOCUMENT_LOADING,
+  DOCUMENT_SUCCESS,
+  DOCUMENT_ERROR,
+  DOCUMENT_UPLOAD_LOADING,
+  DOCUMENT_UPLOAD_SUCCESS,
+  DOCUMENT_UPLOAD_ERROR,
+  DOCUMENT_DELETE_LOADING,
+  DOCUMENT_DELETE_SUCCESS,
+  DOCUMENT_DELETE_ERROR,
+  DOCUMENT_UPDATE_STATUS_LOADING,
+  DOCUMENT_UPDATE_STATUS_SUCCESS,
+  DOCUMENT_UPDATE_STATUS_ERROR,
+  DOCUMENT_RESET_UPLOAD_STATE,
+  CLEAR_DOCUMENT_ERRORS
+} from '../types';
 
-// Get all documents for the user export const getDocuments = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/api/v1/documents'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to fetch documents' }); throw error; } };
+// Get all documents for the user
+export const getDocuments = () => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENTS_LOADING });
+    const response = await api.get('/api/v1/documents');
+    dispatch({
+      type: DOCUMENTS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENTS_ERROR,
+      payload: error.message || 'Failed to fetch documents',
+    });
+    throw error;
+  }
+};
 
-// Get a single document by ID export const getDocumentById = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.get(/api/v1/documents/${documentId}); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to fetch document' }); throw error; } };
+// Get a single document by ID
+export const getDocumentById = (documentId) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENT_LOADING });
+    const response = await api.get(`/api/v1/documents/${documentId}`);
+    dispatch({
+      type: DOCUMENT_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: error.message || 'Failed to fetch document',
+    });
+    throw error;
+  }
+};
 
-// Upload a new document with progress callback export const uploadDocument = (formData, onProgress) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPLOAD_LOADING }); const response = await api.post('/api/v1/documents', formData, { headers: { 'Content-Type': 'multipart/form-data' }, onUploadProgress: (progressEvent) => { if (onProgress && progressEvent.total) { const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total); onProgress(percentCompleted); } } }); dispatch({ type: DOCUMENT_UPLOAD_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPLOAD_ERROR, payload: error.message || 'Failed to upload document' }); throw error; } };
+// Upload a new document with progress callback
+export const uploadDocument = (formData, onProgress) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENT_UPLOAD_LOADING });
+    const response = await api.post('/api/v1/documents', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (progressEvent) => {
+        if (onProgress && progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          onProgress(percentCompleted);
+        }
+      },
+    });
+    dispatch({
+      type: DOCUMENT_UPLOAD_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_UPLOAD_ERROR,
+      payload: error.message || 'Failed to upload document',
+    });
+    throw error;
+  }
+};
 
-// Delete a document export const deleteDocument = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_DELETE_LOADING, payload: { documentId } }); await api.delete(/api/v1/documents/${documentId}); dispatch({ type: DOCUMENT_DELETE_SUCCESS, payload: { documentId } }); return documentId; } catch (error) { dispatch({ type: DOCUMENT_DELETE_ERROR, payload: { documentId, error: error.message || 'Failed to delete document' } }); throw error; } };
+// Delete a document
+export const deleteDocument = (documentId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DOCUMENT_DELETE_LOADING,
+      payload: { documentId },
+    });
+    await api.delete(`/api/v1/documents/${documentId}`);
+    dispatch({
+      type: DOCUMENT_DELETE_SUCCESS,
+      payload: { documentId },
+    });
+    return documentId;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_DELETE_ERROR,
+      payload: {
+        documentId,
+        error: error.message || 'Failed to delete document',
+      },
+    });
+    throw error;
+  }
+};
 
-// Update document verification status export const updateDocumentStatus = (documentId, status, notes) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPDATE_STATUS_LOADING, payload: { documentId } }); const response = await api.patch(/api/v1/documents/${documentId}/status, { status, notes }); dispatch({ type: DOCUMENT_UPDATE_STATUS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPDATE_STATUS_ERROR, payload: { documentId, error: error.message || 'Failed to update document status' } }); throw error; } };
+// Update document verification status
+export const updateDocumentStatus = (documentId, status, notes) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DOCUMENT_UPDATE_STATUS_LOADING,
+      payload: { documentId },
+    });
+    const response = await api.patch(
+      `/api/v1/documents/${documentId}/status`,
+      { status, notes }
+    );
+    dispatch({
+      type: DOCUMENT_UPDATE_STATUS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_UPDATE_STATUS_ERROR,
+      payload: {
+        documentId,
+        error: error.message || 'Failed to update document status',
+      },
+    });
+    throw error;
+  }
+};
 
-// Verify document via integration endpoint export const verifyDocumentStatus = (documentId, statusData) => async (dispatch) => { try { dispatch({ type: DOCUMENT_UPDATE_STATUS_LOADING }); const response = await api.put( /integrations/documents/${documentId}/verify, statusData ); dispatch({ type: DOCUMENT_UPDATE_STATUS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_UPDATE_STATUS_ERROR, payload: error.message || 'Failed to verify document status' }); throw error; } };
+// Verify document via integration endpoint
+export const verifyDocumentStatus = (documentId, statusData) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENT_UPDATE_STATUS_LOADING });
+    const response = await api.put(
+      `/integrations/documents/${documentId}/verify`,
+      statusData
+    );
+    dispatch({
+      type: DOCUMENT_UPDATE_STATUS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_UPDATE_STATUS_ERROR,
+      payload: error.message || 'Failed to verify document status',
+    });
+    throw error;
+  }
+};
 
-// Associate a single document with an application export const linkDocumentToApplication = (documentId, applicationId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.post(/api/v1/documents/${documentId}/link, { applicationId }); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to link document to application' }); throw error; } };
+// Associate a single document with an application
+export const linkDocumentToApplication = (documentId, applicationId) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENT_LOADING });
+    const response = await api.post(
+      `/api/v1/documents/${documentId}/link`,
+      { applicationId }
+    );
+    dispatch({
+      type: DOCUMENT_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: error.message || 'Failed to link document to application',
+    });
+    throw error;
+  }
+};
 
-// Associate multiple documents with an application export const linkDocumentsToApplication = (applicationId, documentIds) => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.post('/integrations/documents/link', { applicationId, documentIds }); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to link documents' }); throw error; } };
+// Associate multiple documents with an application
+export const linkDocumentsToApplication = (applicationId, documentIds) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENTS_LOADING });
+    const response = await api.post(
+      '/integrations/documents/link',
+      { applicationId, documentIds }
+    );
+    dispatch({
+      type: DOCUMENTS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENTS_ERROR,
+      payload: error.message || 'Failed to link documents',
+    });
+    throw error;
+  }
+};
 
-// Check if documents are expiring soon export const checkExpiringDocuments = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/api/v1/documents/expiring'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to check expiring documents' }); throw error; } };
+// Check if documents are expiring soon
+export const checkExpiringDocuments = () => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENTS_LOADING });
+    const response = await api.get('/api/v1/documents/expiring');
+    dispatch({
+      type: DOCUMENTS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENTS_ERROR,
+      payload: error.message || 'Failed to check expiring documents',
+    });
+    throw error;
+  }
+};
 
-// Check for documents expiring via integration endpoint export const checkDocumentExpiry = () => async (dispatch) => { try { dispatch({ type: DOCUMENTS_LOADING }); const response = await api.get('/integrations/documents/check-expiration'); dispatch({ type: DOCUMENTS_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENTS_ERROR, payload: error.message || 'Failed to check document expiry' }); throw error; } };
+// Check for documents expiring via integration endpoint
+export const checkDocumentExpiry = () => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENTS_LOADING });
+    const response = await api.get(
+      '/integrations/documents/check-expiration'
+    );
+    dispatch({
+      type: DOCUMENTS_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENTS_ERROR,
+      payload: error.message || 'Failed to check document expiry',
+    });
+    throw error;
+  }
+};
 
-// Get document verification history export const getDocumentHistory = (documentId) => async (dispatch) => { try { dispatch({ type: DOCUMENT_LOADING }); const response = await api.get(/api/v1/documents/${documentId}/history); dispatch({ type: DOCUMENT_SUCCESS, payload: response.data.data }); return response.data.data; } catch (error) { dispatch({ type: DOCUMENT_ERROR, payload: error.message || 'Failed to fetch document history' }); throw error; } };
+// Get document verification history
+export const getDocumentHistory = (documentId) => async (dispatch) => {
+  try {
+    dispatch({ type: DOCUMENT_LOADING });
+    const response = await api.get(
+      `/api/v1/documents/${documentId}/history`
+    );
+    dispatch({
+      type: DOCUMENT_SUCCESS,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (error) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: error.message || 'Failed to fetch document history',
+    });
+    throw error;
+  }
+};
 
-// Clear any document-related errors export const clearDocumentErrors = () => (dispatch) => { dispatch({ type: CLEAR_DOCUMENT_ERRORS }); };
+// Clear any document-related errors
+export const clearDocumentErrors = () => (dispatch) => {
+  dispatch({ type: CLEAR_DOCUMENT_ERRORS });
+};
 
-// Reset document upload state export const resetDocumentUploadState = () => ({ type: DOCUMENT_RESET_UPLOAD_STATE });
+// Reset document upload state
+export const resetDocumentUploadState = () => ({
+  type: DOCUMENT_RESET_UPLOAD_STATE,
+});
 
