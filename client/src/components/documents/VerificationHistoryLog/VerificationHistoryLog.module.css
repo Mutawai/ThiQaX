@@ -1,0 +1,31 @@
+/* src/components/documents/VerificationHistoryLog/VerificationHistoryLog.module.css */
+
+.historyLog {
+  position: relative;
+}
+
+.historyLog:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.historyLog.collapsed:after {
+  opacity: 1;
+}
+
+.emptyState {
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+  transition: background-color 0.3s ease;
+}
+
+.emptyState:hover {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
