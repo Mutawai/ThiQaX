@@ -1,0 +1,89 @@
+/* src/components/jobs/ComparisonModal/ComparisonModal.module.css */
+
+.comparisonModal {
+  overflow-x: auto;
+}
+
+.modalTitle {
+  padding-right: 48px;
+}
+
+.comparisonGrid {
+  min-width: 600px;
+}
+
+.comparisonRow {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 12px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.comparisonRow:last-child {
+  border-bottom: none;
+}
+
+.categoryColumn {
+  background-color: rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 16px !important;
+}
+
+.categoryLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jobColumn {
+  padding: 8px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.jobHeader {
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.jobTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jobActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.listItems {
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  margin-bottom: 4px;
+}
+
+.listItemIcon {
+  min-width: 24px !important;
+}
+
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.skillChip {
+  margin: 2px;
+}
