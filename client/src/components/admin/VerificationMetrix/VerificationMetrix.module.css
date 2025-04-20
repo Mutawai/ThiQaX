@@ -1,0 +1,169 @@
+.chartContainer {
+  height: 250px;
+  width: 100%;
+  position: relative;
+}
+
+.barChart {
+  display: flex;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.barGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.barStack {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 30px;
+}
+
+.barSegment {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+}
+
+.barLabel {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.pendingColor {
+  background-color: #fef08a;
+}
+
+.approvedColor {
+  background-color: #86efac;
+}
+
+.rejectedColor {
+  background-color: #fca5a5;
+}
+
+.metricCard {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricTitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.metricValue {
+  font-size: 1.875rem;
+  font-weight: 600;
+}
+
+.metricTotal {
+  color: #1f2937;
+}
+
+.metricPending {
+  color: #f59e0b;
+}
+
+.metricApproved {
+  color: #10b981;
+}
+
+.metricRejected {
+  color: #ef4444;
+}
+
+.progressContainer {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.typeItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.typeLabel {
+  width: 120px;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.typePercentage {
+  width: 50px;
+  text-align: right;
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.refreshButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refreshButton:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.refreshButton svg {
+  margin-right: 0.5rem;
+}
+
+.periodSelect {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+@media (max-width: 768px) {
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
