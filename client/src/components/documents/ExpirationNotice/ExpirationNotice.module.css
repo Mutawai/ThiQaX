@@ -1,0 +1,28 @@
+/* src/components/documents/ExpirationNotice/ExpirationNotice.module.css */
+
+.notice {
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.notice:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.bannerNotice {
+  transition: all 0.2s ease;
+}
+
+.bannerNotice:hover {
+  opacity: 0.9;
+  transform: scale(1.005);
+}
+
+.compactNotice {
+  transition: transform 0.2s ease;
+}
+
+.compactNotice:hover {
+  transform: scale(1.1);
+}
