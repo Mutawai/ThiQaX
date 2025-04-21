@@ -1,0 +1,96 @@
+/* client/src/components/messaging/FileAttachmentPreview/FileAttachmentPreview.module.css */
+.container {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+  max-width: 300px;
+  position: relative;
+}
+
+.previewContainer {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.zoomButton {
+  position: absolute !important;
+  right: 4px;
+  bottom: 4px;
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  padding: 2px !important;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.imagePreview:hover .zoomButton {
+  opacity: 1;
+}
+
+.fileIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.fileIcon {
+  width: 32px;
+  height: 32px;
+  color: #666;
+}
+
+.fileInfo {
+  flex: 1;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* Enable text truncation */
+}
+
+.fileName {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.progressBar {
+  height: 4px !important;
+  border-radius: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 8px;
+}
+
+.actionButton {
+  margin: 2px !important;
+}
+
+.uploadingIndicator {
+  margin: 8px;
+  color: #2196f3;
+}
