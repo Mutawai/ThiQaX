@@ -1,0 +1,192 @@
+/* src/components/verification/VerificationComparison/VerificationComparison.module.css */
+
+.container {
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.header {
+  padding: 16px 24px;
+  background-color: #f0f9ff;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 127, 255, 0.1);
+  color: #007fff;
+}
+
+.subtitle {
+  margin-left: 52px;
+}
+
+.tabsContainer {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tabs {
+  min-height: 48px;
+}
+
+.comparisonContainer {
+  padding: 24px;
+}
+
+.resultHeader {
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resultNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resultMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statusChip {
+  font-weight: 500;
+}
+
+.selectButton {
+  align-self: stretch;
+}
+
+.divider {
+  margin: 16px 0;
+}
+
+.tabContent {
+  margin-top: 16px;
+}
+
+.checkName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoIcon {
+  font-size: 1rem;
+  cursor: help;
+}
+
+/* Status and comparison styling */
+.successCell {
+  background-color: rgba(76, 175, 80, 0.08);
+  color: #2e7d32;
+}
+
+.errorCell {
+  background-color: rgba(244, 67, 54, 0.08);
+  color: #d32f2f;
+}
+
+.success {
+  color: #2e7d32;
+}
+
+.warning {
+  color: #ed6c02;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.diffResult {
+  background-color: rgba(255, 235, 59, 0.1);
+  border-left: 3px solid rgba(255, 152, 0, 0.5);
+}
+
+.betterResult {
+  background-color: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid rgba(76, 175, 80, 0.5);
+}
+
+.worseResult {
+  background-color: rgba(244, 67, 54, 0.05);
+  border-left: 3px solid rgba(244, 67, 54, 0.3);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f0f9ff;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.infoBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.emptyState {
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.backButton {
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .subtitle {
+    margin-left: 0;
+  }
+  
+  .comparisonContainer {
+    padding: 16px;
+  }
+  
+  .resultMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .infoBox {
+    margin-left: 8px;
+  }
+}
