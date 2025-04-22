@@ -1,0 +1,312 @@
+/* src/components/verification/TrustScoreExplanation/TrustScoreExplanation.module.css */
+
+.container {
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.header {
+  padding: 16px 24px;
+  background-color: #f8f9ff;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(63, 81, 181, 0.1);
+  color: #3f51b5;
+}
+
+.subtitle {
+  margin-left: 52px;
+  font-style: italic;
+}
+
+.exportButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.scoreOverview {
+  padding: 24px;
+}
+
+.scoreBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.scoreCircleContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.scoreCircleWrapper {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: 12px;
+}
+
+.scoreValue {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreTrend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.trustLevelChip {
+  font-weight: 500;
+}
+
+.scoreSummary {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreHighlights {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.highlightAlert {
+  margin-top: 8px;
+}
+
+.divider {
+  margin: 0;
+}
+
+.factorsSection {
+  padding: 0 16px 16px;
+}
+
+.accordion {
+  margin-top: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.accordion:before {
+  display: none;
+}
+
+.accordionSummary {
+  padding: 0 16px;
+}
+
+.accordionDetails {
+  padding: 0 16px 16px;
+  background-color: #fafafa;
+}
+
+.factorsGrid {
+  margin-top: 8px;
+}
+
+.factorCard {
+  height: 100%;
+}
+
+.factorHeader {
+  padding-bottom: 8px;
+}
+
+.factorIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.factorMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.impactChip {
+  font-size: 0.7rem;
+}
+
+.factorScore {
+  margin-bottom: 12px;
+}
+
+.factorDescription {
+  margin-bottom: 8px;
+}
+
+.factorDetails {
+  margin-top: 8px;
+  background-color: rgba(0, 0, 0, 0.02);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.factorDetail {
+  margin-bottom: 4px;
+}
+
+.success {
+  color: #2e7d32;
+}
+
+.warning {
+  color: #ed6c02;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.scoreSuccess {
+  color: #2e7d32;
+}
+
+.scoreWarning {
+  color: #ed6c02;
+}
+
+.scoreError {
+  color: #d32f2f;
+}
+
+.recommendationsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recommendationAlert {
+  margin: 0;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.relatedFactorChip {
+  font-size: 0.7rem;
+}
+
+.recommendationImpact {
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.historyScore {
+  font-weight: 500;
+}
+
+.emptyState {
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.alert {
+  width: 100%;
+  max-width: 600px;
+}
+
+.footer {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: center;
+  background-color: #f8f9ff;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.refreshButton {
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .titleRow {
+    flex-wrap: wrap;
+  }
+  
+  .subtitle {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  
+  .exportButton {
+    position: relative;
+    margin-top: 16px;
+    width: 100%;
+  }
+  
+  .scoreOverview {
+    padding: 16px;
+  }
+  
+  .factorsSection {
+    padding: 0 8px 16px;
+  }
+  
+  .recommendationHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .factorMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
