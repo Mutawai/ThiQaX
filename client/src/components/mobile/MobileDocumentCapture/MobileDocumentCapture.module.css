@@ -1,0 +1,337 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #6366f1;
+  color: white;
+  z-index: 2;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.errorAlert {
+  margin: 8px;
+}
+
+.modeSwitchTabs {
+  display: flex;
+  justify-content: space-around;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modeTab {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 0;
+}
+
+.activeTab {
+  color: #6366f1;
+  border-bottom: 2px solid #6366f1;
+}
+
+/* Camera view */
+.cameraContainer {
+  flex: 1;
+  position: relative;
+  background-color: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.documentOutline {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 56%;
+  border: 2px dashed rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.documentCorners {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(255, 255, 255, 0.9);
+  border-style: solid;
+  border-width: 0;
+}
+
+.corner:nth-child(1) {
+  border-top-width: 3px;
+  border-left-width: 3px;
+  border-top-left-radius: 4px;
+}
+
+.corner:nth-child(2) {
+  border-top-width: 3px;
+  border-right-width: 3px;
+  border-top-right-radius: 4px;
+}
+
+.corner:nth-child(3) {
+  border-bottom-width: 3px;
+  border-left-width: 3px;
+  border-bottom-left-radius: 4px;
+}
+
+.corner:nth-child(4) {
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+  border-bottom-right-radius: 4px;
+}
+
+.documentGuide {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.cameraControls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.cameraButton {
+  color: white !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  margin: 0 16px;
+}
+
+.captureButton {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.activeIcon {
+  color: #ffeb3b;
+}
+
+/* Gallery view */
+.galleryContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+}
+
+.galleryPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: 16px;
+}
+
+.galleryIcon {
+  font-size: 48px !important;
+  color: #6366f1;
+  margin-bottom: 16px;
+}
+
+.galleryButton {
+  margin-top: 16px !important;
+}
+
+.fileInput {
+  display: none;
+}
+
+/* Preview view */
+.previewContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+}
+
+.imageContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cropMode {
+  cursor: crosshair;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cropBox {
+  position: absolute;
+  border: 2px dashed #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+.cropInstructions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.enhancementControls {
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.enhancementControl {
+  margin-bottom: 12px;
+}
+
+.enhancementControl Typography {
+  color: white;
+  margin-bottom: 8px;
+}
+
+.slider {
+  position: relative;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.sliderTrack {
+  position: absolute;
+  height: 100%;
+  background-color: #6366f1;
+  border-radius: 12px;
+}
+
+.sliderThumb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  cursor: grab;
+}
+
+.resetButton {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  margin-top: 8px !important;
+}
+
+.previewActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: white;
+}
+
+.actionButton {
+  min-width: 100px !important;
+}
+
+.editButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton {
+  color: #666 !important;
+}
+
+.activeEditButton {
+  color: #6366f1 !important;
+  background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+.adjustBackdrop {
+  z-index: 2000;
+}
+
+/* Mobile optimization */
+@media (max-width: 600px) {
+  .captureButton {
+    width: 56px !important;
+    height: 56px !important;
+  }
+  
+  .cameraButton {
+    margin: 0 8px;
+  }
+  
+  .documentOutline {
+    width: 85%;
+    height: 60%;
+  }
+}
