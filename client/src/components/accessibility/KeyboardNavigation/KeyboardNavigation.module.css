@@ -1,0 +1,58 @@
+/* 
+  Skip link styling - hidden by default, visible on focus 
+  This allows keyboard users to skip navigation but stays hidden for other users
+*/
+.skipLink {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px 16px;
+  background-color: #1a56db;
+  color: white;
+  font-weight: 500;
+  z-index: 9999;
+  text-decoration: none;
+  transition: top 0.2s ease;
+  border-radius: 0 0 4px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+/* Skip link becomes visible when focused */
+.skipLinkVisible {
+  top: 0;
+}
+
+/* Focus styles for focusable elements within keyboard navigation container */
+:global([data-keyboard-nav="true"]) :focus {
+  outline: 2px solid #1a56db;
+  outline-offset: 2px;
+}
+
+/* Emphasize focus on interactive elements */
+:global([data-keyboard-nav="true"]) button:focus,
+:global([data-keyboard-nav="true"]) a:focus,
+:global([data-keyboard-nav="true"]) input:focus,
+:global([data-keyboard-nav="true"]) select:focus,
+:global([data-keyboard-nav="true"]) textarea:focus {
+  outline: 2px solid #1a56db;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.3);
+}
+
+/* Ensure focus styles are visible in Windows high contrast mode */
+@media screen and (-ms-high-contrast: active) {
+  .skipLink {
+    background: WindowText;
+    color: Window;
+    border: 1px solid WindowText;
+  }
+  
+  .skipLinkVisible {
+    border: 2px solid WindowText;
+  }
+
+  :global([data-keyboard-nav="true"]) :focus {
+    outline: 2px solid WindowText;
+  }
+}
