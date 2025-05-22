@@ -1,0 +1,162 @@
+/* Toggle container */
+.toggleContainer {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Toggle button styling */
+.toggleButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Button hover state */
+.toggleButton:hover {
+  background-color: #e5e7eb;
+}
+
+/* Button focus state - visible outline for keyboard users */
+.toggleButton:focus {
+  outline: 2px solid #1a56db;
+  outline-offset: 2px;
+}
+
+/* Active (high contrast enabled) state */
+.toggleButton.active {
+  background-color: #1a56db;
+  color: white;
+  border-color: #1a56db;
+}
+
+/* Icon container */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+/* Label styling */
+.label {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* 
+  Global high contrast mode styles
+  These styles will be applied when the 'high-contrast-mode' class
+  is added to the document root element
+*/
+:global(.high-contrast-mode) {
+  /* Base high contrast styles */
+  --hc-text: #000000;
+  --hc-background: #ffffff;
+  --hc-border: #000000;
+  --hc-focus: #0000ff;
+  --hc-selected: #0000ff;
+  --hc-link: #0000ff;
+  --hc-visited: #800080;
+  --hc-error: #ff0000;
+  --hc-success: #008000;
+  --hc-warning: #ff8000;
+  --hc-info: #0000ff;
+}
+
+/* Apply high contrast to form elements */
+:global(.high-contrast-mode) :global(input),
+:global(.high-contrast-mode) :global(select),
+:global(.high-contrast-mode) :global(textarea),
+:global(.high-contrast-mode) :global(button) {
+  border: 1px solid var(--hc-border);
+  color: var(--hc-text);
+  background-color: var(--hc-background);
+}
+
+/* Apply high contrast to links */
+:global(.high-contrast-mode) :global(a) {
+  color: var(--hc-link);
+  text-decoration: underline;
+}
+
+:global(.high-contrast-mode) :global(a:visited) {
+  color: var(--hc-visited);
+}
+
+/* Enhanced focus indicators for high contrast mode */
+:global(.high-contrast-mode) :global(:focus) {
+  outline: 2px solid var(--hc-focus);
+  outline-offset: 2px;
+}
+
+/* Ensure buttons have visible borders in high contrast mode */
+:global(.high-contrast-mode) :global(button),
+:global(.high-contrast-mode) :global(.btn) {
+  border: 2px solid var(--hc-border);
+}
+
+/* Apply high contrast to selected text */
+:global(.high-contrast-mode) :global(::selection) {
+  background-color: var(--hc-selected);
+  color: var(--hc-background);
+}
+
+/* Enhanced contrast for status indicators */
+:global(.high-contrast-mode) :global(.error),
+:global(.high-contrast-mode) :global(.text-error) {
+  color: var(--hc-error);
+}
+
+:global(.high-contrast-mode) :global(.success),
+:global(.high-contrast-mode) :global(.text-success) {
+  color: var(--hc-success);
+}
+
+:global(.high-contrast-mode) :global(.warning),
+:global(.high-contrast-mode) :global(.text-warning) {
+  color: var(--hc-warning);
+}
+
+:global(.high-contrast-mode) :global(.info),
+:global(.high-contrast-mode) :global(.text-info) {
+  color: var(--hc-info);
+}
+
+/* Enhance contrast for icons */
+:global(.high-contrast-mode) :global(svg) {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0.5;
+}
+
+/* Remove background images that may impact contrast */
+:global(.high-contrast-mode) :global([class*="bg-"]) {
+  background-image: none !important;
+}
+
+/* Windows High Contrast Mode support */
+@media screen and (-ms-high-contrast: active) {
+  .toggleButton {
+    border: 2px solid ButtonText;
+    background-color: ButtonFace;
+    color: ButtonText;
+  }
+  
+  .toggleButton.active {
+    border: 2px solid Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  
+  .toggleButton:focus {
+    outline: 2px solid ButtonText;
+  }
+}
