@@ -1,0 +1,426 @@
+/* client/src/components/mobile/PullToRefresh/PullToRefresh.module.css */
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  touch-action: pan-y;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  will-change: transform;
+}
+
+.refreshIndicator {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10;
+  will-change: transform, opacity;
+}
+
+.indicatorContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  will-change: transform;
+}
+
+.spinner {
+  color: #6366f1 !important;
+  animation: spin 1s linear infinite;
+}
+
+.refreshIcon {
+  color: #6366f1;
+  font-size: 24px;
+  transition: transform 0.3s ease-out;
+}
+
+.arrowIcon {
+  color: #9e9e9e;
+  font-size: 24px;
+  transition: transform 0.3s ease-out, color 0.3s ease-out;
+}
+
+.completeIcon {
+  color: #4caf50;
+  font-size: 24px;
+  animation: checkPulse 0.6s ease-out;
+}
+
+.statusText {
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  text-align: center;
+  color: #666 !important;
+  margin: 0 !important;
+  white-space: nowrap;
+  transition: color 0.3s ease-out;
+}
+
+.progressIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  transition: width 0.1s ease-out, opacity 0.3s ease-out;
+  z-index: 11;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes checkPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes refreshSlide {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* State-specific styles */
+.container.pulling .refreshIndicator {
+  animation: refreshSlide 0.3s ease-out;
+}
+
+.container.refreshing .refreshIndicator {
+  background-color: #f8f9ff;
+  border-bottom-color: #e3e8ff;
+}
+
+.container.refreshing .statusText {
+  color: #6366f1 !important;
+}
+
+.container.complete .refreshIndicator {
+  background-color: #f0f9f0;
+  border-bottom-color: #c8e6c9;
+}
+
+.container.complete .statusText {
+  color: #4caf50 !important;
+}
+
+/* Touch feedback */
+.content:active {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .refreshIndicator {
+    height: 56px;
+    top: -56px;
+  }
+  
+  .iconContainer {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .refreshIcon,
+  .arrowIcon {
+    font-size: 20px;
+  }
+  
+  .spinner {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .statusText {
+    font-size: 0.6875rem !important;
+  }
+  
+  .progressIndicator {
+    height: 1.5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .refreshIndicator {
+    height: 52px;
+    top: -52px;
+  }
+  
+  .iconContainer {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .refreshIcon,
+  .arrowIcon {
+    font-size: 18px;
+  }
+  
+  .spinner {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .statusText {
+    font-size: 0.625rem !important;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .progressIndicator {
+    height: 2px;
+  }
+  
+  .refreshIndicator {
+    border-bottom-width: 0.5px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1e1e1e;
+  }
+  
+  .refreshIndicator {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
+  }
+  
+  .statusText {
+    color: #ccc !important;
+  }
+  
+  .arrowIcon {
+    color: #888;
+  }
+  
+  .container.refreshing .refreshIndicator {
+    background-color: #1a1a2e;
+    border-bottom-color: #16213e;
+  }
+  
+  .container.refreshing .statusText {
+    color: #8b93ff !important;
+  }
+  
+  .container.complete .refreshIndicator {
+    background-color: #1a2e1a;
+    border-bottom-color: #2e5a2e;
+  }
+  
+  .container.complete .statusText {
+    color: #81c784 !important;
+  }
+  
+  .content:active {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .refreshIndicator,
+  .iconContainer,
+  .content,
+  .progressIndicator {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .spinner {
+    animation: none !important;
+  }
+  
+  .checkPulse {
+    animation: none !important;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.container:focus-within .refreshIndicator {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .refreshIndicator {
+    display: none;
+  }
+  
+  .progressIndicator {
+    display: none;
+  }
+  
+  .content {
+    transform: none !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+}
+
+/* Loading shimmer effect */
+.container.refreshing .refreshIndicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Custom scrollbar for content */
+.content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Performance optimizations */
+.container,
+.refreshIndicator,
+.content {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* Safe area support for devices with notches */
+@supports (padding: max(0px)) {
+  .refreshIndicator {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* Hover effects for desktop */
+@media (hover: hover) and (pointer: fine) {
+  .iconContainer:hover .refreshIcon,
+  .iconContainer:hover .arrowIcon {
+    transform: scale(1.1);
+  }
+  
+  .container:hover .progressIndicator {
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+  }
+}
+
+/* Force hardware acceleration */
+.refreshIndicator,
+.content,
+.iconContainer,
+.progressIndicator {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Improve touch responsiveness */
+.content {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Content selection within children should still work */
+.content * {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
