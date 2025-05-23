@@ -1,0 +1,768 @@
+/* client/src/components/mobile/MobileFilterMenu/MobileFilterMenu.module.css */
+.filterMenu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+/* Drawer Styles */
+.drawer {
+  /* Drawer container styles handled by MUI */
+}
+
+/* Modal Styles */
+.backdrop {
+  z-index: 1200;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+  z-index: 1300;
+  overflow: hidden;
+}
+
+.modalOpen {
+  transform: translateX(0);
+}
+
+/* Header Styles */
+.header {
+  padding: 12px 16px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 64px;
+}
+
+.title {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.closeButton {
+  color: #666 !important;
+  margin-left: auto !important;
+}
+
+.activeCountChip {
+  background-color: #6366f1 !important;
+  color: white !important;
+  font-size: 0.75rem !important;
+  height: 20px !important;
+  margin-left: 8px !important;
+}
+
+/* Search Styles */
+.searchContainer {
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.searchField {
+  background-color: white !important;
+}
+
+.searchField .MuiOutlinedInput-root {
+  border-radius: 8px !important;
+}
+
+.searchField .MuiInputBase-input {
+  padding: 12px 14px !important;
+  font-size: 0.875rem !important;
+}
+
+/* Content Styles */
+.filterContent {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
+}
+
+/* Filter Group Styles */
+.filterGroup {
+  margin-bottom: 8px !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.filterGroup:before {
+  display: none !important;
+}
+
+.groupHeader {
+  padding: 16px !important;
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  min-height: 56px !important;
+}
+
+.groupTitle {
+  font-weight: 600 !important;
+  color: #333 !important;
+  flex: 1;
+}
+
+.groupBadge {
+  margin-left: auto;
+}
+
+.groupContent {
+  padding: 16px !important;
+  flex-direction: column !important;
+  gap: 16px;
+}
+
+/* Filter Control Styles */
+.filterControl {
+  width: 100% !important;
+  margin-bottom: 16px !important;
+}
+
+.filterLabel {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin-bottom: 12px !important;
+}
+
+.filterItem {
+  margin-bottom: 16px;
+}
+
+/* Filter Option Styles */
+.filterOption {
+  margin: 0 !important;
+  padding: 8px 0 !important;
+  width: 100%;
+  align-items: flex-start !important;
+}
+
+.filterOption .MuiFormControlLabel-label {
+  width: 100%;
+  margin-left: 8px;
+}
+
+.optionLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.countChip {
+  background-color: #f0f0f0 !important;
+  color: #666 !important;
+  height: 20px !important;
+  font-size: 0.6875rem !important;
+  margin-left: 8px !important;
+}
+
+/* Range Filter Styles */
+.rangeContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.rangeSlider {
+  flex: 1 !important;
+  margin: 0 8px !important;
+}
+
+.rangeValue {
+  min-width: 60px;
+  text-align: center;
+  font-weight: 500;
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* Switch Filter Styles */
+.switchFilter {
+  margin: 8px 0 !important;
+  width: 100%;
+  justify-content: space-between !important;
+  margin-left: 0 !important;
+}
+
+.switchFilter .MuiFormControlLabel-label {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Multi-Select Styles */
+.multiSelect {
+  margin-top: 8px !important;
+}
+
+.multiSelect .MuiOutlinedInput-root {
+  border-radius: 8px !important;
+}
+
+.multiSelect .MuiChip-root {
+  height: 24px !important;
+  font-size: 0.75rem !important;
+}
+
+/* Actions Styles */
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resetButton {
+  flex: 1;
+  border-color: #e0e0e0 !important;
+  color: #666 !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+}
+
+.resetButton:hover {
+  border-color: #bdbdbd !important;
+  background-color: #f5f5f5 !important;
+}
+
+.applyButton {
+  flex: 2;
+  background-color: #6366f1 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important;
+}
+
+.applyButton:hover {
+  background-color: #5856eb !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
+}
+
+.applyButton:disabled {
+  background-color: #e0e0e0 !important;
+  color: #9e9e9e !important;
+  box-shadow: none !important;
+}
+
+/* No Results Styles */
+.noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.noResults p {
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+  }
+  
+  .modalOpen {
+    transform: translateY(0);
+  }
+  
+  .header {
+    padding: 8px 16px;
+    min-height: 56px;
+  }
+  
+  .title {
+    font-size: 1.125rem;
+  }
+  
+  .searchContainer {
+    padding: 12px 16px;
+  }
+  
+  .groupHeader {
+    padding: 12px 16px !important;
+    min-height: 48px !important;
+  }
+  
+  .groupContent {
+    padding: 12px 16px !important;
+  }
+  
+  .actions {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  
+  .resetButton,
+  .applyButton {
+    padding: 10px 12px !important;
+    font-size: 0.875rem !important;
+  }
+  
+  .rangeValue {
+    min-width: 50px;
+    font-size: 0.6875rem;
+    padding: 2px 6px;
+  }
+  
+  .countChip {
+    font-size: 0.625rem !important;
+    height: 18px !important;
+  }
+  
+  .activeCountChip {
+    font-size: 0.6875rem !important;
+    height: 18px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    padding: 6px 12px;
+  }
+  
+  .searchContainer {
+    padding: 8px 12px;
+  }
+  
+  .groupHeader {
+    padding: 8px 12px !important;
+  }
+  
+  .groupContent {
+    padding: 8px 12px !important;
+    gap: 12px;
+  }
+  
+  .actions {
+    padding: 8px 12px;
+    flex-direction: column;
+  }
+  
+  .resetButton,
+  .applyButton {
+    flex: none;
+    width: 100%;
+  }
+  
+  .rangeContainer {
+    gap: 8px;
+  }
+  
+  .rangeValue {
+    min-width: 40px;
+    font-size: 0.625rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .filterMenu {
+    background-color: #1e1e1e;
+  }
+  
+  .header {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
+  }
+  
+  .title {
+    color: #fff;
+  }
+  
+  .closeButton {
+    color: #ccc !important;
+  }
+  
+  .searchContainer {
+    background-color: #2a2a2a;
+    border-bottom-color: #333;
+  }
+  
+  .searchField {
+    background-color: #1e1e1e !important;
+  }
+  
+  .groupHeader {
+    background-color: #2a2a2a !important;
+    border-bottom-color: #333 !important;
+  }
+  
+  .groupTitle {
+    color: #fff !important;
+  }
+  
+  .filterLabel {
+    color: #fff !important;
+  }
+  
+  .optionLabel p {
+    color: #ccc;
+  }
+  
+  .countChip {
+    background-color: #333 !important;
+    color: #ccc !important;
+  }
+  
+  .rangeValue {
+    background-color: #333;
+    color: #ccc;
+  }
+  
+  .switchFilter .MuiFormControlLabel-label {
+    color: #ccc;
+  }
+  
+  .actions {
+    background-color: #1e1e1e;
+    border-top-color: #333;
+  }
+  
+  .resetButton {
+    border-color: #333 !important;
+    color: #ccc !important;
+  }
+  
+  .resetButton:hover {
+    border-color: #555 !important;
+    background-color: #2a2a2a !important;
+  }
+  
+  .modal {
+    background-color: #1e1e1e;
+  }
+}
+
+/* Accessibility Enhancements */
+.filterOption:focus-within,
+.switchFilter:focus-within {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.resetButton:focus-visible,
+.applyButton:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Animation Enhancements */
+.filterGroup {
+  transition: all 0.2s ease-out;
+}
+
+.filterOption {
+  transition: background-color 0.2s ease-out;
+}
+
+.filterOption:hover {
+  background-color: rgba(99, 102, 241, 0.04);
+  border-radius: 4px;
+}
+
+.resetButton,
+.applyButton {
+  transition: all 0.2s ease-out;
+}
+
+.resetButton:active,
+.applyButton:active {
+  transform: translateY(1px);
+}
+
+.modal {
+  will-change: transform;
+}
+
+/* Loading States */
+.filterContent.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.filterContent.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Performance Optimizations */
+.filterContent {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.modal {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Custom Scrollbar */
+.filterContent::-webkit-scrollbar {
+  width: 4px;
+}
+
+.filterContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filterContent::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.filterContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .filterContent::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .filterContent::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Touch Optimizations */
+.filterOption,
+.resetButton,
+.applyButton {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.filterOption {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.resetButton,
+.applyButton {
+  min-height: 48px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .modal,
+  .filterGroup,
+  .filterOption,
+  .resetButton,
+  .applyButton {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .resetButton:active,
+  .applyButton:active {
+    transform: none;
+  }
+  
+  .filterContent.loading::after {
+    animation: none !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .modal,
+  .drawer {
+    display: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .filterOption:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .resetButton {
+    border-width: 2px !important;
+  }
+  
+  .applyButton {
+    border: 2px solid #6366f1 !important;
+  }
+  
+  .header {
+    border-bottom-width: 2px;
+  }
+  
+  .searchContainer {
+    border-bottom-width: 2px;
+  }
+  
+  .actions {
+    border-top-width: 2px;
+  }
+}
+
+/* Safe Area Support */
+@supports (padding: max(0px)) {
+  .header {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .searchContainer {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .groupContent {
+    padding-left: max(16px, env(safe-area-inset-left)) !important;
+    padding-right: max(16px, env(safe-area-inset-right)) !important;
+  }
+  
+  .actions {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Hover Effects for Desktop */
+@media (hover: hover) and (pointer: fine) {
+  .closeButton:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  .groupHeader:hover {
+    background-color: #f0f0f0 !important;
+  }
+  
+  .activeCountChip:hover {
+    transform: scale(1.05);
+  }
+  
+  .countChip:hover {
+    background-color: #e0e0e0 !important;
+  }
+}
+
+/* Focus Management */
+.filterMenu:focus-within .header {
+  border-bottom-color: #6366f1;
+}
+
+.searchField:focus-within .MuiOutlinedInput-notchedOutline {
+  border-color: #6366f1 !important;
+  border-width: 2px !important;
+}
+
+/* Badge Positioning */
+.groupBadge .MuiBadge-badge {
+  background-color: #6366f1;
+  color: white;
+  font-size: 0.6875rem;
+  height: 18px;
+  min-width: 18px;
+}
+
+/* Accordion Override */
+.filterGroup .MuiAccordionSummary-content {
+  margin: 0 !important;
+}
+
+.filterGroup .MuiAccordionDetails-root {
+  padding: 0 !important;
+}
+
+/* Slider Customization */
+.rangeSlider .MuiSlider-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: #6366f1;
+}
+
+.rangeSlider .MuiSlider-track {
+  background-color: #6366f1;
+}
+
+.rangeSlider .MuiSlider-rail {
+  background-color: #e0e0e0;
+}
+
+.rangeSlider .MuiSlider-valueLabel {
+  background-color: #6366f1;
+}
+
+/* Switch Customization */
+.switchFilter .MuiSwitch-track {
+  background-color: #e0e0e0 !important;
+}
+
+.switchFilter .MuiSwitch-thumb {
+  background-color: #fff;
+}
+
+.switchFilter .Mui-checked .MuiSwitch-thumb {
+  background-color: #6366f1;
+}
+
+.switchFilter .Mui-checked + .MuiSwitch-track {
+  background-color: rgba(99, 102, 241, 0.5) !important;
+}
