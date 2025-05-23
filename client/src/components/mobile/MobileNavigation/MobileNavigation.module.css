@@ -1,0 +1,371 @@
+/* client/src/components/mobile/MobileNavigation/MobileNavigation.module.css */
+.mobileNavigation {
+  /* Base styles for mobile navigation container */
+}
+
+/* Navigation Types */
+.bottom {
+  /* Bottom navigation specific styles */
+}
+
+.top {
+  /* Top navigation specific styles */
+}
+
+.drawer {
+  /* Drawer navigation specific styles */
+}
+
+.hybrid {
+  /* Hybrid navigation (top + bottom/drawer) specific styles */
+}
+
+/* Variants */
+.default {
+  /* Default variant styles */
+}
+
+.minimal {
+  /* Minimal variant with reduced visual elements */
+}
+
+.material {
+  /* Material Design variant with enhanced shadows and transitions */
+}
+
+/* Bottom Navigation Styles */
+.bottomNavigation {
+  border-top: 1px solid #e0e0e0;
+  background-color: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bottomNavigation .MuiBottomNavigationAction-root {
+  min-width: 64px;
+  max-width: 168px;
+  padding: 8px 12px 10px;
+  color: #757575;
+  transition: color 0.2s ease-in-out;
+}
+
+.bottomNavigation .MuiBottomNavigationAction-root.Mui-selected {
+  color: #6366f1;
+  padding-top: 6px;
+}
+
+.bottomNavigation .MuiBottomNavigationAction-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* App Bar Styles */
+.appBar {
+  background-color: #fff !important;
+  color: #333 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menuButton {
+  margin-right: 12px !important;
+  color: #333 !important;
+}
+
+.title {
+  flex-grow: 1;
+  font-weight: 600;
+  color: #333;
+}
+
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notificationButton {
+  color: #333 !important;
+  margin-right: 4px !important;
+}
+
+.profileButton {
+  color: #333 !important;
+  padding: 6px !important;
+}
+
+.avatar {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 0.875rem !important;
+  background-color: #6366f1 !important;
+}
+
+/* Drawer Styles */
+.drawer {
+  /* Drawer container styles handled by MUI */
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  min-height: 64px;
+  background-color: #6366f1;
+  color: white;
+}
+
+.drawerTitle {
+  font-weight: 600;
+  color: white;
+}
+
+.drawerList {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.listItem {
+  padding: 12px 16px !important;
+  margin: 0 8px 4px 8px !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s ease-in-out !important;
+}
+
+.listItem:hover {
+  background-color: rgba(99, 102, 241, 0.04) !important;
+}
+
+.listItem.Mui-selected {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+  color: #6366f1 !important;
+}
+
+.listItem.Mui-selected .listItemIcon {
+  color: #6366f1 !important;
+}
+
+.listItemIcon {
+  min-width: 40px !important;
+  color: #666;
+}
+
+.nestedListItem {
+  padding: 8px 16px 8px 56px !important;
+  margin: 0 8px 2px 8px !important;
+  border-radius: 6px !important;
+}
+
+.nestedListItem:hover {
+  background-color: rgba(99, 102, 241, 0.04) !important;
+}
+
+.nestedListItem.Mui-selected {
+  background-color: rgba(99, 102, 241, 0.08) !important;
+  color: #6366f1 !important;
+}
+
+.nestedListItemIcon {
+  min-width: 32px !important;
+  color: #666;
+}
+
+.userActions {
+  padding: 8px 0 16px 0;
+  border-top: 1px solid #e0e0e0;
+  margin-top: auto;
+}
+
+.userActions .MuiListItemButton-root {
+  padding: 12px 16px !important;
+  margin: 0 8px 4px 8px !important;
+  border-radius: 8px !important;
+}
+
+.userActions .MuiListItemButton-root:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .bottomNavigation .MuiBottomNavigationAction-root {
+    min-width: 0;
+    padding: 6px 4px 8px;
+  }
+  
+  .bottomNavigation .MuiBottomNavigationAction-label {
+    font-size: 0.6875rem;
+  }
+  
+  .avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .drawerHeader {
+    padding: 12px 16px;
+    min-height: 56px;
+  }
+  
+  .title {
+    font-size: 1.125rem;
+  }
+}
+
+/* Variant Styles */
+.minimal .bottomNavigation {
+  box-shadow: none;
+  border-top: 1px solid #f0f0f0;
+}
+
+.minimal .appBar {
+  box-shadow: none !important;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.minimal .listItem {
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.minimal .listItem:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.material .bottomNavigation {
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.material .appBar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.material .listItem {
+  margin: 0 12px 6px 12px !important;
+  border-radius: 12px !important;
+}
+
+.material .drawerHeader {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* Accessibility Enhancements */
+.bottomNavigation .MuiBottomNavigationAction-root:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.listItem:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.menuButton:focus-visible,
+.profileButton:focus-visible,
+.notificationButton:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Animation and Transitions */
+.bottomNavigation .MuiBottomNavigationAction-root {
+  transition: all 0.2s ease-in-out;
+}
+
+.bottomNavigation .MuiBottomNavigationAction-root.Mui-selected {
+  transform: translateY(-1px);
+}
+
+.listItem {
+  transition: all 0.2s ease-in-out;
+}
+
+.avatar {
+  transition: transform 0.2s ease-in-out;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Badge Styles */
+.bottomNavigation .MuiBadge-root .MuiBadge-badge {
+  background-color: #f44336;
+  color: white;
+  font-size: 0.625rem;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+}
+
+.drawerList .MuiBadge-root .MuiBadge-badge {
+  background-color: #f44336;
+  color: white;
+  font-size: 0.625rem;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 6px;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .bottomNavigation {
+    background-color: #1e1e1e;
+    border-top-color: #333;
+  }
+  
+  .appBar {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+    border-bottom-color: #333;
+  }
+  
+  .menuButton,
+  .notificationButton,
+  .profileButton {
+    color: #fff !important;
+  }
+  
+  .title {
+    color: #fff;
+  }
+  
+  .listItem:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  
+  .listItem.Mui-selected {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+  }
+}
+
+/* Loading States */
+.bottomNavigation.loading .MuiBottomNavigationAction-root {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.drawerList.loading .MuiListItemButton-root {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Custom Scrollbar for Drawer */
+.drawerList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.drawerList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawerList::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.drawerList::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
