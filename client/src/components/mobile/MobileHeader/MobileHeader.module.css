@@ -1,0 +1,491 @@
+/* client/src/components/mobile/MobileHeader/MobileHeader.module.css */
+.header {
+  background-color: #fff !important;
+  color: #333 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 1100 !important;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px !important;
+  min-height: 56px !important;
+}
+
+/* Header Variants */
+.minimal {
+  box-shadow: none !important;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #fafafa !important;
+}
+
+.transparent {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none;
+  color: #fff !important;
+}
+
+.transparent .backButton,
+.transparent .menuButton,
+.transparent .notificationButton,
+.transparent .profileButton,
+.transparent .actionButton {
+  color: #fff !important;
+}
+
+/* Navigation Buttons */
+.backButton,
+.menuButton {
+  margin-right: 8px !important;
+  color: #333 !important;
+}
+
+.backButton:hover,
+.menuButton:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Title */
+.title {
+  flex: 1;
+  font-weight: 600 !important;
+  color: #333;
+  text-align: center;
+  font-size: 1.125rem !important;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 8px;
+}
+
+/* Right Actions */
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.actionButton,
+.notificationButton,
+.moreButton {
+  color: #333 !important;
+  padding: 8px !important;
+}
+
+.actionButton:hover,
+.notificationButton:hover,
+.moreButton:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.profileButton {
+  color: #333 !important;
+  padding: 6px !important;
+  margin-left: 4px !important;
+}
+
+.profileButton:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Avatar */
+.avatar {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 0.875rem !important;
+  background-color: #6366f1 !important;
+  color: white !important;
+  font-weight: 600;
+  transition: transform 0.2s ease-out;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Menus */
+.profileMenu,
+.actionsMenu {
+  margin-top: 8px;
+}
+
+.profileMenu .MuiMenuItem-root,
+.actionsMenu .MuiMenuItem-root {
+  padding: 12px 16px;
+  min-height: 48px;
+}
+
+.profileMenu .MuiListItemIcon-root,
+.actionsMenu .MuiListItemIcon-root {
+  min-width: 40px;
+  color: #666;
+}
+
+/* Badge Customization */
+.notificationButton .MuiBadge-badge {
+  background-color: #f44336;
+  color: white;
+  font-size: 0.625rem;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+  top: 8px;
+  right: 8px;
+}
+
+.actionButton .MuiBadge-badge {
+  background-color: #f44336;
+  color: white;
+  font-size: 0.625rem;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+}
+
+/* Responsive Design */
+@media (min-width: 600px) {
+  .toolbar {
+    padding: 0 16px !important;
+    min-height: 64px !important;
+  }
+  
+  .title {
+    font-size: 1.25rem !important;
+  }
+  
+  .avatar {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1rem !important;
+  }
+  
+  .backButton,
+  .menuButton {
+    margin-right: 12px !important;
+  }
+  
+  .rightActions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .toolbar {
+    padding: 0 4px !important;
+  }
+  
+  .title {
+    font-size: 1rem !important;
+    padding: 0 4px;
+  }
+  
+  .avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .rightActions {
+    gap: 2px;
+  }
+  
+  .actionButton,
+  .notificationButton,
+  .moreButton {
+    padding: 6px !important;
+  }
+  
+  .profileButton {
+    padding: 4px !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .header {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+    border-bottom-color: #333;
+  }
+  
+  .minimal {
+    background-color: #2a2a2a !important;
+    border-bottom-color: #333;
+  }
+  
+  .title {
+    color: #fff;
+  }
+  
+  .backButton,
+  .menuButton,
+  .actionButton,
+  .notificationButton,
+  .profileButton,
+  .moreButton {
+    color: #fff !important;
+  }
+  
+  .backButton:hover,
+  .menuButton:hover,
+  .actionButton:hover,
+  .notificationButton:hover,
+  .profileButton:hover,
+  .moreButton:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  
+  .profileMenu .MuiListItemIcon-root,
+  .actionsMenu .MuiListItemIcon-root {
+    color: #ccc;
+  }
+}
+
+/* Accessibility Enhancements */
+.backButton:focus-visible,
+.menuButton:focus-visible,
+.actionButton:focus-visible,
+.notificationButton:focus-visible,
+.profileButton:focus-visible,
+.moreButton:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Animation and Transitions */
+.backButton,
+.menuButton,
+.actionButton,
+.notificationButton,
+.profileButton,
+.moreButton {
+  transition: all 0.2s ease-out;
+}
+
+.title {
+  transition: color 0.2s ease-out;
+}
+
+.header {
+  transition: all 0.3s ease-out;
+}
+
+/* Loading States */
+.header.loading {
+  opacity: 0.8;
+}
+
+.header.loading .backButton,
+.header.loading .menuButton,
+.header.loading .actionButton,
+.header.loading .notificationButton,
+.header.loading .profileButton,
+.header.loading .moreButton {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Performance Optimizations */
+.header,
+.toolbar,
+.avatar {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Safe Area Support */
+@supports (padding: max(0px)) {
+  .toolbar {
+    padding-left: max(8px, env(safe-area-inset-left)) !important;
+    padding-right: max(8px, env(safe-area-inset-right)) !important;
+  }
+  
+  @media (min-width: 600px) {
+    .toolbar {
+      padding-left: max(16px, env(safe-area-inset-left)) !important;
+      padding-right: max(16px, env(safe-area-inset-right)) !important;
+    }
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .backButton,
+  .menuButton,
+  .actionButton,
+  .notificationButton,
+  .profileButton,
+  .moreButton,
+  .title,
+  .header,
+  .avatar {
+    transition: none !important;
+  }
+  
+  .avatar:hover {
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .header {
+    display: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom-width: 2px;
+  }
+  
+  .backButton:hover,
+  .menuButton:hover,
+  .actionButton:hover,
+  .notificationButton:hover,
+  .profileButton:hover,
+  .moreButton:hover {
+    border: 2px solid currentColor;
+  }
+  
+  .avatar {
+    border: 2px solid #6366f1;
+  }
+}
+
+/* Focus Management */
+.header:focus-within {
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Hover Effects for Desktop */
+@media (hover: hover) and (pointer: fine) {
+  .backButton:hover,
+  .menuButton:hover {
+    transform: translateX(-1px);
+  }
+  
+  .actionButton:hover,
+  .notificationButton:hover,
+  .moreButton:hover {
+    transform: scale(1.05);
+  }
+  
+  .profileButton:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* Touch Optimizations */
+.backButton,
+.menuButton,
+.actionButton,
+.notificationButton,
+.profileButton,
+.moreButton {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Toolbar Height Variations */
+.toolbar.compact {
+  min-height: 48px !important;
+}
+
+.toolbar.large {
+  min-height: 72px !important;
+}
+
+/* Title Alignment Variations */
+.title.left {
+  text-align: left;
+  flex: 1;
+}
+
+.title.right {
+  text-align: right;
+  flex: 1;
+}
+
+/* Network Status Indicator */
+.header.offline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #f44336;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Custom Badge Positioning */
+.notificationButton .MuiBadge-root {
+  overflow: visible;
+}
+
+.actionButton .MuiBadge-root {
+  overflow: visible;
+}
+
+/* Sticky Header Enhancement */
+.header[data-position="sticky"] {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+}
+
+/* Header Search Integration */
+.header.withSearch .title {
+  display: none;
+}
+
+.header.withSearch .searchContainer {
+  flex: 1;
+  margin: 0 8px;
+}
+
+/* Emergency/Alert State */
+.header.alert {
+  background-color: #fff3cd !important;
+  border-bottom-color: #ffeaa7 !important;
+  color: #856404 !important;
+}
+
+.header.alert .title {
+  color: #856404 !important;
+}
+
+.header.emergency {
+  background-color: #f8d7da !important;
+  border-bottom-color: #f5c6cb !important;
+  color: #721c24 !important;
+}
+
+.header.emergency .title {
+  color: #721c24 !important;
+}
