@@ -1,0 +1,360 @@
+/* client/src/components/integration/DocumentApplicationLinker/DocumentApplicationLinker.module.css */
+
+.container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.applicationInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.jobTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.applicationId {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.loadingText {
+  text-align: center;
+  margin-top: 16px;
+  color: #6b7280;
+}
+
+.errorMessage {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+}
+
+.emptySubtext {
+  font-size: 0.875rem;
+  margin-top: 8px;
+}
+
+.documentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.documentCard {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background: #ffffff;
+}
+
+.documentCard:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.documentCard.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.documentCard:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.documentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.documentCheckbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.documentType {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badgeId {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badgeEducation {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badgeExperience {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badgeMedical {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.badgeOther {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.badgeDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.documentTitle {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.documentDescription {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.documentFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.verificationStatus {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusVerified {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.statusPending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.statusRejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.uploadDate {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.selectionSummary {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    margin: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .applicationInfo {
+    align-items: flex-start;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .documentsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .documentCard {
+    padding: 12px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .actionButtons {
+    justify-content: stretch;
+  }
+
+  .actionButtons button {
+    flex: 1;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .jobTitle {
+    color: #d1d5db;
+  }
+
+  .applicationId {
+    color: #9ca3af;
+  }
+
+  .errorMessage {
+    background: #7f1d1d;
+    border-color: #dc2626;
+    color: #fecaca;
+  }
+
+  .documentCard {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .documentCard:hover {
+    border-color: #60a5fa;
+  }
+
+  .documentCard.selected {
+    background: #1e3a8a;
+    border-color: #60a5fa;
+  }
+
+  .documentTitle {
+    color: #f9fafb;
+  }
+
+  .documentDescription {
+    color: #d1d5db;
+  }
+
+  .documentFooter {
+    border-color: #4b5563;
+  }
+
+  .uploadDate {
+    color: #9ca3af;
+  }
+
+  .selectionSummary {
+    color: #d1d5db;
+  }
+}
+
+/* Accessibility */
+.documentCard:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .documentCard {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .documentCard {
+    border-width: 3px;
+  }
+  
+  .documentCard.selected {
+    border-width: 4px;
+  }
+}
