@@ -1,0 +1,371 @@
+/* client/src/components/integration/ApplicationVerificationStatus/ApplicationVerificationStatus.module.css */
+
+.container {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.compact {
+  padding: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.compact .title {
+  font-size: 1.125rem;
+}
+
+.overallStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.loadingText {
+  margin-left: 8px;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.documentsStatus {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.documentStatus {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+  background: #f9fafb;
+}
+
+.compact .documentStatus {
+  padding: 12px;
+}
+
+.documentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.documentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.documentTitle {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.documentType {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusVerified {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.statusRejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusPending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.statusNoDocuments,
+.statusIssuesFound,
+.statusFullyVerified,
+.statusVerificationPending,
+.statusNotStarted {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.statusFullyVerified {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.statusIssuesFound {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.iconVerified,
+.iconRejected,
+.iconPending,
+.iconUnknown {
+  width: 16px;
+  height: 16px;
+}
+
+.iconVerified {
+  color: #059669;
+}
+
+.iconRejected {
+  color: #dc2626;
+}
+
+.iconPending {
+  color: #d97706;
+}
+
+.iconUnknown {
+  color: #6b7280;
+}
+
+.verificationNotes,
+.rejectionReason {
+  margin-top: 8px;
+  padding: 8px;
+  background: #ffffff;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.rejectionReason {
+  border-left: 3px solid #dc2626;
+  background: #fef2f2;
+}
+
+.timeline {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.timelineItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.timelineContent {
+  flex: 1;
+}
+
+.timelineLabel {
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.timelineDate {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.updateForm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.updateForm h4 {
+  margin: 0 0 16px 0;
+  color: #1f2937;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #9ca3af;
+}
+
+.emptySubtext {
+  font-size: 0.875rem;
+  margin-top: 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .documentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .updateForm {
+    min-width: 90vw;
+    max-width: 90vw;
+    margin: 20px;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .timeline {
+    margin-left: -8px;
+  }
+
+  .timelineItem {
+    gap: 8px;
+  }
+
+  .timelineIcon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .documentStatus {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .documentTitle {
+    color: #f9fafb;
+  }
+
+  .verificationNotes {
+    background: #4b5563;
+  }
+
+  .updateForm {
+    background: #1f2937;
+  }
+
+  .updateForm h4 {
+    color: #f9fafb;
+  }
+
+  .formGroup label {
+    color: #d1d5db;
+  }
+
+  .formGroup select,
+  .formGroup textarea {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+}
