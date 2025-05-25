@@ -1,4 +1,4 @@
-// client/src/services/integration.service.js
+// client/src/services/integrationService.js
 import api from './api';
 
 /**
