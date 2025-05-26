@@ -1,0 +1,505 @@
+/* client/src/components/integration/JobApplicationSummary/JobApplicationSummary.module.css */
+
+.container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.compact {
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.titleSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.compact .title {
+  font-size: 1.25rem;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.statusPending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.statusProgress {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.statusSuccess {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.statusError {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.progressSection {
+  margin-bottom: 16px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.progressPercentage {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.jobInfo {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.jobHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.jobIcon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.jobTitle {
+  margin: 0 0 4px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.jobCompany {
+  margin: 0 0 2px 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.jobLocation {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.applicationMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.applicationId {
+  font-family: monospace;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: #374151;
+  background: #f9fafb;
+}
+
+.tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tabContent {
+  min-height: 200px;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.summaryCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardIcon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.cardContent h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.cardValue {
+  margin: 0 0 2px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.cardSubtext {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.nextStepsSection,
+.requirementsSection,
+.coverLetterSection {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.nextStepsSection h4,
+.requirementsSection h4,
+.coverLetterSection h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.nextStepsList,
+.requirementsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nextStepItem,
+.requirementItem {
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  font-size: 0.875rem;
+  position: relative;
+  padding-left: 20px;
+}
+
+.nextStepItem:before,
+.requirementItem:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.nextStepItem:last-child,
+.requirementItem:last-child {
+  border-bottom: none;
+}
+
+.coverLetterContent {
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #374151;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.documentsTab {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.documentLinkerSection {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 20px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sectionHeader h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timelineItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.timelineIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #dbeafe;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.timelineIcon svg {
+  width: 16px;
+  height: 16px;
+  color: #3b82f6;
+}
+
+.timelineContent {
+  flex: 1;
+  padding-top: 4px;
+}
+
+.timelineContent h5 {
+  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.timelineContent p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.loadingText {
+  text-align: center;
+  margin-top: 16px;
+  color: #6b7280;
+}
+
+.errorState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.errorIcon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #dc2626;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    margin: 16px;
+  }
+
+  .titleSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .applicationMeta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .summaryCards {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .timelineItem {
+    gap: 8px;
+  }
+
+  .timelineIcon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .jobInfo {
+    background: #374151;
+  }
+
+  .jobTitle {
+    color: #f9fafb;
+  }
+
+  .summaryCard {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .cardValue {
+    color: #f9fafb;
+  }
+
+  .nextStepsSection,
+  .requirementsSection,
+  .coverLetterSection {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .coverLetterContent {
+    background: #4b5563;
+  }
+
+  .tab {
+    color: #d1d5db;
+  }
+
+  .tab:hover {
+    color: #f9fafb;
+    background: #374151;
+  }
+}
