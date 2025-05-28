@@ -1,0 +1,284 @@
+/* ProfileEligibilityChecker Component Styles */
+
+.container {
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1c1e21;
+  margin: 0;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.eligible {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.ineligible {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.statusIcon {
+  font-size: 16px;
+}
+
+.statusText {
+  font-weight: 600;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #65676b;
+  font-size: 16px;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  color: #c62828;
+  font-size: 14px;
+}
+
+.errorIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.retryButton {
+  background: #1877f2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background: #166fe5;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1e21;
+  margin: 16px 0 8px 0;
+}
+
+.reasons,
+.missing,
+.warnings {
+  margin: 16px 0;
+}
+
+.reasonsList,
+.missingList,
+.warningsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reasonItem,
+.missingItem,
+.warningItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.reasonIcon {
+  color: #c62828;
+  font-weight: bold;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.missingIcon,
+.warningIcon {
+  font-size: 14px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.reasonItem {
+  color: #c62828;
+}
+
+.missingItem {
+  color: #f57c00;
+}
+
+.warningItem {
+  color: #f57c00;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f2f5;
+}
+
+.refreshButton {
+  background: #f0f2f5;
+  color: #1c1e21;
+  border: 1px solid #dadde1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refreshButton:hover {
+  background: #e4e6ea;
+}
+
+.completeButton {
+  background: #42a5f5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.completeButton:hover {
+  background: #1e88e5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    margin: 12px 0;
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .status {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .refreshButton,
+  .completeButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reasonItem,
+  .missingItem,
+  .warningItem {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+    margin: 8px 0;
+  }
+
+  .loading {
+    padding: 30px 20px;
+    font-size: 14px;
+  }
+
+  .error {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .sectionTitle {
+    font-size: 13px;
+  }
+}
+
+/* Focus styles for accessibility */
+.refreshButton:focus,
+.completeButton:focus,
+.retryButton:focus {
+  outline: 2px solid #1877f2;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .eligible {
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid #008000;
+  }
+
+  .ineligible {
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid #ff0000;
+  }
+
+  .container {
+    border: 2px solid #000000;
+  }
+}
