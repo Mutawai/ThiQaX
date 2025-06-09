@@ -1,0 +1,563 @@
+/* client/src/components/integration/MobileWebSyncHandler/MobileWebSyncHandler.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 80px;
+  max-height: 500px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafafa;
+  min-height: 56px;
+}
+
+.statusIcon {
+  transition: all 0.3s ease;
+}
+
+.statusIcon.spinning {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.deviceChip {
+  background-color: rgba(33, 150, 243, 0.1) !important;
+  color: #1976d2 !important;
+  font-size: 11px !important;
+  height: 22px !important;
+}
+
+.statusChip {
+  font-size: 11px !important;
+  height: 22px !important;
+  border-radius: 11px !important;
+  transition: all 0.2s ease;
+}
+
+.syncProgress {
+  height: 3px !important;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.syncProgress .MuiLinearProgress-bar {
+  transition: transform 0.4s linear;
+}
+
+.conflictAlert {
+  margin: 8px 16px !important;
+  border-radius: 4px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.content {
+  padding: 12px 16px;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.dataTypeItem {
+  padding: 4px 0 !important;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.dataTypeItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.conflictOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.conflictOption {
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.conflictOption:hover {
+  border-color: #2196f3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.conflictOption.selected {
+  border-color: #2196f3;
+  background-color: rgba(33, 150, 243, 0.05);
+}
+
+/* Status-specific styling */
+.statusSyncing {
+  background-color: rgba(33, 150, 243, 0.1);
+  color: #1976d2;
+}
+
+.statusSuccess {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #388e3c;
+}
+
+.statusError {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #d32f2f;
+}
+
+.statusOffline {
+  background-color: rgba(117, 117, 117, 0.1);
+  color: #616161;
+}
+
+/* Device indicators */
+.deviceMobile {
+  color: #4caf50;
+}
+
+.deviceWeb {
+  color: #2196f3;
+}
+
+/* Sync status animations */
+.syncSuccess {
+  animation: successPulse 0.6s ease-in-out;
+}
+
+@keyframes successPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.syncError {
+  animation: errorShake 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* Conflict indicators */
+.conflictBadge {
+  background-color: #ff9800 !important;
+  color: white !important;
+  animation: conflictPulse 2s infinite;
+}
+
+@keyframes conflictPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Connection quality indicators */
+.connectionStrong {
+  color: #4caf50;
+}
+
+.connectionWeak {
+  color: #ff9800;
+}
+
+.connectionLost {
+  color: #f44336;
+}
+
+/* Progress indicators */
+.progressContainer {
+  position: relative;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #2196f3, #21cbf3);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progressBar.animated {
+  background: linear-gradient(90deg, #2196f3, #21cbf3, #2196f3);
+  background-size: 200% 100%;
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Loading states */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #666;
+}
+
+.loadingDots {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.loadingDot {
+  width: 6px;
+  height: 6px;
+  background-color: #2196f3;
+  border-radius: 50%;
+  animation: loadingBounce 1.4s ease-in-out infinite both;
+}
+
+.loadingDot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loadingDot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loadingBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Settings toggle styling */
+.settingsToggle {
+  margin: 8px 0;
+}
+
+.settingsToggle .MuiFormControlLabel-label {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Data type list styling */
+.dataTypeList {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.dataTypeItem .MuiListItemIcon-root {
+  min-width: 32px;
+}
+
+.dataTypeItem .MuiListItemText-primary {
+  font-size: 14px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .header {
+    padding: 8px 12px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .content {
+    padding: 8px 12px;
+  }
+  
+  .conflictOptions {
+    gap: 8px;
+  }
+  
+  .conflictOption {
+    padding: 8px;
+  }
+  
+  .dataTypeItem {
+    padding: 6px 8px !important;
+  }
+  
+  .section {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+}
+
+/* Compact mode */
+.compact .header {
+  padding: 6px 12px;
+  min-height: 40px;
+}
+
+.compact .content {
+  padding: 6px 12px;
+}
+
+.compact .section {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+
+.compact .dataTypeItem {
+  padding: 2px 0 !important;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .container {
+    border: 2px solid #000;
+  }
+  
+  .conflictOption {
+    border: 2px solid #000;
+  }
+  
+  .statusChip {
+    border: 1px solid currentColor;
+  }
+  
+  .deviceChip {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .statusIcon.spinning {
+    animation: none;
+  }
+  
+  .conflictAlert {
+    animation: none;
+  }
+  
+  .syncSuccess {
+    animation: none;
+  }
+  
+  .syncError {
+    animation: none;
+  }
+  
+  .conflictBadge {
+    animation: none;
+  }
+  
+  .progressBar.animated {
+    animation: none;
+    background: #2196f3;
+  }
+  
+  .loadingDot {
+    animation: none;
+    transform: scale(1);
+  }
+  
+  .conflictOption:hover {
+    transform: none;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #2d2d2d;
+    color: #ffffff;
+  }
+  
+  .header {
+    background-color: #3d3d3d;
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .content {
+    background-color: #2d2d2d;
+  }
+  
+  .section {
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .dataTypeItem:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .dataTypeList {
+    background-color: #3a3a3a;
+  }
+  
+  .conflictOption {
+    background-color: #3a3a3a;
+    color: #ffffff;
+  }
+  
+  .conflictOption:hover {
+    border-color: #64b5f6;
+  }
+  
+  .conflictOption.selected {
+    border-color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+  }
+  
+  .progressContainer {
+    background-color: #4d4d4d;
+  }
+}
+
+/* Focus states for accessibility */
+.dataTypeItem:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+.conflictOption:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Sync status transitions */
+.statusTransition {
+  transition: all 0.3s ease;
+}
+
+/* Device sync indicators */
+.deviceSync {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.deviceSyncIcon {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.deviceSyncIcon.active {
+  opacity: 1;
+  color: #4caf50;
+}
+
+.deviceSyncIcon.syncing {
+  opacity: 1;
+  color: #2196f3;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Sync queue indicator */
+.syncQueue {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.syncQueueCount {
+  background-color: #2196f3;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  min-width: 16px;
+  text-align: center;
+}
