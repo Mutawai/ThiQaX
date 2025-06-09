@@ -1,0 +1,482 @@
+/* client/src/components/integration/RealtimeStatusUpdater/RealtimeStatusUpdater.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 80px;
+  max-height: 600px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafafa;
+  min-height: 56px;
+}
+
+.badge {
+  position: relative;
+}
+
+.connectionIcon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.statusChip {
+  font-size: 11px !important;
+  height: 22px !important;
+  border-radius: 11px !important;
+}
+
+.syncProgress {
+  height: 3px !important;
+  background-color: transparent;
+}
+
+.errorAlert {
+  margin: 8px 16px !important;
+  border-radius: 4px;
+}
+
+.content {
+  padding: 12px 16px;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.updateItem {
+  padding: 4px 0 !important;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.updateItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.typeIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Connection status indicators */
+.connected {
+  color: #4caf50;
+}
+
+.connecting {
+  color: #ff9800;
+  animation: spin 2s linear infinite;
+}
+
+.disconnected {
+  color: #757575;
+}
+
+.error {
+  color: #f44336;
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+.failed {
+  color: #d32f2f;
+}
+
+/* Animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.newUpdate {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Status colors */
+.statusSuccess {
+  background-color: rgba(76, 175, 80, 0.1) !important;
+  color: #4caf50 !important;
+}
+
+.statusError {
+  background-color: rgba(244, 67, 54, 0.1) !important;
+  color: #f44336 !important;
+}
+
+.statusWarning {
+  background-color: rgba(255, 152, 0, 0.1) !important;
+  color: #ff9800 !important;
+}
+
+.statusInfo {
+  background-color: rgba(33, 150, 243, 0.1) !important;
+  color: #2196f3 !important;
+}
+
+/* Entity type colors */
+.application {
+  background-color: #2196f3;
+}
+
+.document {
+  background-color: #ff9800;
+}
+
+.job {
+  background-color: #4caf50;
+}
+
+.payment {
+  background-color: #9c27b0;
+}
+
+/* Pause state styling */
+.paused {
+  opacity: 0.6;
+  filter: grayscale(0.3);
+}
+
+.paused .header {
+  background-color: #f5f5f5;
+}
+
+.paused .connectionIcon {
+  animation: none;
+}
+
+/* Loading states */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #666;
+}
+
+.loadingDots {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.loadingDot {
+  width: 4px;
+  height: 4px;
+  background-color: #666;
+  border-radius: 50%;
+  animation: loadingBounce 1.4s ease-in-out infinite both;
+}
+
+.loadingDot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loadingDot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loadingBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Notification indicators */
+.updateBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Compact mode */
+.compact .header {
+  padding: 8px 12px;
+  min-height: 40px;
+}
+
+.compact .content {
+  padding: 8px 12px;
+}
+
+.compact .updateItem {
+  padding: 2px 0 !important;
+}
+
+.compact .section {
+  margin-bottom: 12px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .header {
+    padding: 8px 12px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .content {
+    padding: 8px 12px;
+  }
+  
+  .updateItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .statusChip {
+    font-size: 10px !important;
+    height: 20px !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .typeIndicator {
+    border: 2px solid #000;
+  }
+  
+  .statusChip {
+    border: 1px solid currentColor;
+  }
+  
+  .updateItem {
+    border: 1px solid #ccc;
+    margin-bottom: 4px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .connectionIcon {
+    animation: none;
+  }
+  
+  .connecting {
+    animation: none;
+  }
+  
+  .error {
+    animation: none;
+  }
+  
+  .newUpdate {
+    animation: none;
+  }
+  
+  .loadingDot {
+    animation: none;
+    transform: scale(1);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #2d2d2d;
+    color: #ffffff;
+  }
+  
+  .header {
+    background-color: #3d3d3d;
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .content {
+    background-color: #2d2d2d;
+  }
+  
+  .updateItem:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .paused .header {
+    background-color: #3a3a3a;
+  }
+  
+  .typeIndicator {
+    opacity: 0.9;
+  }
+}
+
+/* Focus states for accessibility */
+.updateItem:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+.statusChip:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 1px;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Success/error flash effects */
+.updateFlash {
+  animation: flash 0.6s ease-in-out;
+}
+
+@keyframes flash {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(76, 175, 80, 0.2);
+  }
+}
+
+.errorFlash {
+  animation: errorFlash 0.6s ease-in-out;
+}
+
+@keyframes errorFlash {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(244, 67, 54, 0.2);
+  }
+}
+
+/* Connection quality indicator */
+.connectionQuality {
+  display: flex;
+  gap: 2px;
+  margin-left: 4px;
+}
+
+.qualityBar {
+  width: 3px;
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 1px;
+}
+
+.qualityBar.active {
+  background-color: #4caf50;
+}
+
+.qualityBar.medium {
+  background-color: #ff9800;
+}
+
+.qualityBar.poor {
+  background-color: #f44336;
+}
+
+/* Statistics styling */
+.statsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.statChip {
+  font-size: 11px !important;
+  height: 24px !important;
+}
+
+/* Update transition effects */
+.updateEnter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.updateEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.updateExit {
+  opacity: 1;
+}
+
+.updateExitActive {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 300ms, transform 300ms;
+}
