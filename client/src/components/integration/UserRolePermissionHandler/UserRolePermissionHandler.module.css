@@ -1,0 +1,817 @@
+/* client/src/components/integration/UserRolePermissionHandler/UserRolePermissionHandler.module.css */
+
+.container {
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Stats Container */
+.statsContainer {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Error Container */
+.errorContainer {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* Filters Section */
+.filtersContainer {
+  margin-bottom: 24px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #374151;
+  min-width: 160px;
+  transition: border-color 0.2s ease;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #374151;
+  flex: 1;
+  min-width: 200px;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+/* Bulk Actions */
+.bulkActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.selectedCount {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.bulkRoleSelect {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.bulkRoleSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* Table Section */
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+.usersTable thead {
+  background-color: #f9fafb;
+}
+
+.usersTable th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.usersTable th:first-child {
+  width: 40px;
+}
+
+.userRow {
+  transition: background-color 0.2s ease;
+}
+
+.userRow:hover {
+  background-color: #f9fafb;
+}
+
+.usersTable td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+/* User Info Styling */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.userEmail {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Role Badges */
+.roleBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusACTIVE {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.statusSUSPENDED {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.statusDEACTIVATED {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* Permission Count */
+.permissionCount {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.roleSelect {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  min-width: 120px;
+  transition: border-color 0.2s ease;
+}
+
+.roleSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.roleSelect:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.editPermissionsButton {
+  padding: 4px 8px;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #3b82f6;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.editPermissionsButton:hover:not(:disabled) {
+  background-color: #3b82f6;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.editPermissionsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Modal Styling */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.modalBody {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.roleInfo {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.permissionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.permissionItem {
+  display: flex;
+  align-items: center;
+}
+
+.permissionLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.permissionText {
+  font-size: 14px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rolePermissionBadge {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.saveButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.paginationButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    margin: 8px;
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .statsContainer {
+    align-self: stretch;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .filterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterSelect,
+  .searchInput {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .bulkActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tableContainer {
+    font-size: 12px;
+  }
+
+  .usersTable th,
+  .usersTable td {
+    padding: 8px 12px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+  }
+
+  .roleSelect,
+  .editPermissionsButton {
+    width: 100%;
+    min-width: auto;
+    font-size: 11px;
+  }
+
+  .userInfo {
+    gap: 1px;
+  }
+
+  .userName {
+    font-size: 12px;
+  }
+
+  .userEmail {
+    font-size: 10px;
+  }
+
+  .modal {
+    margin: 8px;
+    max-height: 90vh;
+  }
+
+  .modalHeader,
+  .modalBody,
+  .modalFooter {
+    padding: 16px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 4px;
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .statValue {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .statsContainer {
+    gap: 12px;
+  }
+
+  .bulkActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bulkRoleSelect {
+    width: 100%;
+    text-align: center;
+  }
+
+  .usersTable {
+    font-size: 11px;
+  }
+
+  .roleBadge,
+  .statusBadge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .permissionCount {
+    font-size: 10px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .paginationButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .modal {
+    margin: 4px;
+    max-height: 95vh;
+  }
+
+  .modalHeader h3 {
+    font-size: 16px;
+  }
+
+  .permissionText {
+    font-size: 12px;
+  }
+
+  .rolePermissionBadge {
+    font-size: 9px;
+  }
+}
+
+/* Animation and Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.userRow {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+/* Focus States for Accessibility */
+.roleSelect:focus,
+.editPermissionsButton:focus,
+.paginationButton:focus,
+.filterSelect:focus,
+.searchInput:focus,
+.bulkRoleSelect:focus,
+.cancelButton:focus,
+.saveButton:focus,
+.closeButton:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.permissionLabel:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .errorContainer {
+    background-color: #3b1f1f;
+    border-color: #7f1d1d;
+  }
+
+  .usersTable {
+    background-color: #1f2937;
+  }
+
+  .usersTable thead {
+    background-color: #374151;
+  }
+
+  .userRow:hover {
+    background-color: #374151;
+  }
+
+  .filterSelect,
+  .searchInput,
+  .roleSelect,
+  .bulkRoleSelect {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .bulkActions {
+    background-color: #374151;
+  }
+
+  .modal {
+    background-color: #1f2937;
+  }
+
+  .modalHeader,
+  .modalFooter {
+    border-color: #4b5563;
+  }
+
+  .modalFooter {
+    background-color: #374151;
+  }
+
+  .editPermissionsButton {
+    border-color: #3b82f6;
+    background-color: #1f2937;
+    color: #3b82f6;
+  }
+
+  .cancelButton {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .cancelButton:hover {
+    background-color: #4b5563;
+  }
+}
