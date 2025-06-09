@@ -1,0 +1,557 @@
+/* client/src/components/integration/AdminVerificationQueue/AdminVerificationQueue.module.css */
+
+.container {
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Stats Container */
+.statsContainer {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Error Container */
+.errorContainer {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* Filters Section */
+.filtersContainer {
+  margin-bottom: 24px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #374151;
+  min-width: 160px;
+  transition: border-color 0.2s ease;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #374151;
+  flex: 1;
+  min-width: 200px;
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+/* Bulk Actions */
+.bulkActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.selectedCount {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.bulkButton {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bulkApprove {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.bulkApprove:hover {
+  background-color: #059669;
+}
+
+.bulkAssign {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.bulkAssign:hover {
+  background-color: #2563eb;
+}
+
+/* Table Section */
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.verificationTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+.verificationTable thead {
+  background-color: #f9fafb;
+}
+
+.verificationTable th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.verificationTable th:first-child {
+  width: 40px;
+}
+
+.verificationRow {
+  transition: background-color 0.2s ease;
+}
+
+.verificationRow:hover {
+  background-color: #f9fafb;
+}
+
+.verificationTable td {
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+/* User Info Styling */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.userName {
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.userEmail {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusPending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.statusApproved {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.statusRejected {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.statusAssigned {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+/* Assignment Info */
+.assignedAdmin {
+  font-size: 12px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.unassigned {
+  font-size: 12px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.approveButton {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.approveButton:hover:not(:disabled) {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.rejectButton {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.rejectButton:hover:not(:disabled) {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+.assignButton {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.assignButton:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.paginationButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.paginationInfo {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    margin: 8px;
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .statsContainer {
+    align-self: stretch;
+    justify-content: space-around;
+  }
+
+  .filterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterSelect,
+  .searchInput {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .bulkActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tableContainer {
+    font-size: 12px;
+  }
+
+  .verificationTable th,
+  .verificationTable td {
+    padding: 8px 12px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .actionButton {
+    min-width: 60px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .userInfo {
+    gap: 1px;
+  }
+
+  .userName {
+    font-size: 12px;
+  }
+
+  .userEmail {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 4px;
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .statValue {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .bulkActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bulkButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  .verificationTable {
+    font-size: 11px;
+  }
+
+  .statusBadge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .paginationButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Animation and Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.verificationRow {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Focus States for Accessibility */
+.actionButton:focus,
+.paginationButton:focus,
+.filterSelect:focus,
+.searchInput:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .title {
+    color: #f9fafb;
+  }
+
+  .errorContainer {
+    background-color: #3b1f1f;
+    border-color: #7f1d1d;
+  }
+
+  .verificationTable {
+    background-color: #1f2937;
+  }
+
+  .verificationTable thead {
+    background-color: #374151;
+  }
+
+  .verificationRow:hover {
+    background-color: #374151;
+  }
+
+  .filterSelect,
+  .searchInput {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .bulkActions {
+    background-color: #374151;
+  }
+}
