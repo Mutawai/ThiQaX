@@ -1,0 +1,308 @@
+/* client/src/components/integration/NotificationAggregator/NotificationAggregator.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.searchContainer {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabs {
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 48px;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 200px;
+}
+
+.notificationList {
+  padding: 0;
+}
+
+.notificationItem {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.notificationItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.notificationItem.unread {
+  background-color: rgba(25, 118, 210, 0.05);
+  border-left: 4px solid #1976d2;
+}
+
+.notificationItem.unread:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.unreadText {
+  font-weight: 600 !important;
+}
+
+.menuButton {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notificationItem:hover .menuButton {
+  opacity: 1;
+}
+
+.notificationGroup {
+  margin-bottom: 8px;
+}
+
+.groupHeader {
+  background-color: #f5f5f5 !important;
+  padding: 8px 16px !important;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+}
+
+.groupHeader:hover {
+  background-color: #eeeeee !important;
+}
+
+/* Notification type colors */
+.typeApplication {
+  color: #2196f3;
+}
+
+.typeDocument {
+  color: #ff9800;
+}
+
+.typeJob {
+  color: #4caf50;
+}
+
+.typePayment {
+  color: #9c27b0;
+}
+
+.typeSystem {
+  color: #607d8b;
+}
+
+.typeGeneral {
+  color: #795548;
+}
+
+/* Priority indicators */
+.priorityHigh {
+  border-left-color: #f44336 !important;
+}
+
+.priorityNormal {
+  border-left-color: #2196f3 !important;
+}
+
+.priorityLow {
+  border-left-color: #4caf50 !important;
+}
+
+/* Animation for new notifications */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.newNotification {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Badge positioning */
+.tabBadge {
+  margin-left: 8px;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .searchContainer {
+    padding: 8px 12px;
+  }
+  
+  .notificationItem {
+    padding: 8px 12px !important;
+  }
+  
+  .groupHeader {
+    padding: 6px 12px !important;
+  }
+  
+  .tabs {
+    min-height: 40px;
+  }
+}
+
+/* Compact mode styles */
+.compact .notificationItem {
+  padding: 6px 12px !important;
+}
+
+.compact .header {
+  padding: 8px 12px;
+}
+
+.compact .searchContainer {
+  padding: 6px 8px;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.emptyStateIcon {
+  width: 60px !important;
+  height: 60px !important;
+  margin-bottom: 16px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Filter chips */
+.filterChips {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+}
+
+.filterChip {
+  font-size: 12px !important;
+  height: 24px !important;
+}
+
+/* Notification content styling */
+.notificationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notificationTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.notificationMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.priorityChip {
+  font-size: 10px !important;
+  height: 18px !important;
+}
+
+/* Accessibility */
+.notificationItem:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: -2px;
+}
+
+.notificationItem[aria-selected="true"] {
+  background-color: rgba(25, 118, 210, 0.12);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #2d2d2d;
+    color: #ffffff;
+  }
+  
+  .header {
+    background-color: #3d3d3d;
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .searchContainer {
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .tabs {
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .notificationItem {
+    border-bottom-color: #4d4d4d;
+  }
+  
+  .notificationItem:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .groupHeader {
+    background-color: #4d4d4d !important;
+    border-bottom-color: #5d5d5d;
+  }
+}
