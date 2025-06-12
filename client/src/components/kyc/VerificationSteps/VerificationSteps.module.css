@@ -1,0 +1,736 @@
+/* VerificationSteps.module.css */
+
+.verificationSteps {
+  width: 100%;
+  font-family: inherit;
+}
+
+/* Overall Progress Section */
+.overallProgress {
+  margin-bottom: 2rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.progressBarContainer {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.overallProgressBar {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #6366f1 0%, #10b981 100%);
+  transition: width 1s ease-in-out;
+}
+
+/* Horizontal Layout */
+.horizontalSteps {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.horizontalStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.horizontalStep.disabled {
+  cursor: not-allowed;
+}
+
+.horizontalStep:hover:not(.disabled) {
+  transform: translateY(-2px);
+}
+
+.horizontalStepContent {
+  margin-top: 0.75rem;
+  max-width: 10rem;
+  text-align: center;
+}
+
+.horizontalConnector {
+  flex: 1;
+  height: 2px;
+  margin: 0 1rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Vertical Layout */
+.verticalSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.verticalStep {
+  display: flex;
+  align-items: flex-start;
+}
+
+.verticalStepCircleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.verticalConnector {
+  width: 2px;
+  height: 3rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.verticalStepContent {
+  flex: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.25rem 0;
+}
+
+.verticalStepContent.disabled {
+  cursor: not-allowed;
+}
+
+.verticalStepContent:hover:not(.disabled) {
+  padding-left: 0.5rem;
+}
+
+/* Step Circles */
+.stepCircle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.stepCircle.disabled {
+  cursor: not-allowed;
+}
+
+.stepCircle.small {
+  height: 2rem;
+  width: 2rem;
+}
+
+.stepCircle.medium {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.stepCircle.large {
+  height: 3rem;
+  width: 3rem;
+}
+
+/* Step Circle States */
+.stepCircle.completed {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.stepCircle.completed:hover {
+  background-color: #059669;
+  border-color: #059669;
+  box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15);
+}
+
+.stepCircle.current {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.stepCircle.current:hover {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.15);
+}
+
+.stepCircle.pending {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+.stepCircle.pending:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.05);
+}
+
+.stepCircle.disabled {
+  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+}
+
+/* Step Icons */
+.stepIcon {
+  transition: all 0.3s ease;
+}
+
+.stepIcon.small {
+  height: 1rem;
+  width: 1rem;
+}
+
+.stepIcon.medium {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.stepIcon.large {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+/* Step Content */
+.stepContent {
+  transition: all 0.3s ease;
+}
+
+.stepTitle {
+  font-weight: 500;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.stepTitle.small {
+  font-size: 0.75rem;
+}
+
+.stepTitle.medium {
+  font-size: 0.875rem;
+}
+
+.stepTitle.large {
+  font-size: 1rem;
+}
+
+.stepDescription {
+  margin: 0.25rem 0 0 0;
+  transition: color 0.3s ease;
+}
+
+.stepDescription.small {
+  font-size: 0.625rem;
+}
+
+.stepDescription.medium {
+  font-size: 0.75rem;
+}
+
+.stepDescription.large {
+  font-size: 0.875rem;
+}
+
+/* Step Text States */
+.stepContent.completed .stepTitle,
+.stepContent.current .stepTitle {
+  color: #111827;
+}
+
+.stepContent.pending .stepTitle {
+  color: #374151;
+}
+
+.stepContent.pending:hover .stepTitle {
+  color: #111827;
+}
+
+.stepContent.disabled .stepTitle {
+  color: #9ca3af;
+}
+
+.stepContent.completed .stepDescription,
+.stepContent.current .stepDescription {
+  color: #6b7280;
+}
+
+.stepContent.pending .stepDescription {
+  color: #9ca3af;
+}
+
+.stepContent.pending:hover .stepDescription {
+  color: #6b7280;
+}
+
+.stepContent.disabled .stepDescription {
+  color: #d1d5db;
+}
+
+/* Connector States */
+.connector.completed {
+  background-color: #10b981;
+}
+
+.connector.pending {
+  background-color: #d1d5db;
+}
+
+.connector.disabled {
+  background-color: #f3f4f6;
+}
+
+/* Progress Bars within Steps */
+.stepProgress {
+  margin-top: 0.5rem;
+}
+
+.stepProgressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.stepProgressBar {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.375rem;
+  overflow: hidden;
+}
+
+.stepProgressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-in-out;
+}
+
+.stepProgressFill.completed {
+  background-color: #10b981;
+}
+
+.stepProgressFill.current {
+  background-color: #6366f1;
+}
+
+.stepProgressFill.pending {
+  background-color: #9ca3af;
+}
+
+/* Missing Items Display */
+.missingItems {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.missingFields {
+  color: #f59e0b;
+  margin: 0;
+}
+
+.missingDocuments {
+  color: #f59e0b;
+  margin: 0;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.verificationSteps {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.horizontalStep {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.verticalStep {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .horizontalSteps {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .horizontalStep {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+  
+  .horizontalStepContent {
+    margin-top: 0;
+    margin-left: 1rem;
+    text-align: left;
+    max-width: none;
+    flex: 1;
+  }
+  
+  .horizontalConnector {
+    display: none;
+  }
+  
+  .stepCircle.small {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  
+  .stepCircle.medium {
+    height: 3rem;
+    width: 3rem;
+  }
+  
+  .stepCircle.large {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+  
+  .stepIcon.small {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+  
+  .stepIcon.medium {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  
+  .stepIcon.large {
+    height: 1.75rem;
+    width: 1.75rem;
+  }
+  
+  .stepTitle.small {
+    font-size: 0.875rem;
+  }
+  
+  .stepTitle.medium {
+    font-size: 1rem;
+  }
+  
+  .stepTitle.large {
+    font-size: 1.125rem;
+  }
+  
+  .stepDescription.small {
+    font-size: 0.75rem;
+  }
+  
+  .stepDescription.medium {
+    font-size: 0.875rem;
+  }
+  
+  .stepDescription.large {
+    font-size: 1rem;
+  }
+  
+  .overallProgress {
+    margin-bottom: 1.5rem;
+  }
+  
+  .verticalSteps {
+    gap: 1rem;
+  }
+  
+  .verticalStepCircleContainer {
+    margin-right: 0.75rem;
+  }
+  
+  .verticalConnector {
+    height: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepProgress {
+    margin-top: 0.25rem;
+  }
+  
+  .stepProgressHeader {
+    font-size: 0.625rem;
+  }
+  
+  .stepProgressBar {
+    height: 0.25rem;
+  }
+  
+  .missingItems {
+    font-size: 0.625rem;
+  }
+  
+  .overallProgress {
+    margin-bottom: 1rem;
+  }
+  
+  .progressHeader {
+    font-size: 0.75rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .stepCircle.pending {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+  
+  .stepCircle.disabled {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #6b7280;
+  }
+  
+  .connector.pending {
+    background-color: #4b5563;
+  }
+  
+  .connector.disabled {
+    background-color: #374151;
+  }
+  
+  .stepProgressBar {
+    background-color: #374151;
+  }
+  
+  .overallProgressBar {
+    background-color: #4b5563;
+  }
+  
+  .stepContent.pending .stepTitle {
+    color: #d1d5db;
+  }
+  
+  .stepContent.pending .stepDescription {
+    color: #9ca3af;
+  }
+  
+  .stepContent.disabled .stepTitle {
+    color: #6b7280;
+  }
+  
+  .stepContent.disabled .stepDescription {
+    color: #4b5563;
+  }
+  
+  .progressHeader {
+    color: #9ca3af;
+  }
+  
+  .stepProgressHeader {
+    color: #9ca3af;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .stepCircle {
+    border-width: 3px;
+  }
+  
+  .stepCircle.completed {
+    border-color: #000;
+  }
+  
+  .stepCircle.current {
+    border-color: #000;
+  }
+  
+  .stepCircle.pending {
+    border-color: #666;
+  }
+  
+  .stepCircle.disabled {
+    border-color: #ccc;
+  }
+  
+  .connector {
+    height: 3px;
+  }
+  
+  .verticalConnector {
+    width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .stepCircle,
+  .stepContent,
+  .overallProgressBar,
+  .stepProgressFill,
+  .horizontalStep,
+  .verticalStepContent {
+    transition: none;
+  }
+  
+  .stepCircle.current {
+    animation: none;
+  }
+  
+  .verificationSteps,
+  .horizontalStep,
+  .verticalStep {
+    animation: none;
+  }
+  
+  .horizontalStep:hover:not(.disabled) {
+    transform: none;
+  }
+  
+  .verticalStepContent:hover:not(.disabled) {
+    padding-left: 0;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .verificationSteps {
+    break-inside: avoid;
+  }
+  
+  .stepCircle {
+    box-shadow: none !important;
+    border-width: 2px;
+  }
+  
+  .stepCircle.completed {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    color: #fff !important;
+  }
+  
+  .stepCircle.current {
+    background-color: #666 !important;
+    border-color: #666 !important;
+    color: #fff !important;
+  }
+  
+  .stepCircle.pending,
+  .stepCircle.disabled {
+    background-color: #fff !important;
+    border-color: #000 !important;
+    color: #000 !important;
+  }
+  
+  .connector.completed {
+    background-color: #000 !important;
+  }
+  
+  .connector.pending,
+  .connector.disabled {
+    background-color: #ccc !important;
+  }
+  
+  .stepContent {
+    color: #000 !important;
+  }
+  
+  .overallProgressBar,
+  .stepProgressFill {
+    background-color: #000 !important;
+  }
+  
+  .progressHeader,
+  .stepProgressHeader {
+    color: #000 !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.stepCircle:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.horizontalStep:focus-visible,
+.verticalStepContent:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+/* Custom Properties for Theming */
+.verificationSteps {
+  --step-completed-color: #10b981;
+  --step-current-color: #6366f1;
+  --step-pending-color: #d1d5db;
+  --step-disabled-color: #e5e7eb;
+  --step-text-color: #111827;
+  --step-text-muted: #6b7280;
+  --step-text-disabled: #9ca3af;
+}
+
+/* Allow customization through CSS custom properties */
+.stepCircle.completed {
+  background-color: var(--step-completed-color);
+  border-color: var(--step-completed-color);
+}
+
+.stepCircle.current {
+  background-color: var(--step-current-color);
+  border-color: var(--step-current-color);
+}
+
+.connector.completed {
+  background-color: var(--step-completed-color);
+}
+
+.stepProgressFill.completed {
+  background-color: var(--step-completed-color);
+}
+
+.stepProgressFill.current {
+  background-color: var(--step-current-color);
+}
