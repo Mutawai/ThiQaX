@@ -1,0 +1,543 @@
+/* KYCForm.module.css */
+
+.kycForm {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.formContainer {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.progressContainer {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+}
+
+.progressSteps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+}
+
+.stepCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid;
+  transition: all 0.3s ease;
+}
+
+.stepCircle.completed {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.stepCircle.active {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  color: white;
+}
+
+.stepCircle.inactive {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+.stepNumber {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.stepContent {
+  margin-left: 0.75rem;
+}
+
+.stepTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.stepTitle.active {
+  color: #111827;
+}
+
+.stepTitle.inactive {
+  color: #6b7280;
+}
+
+.stepConnector {
+  flex: 1;
+  border-top: 2px solid;
+  margin: 0 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.stepConnector.completed {
+  border-color: #10b981;
+}
+
+.stepConnector.inactive {
+  border-color: #d1d5db;
+}
+
+.alertContainer {
+  margin: 1rem 1.5rem 0;
+}
+
+.alert {
+  border-radius: 0.375rem;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.alertSuccess {
+  background-color: #ecfdf5;
+  border-color: #d1fae5;
+  color: #065f46;
+}
+
+.alertError {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.alertIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.alertContent {
+  display: flex;
+  align-items: flex-start;
+}
+
+.alertTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.alertMessage {
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.stepContent {
+  padding: 1.5rem;
+}
+
+.stepHeader {
+  margin-bottom: 1.5rem;
+}
+
+.stepContentTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.stepDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.documentUpload {
+  margin-bottom: 1.5rem;
+}
+
+.documentLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: #dc2626;
+  margin-left: 0.25rem;
+}
+
+.uploadArea {
+  border: 2px dashed;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.uploadArea.idle {
+  border-color: #d1d5db;
+}
+
+.uploadArea.idle:hover {
+  border-color: #6366f1;
+  background-color: #f8fafc;
+}
+
+.uploadArea.dragOver {
+  border-color: #6366f1;
+  background-color: #eef2ff;
+}
+
+.uploadArea.hasError {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.uploadArea.uploaded {
+  border-color: #10b981;
+  background-color: #ecfdf5;
+}
+
+.uploadIcon {
+  margin: 0 auto 1rem;
+  height: 3rem;
+  width: 3rem;
+  color: #9ca3af;
+}
+
+.uploadText {
+  margin-top: 1rem;
+}
+
+.uploadPrimary {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.uploadHighlight {
+  font-weight: 500;
+  color: #6366f1;
+}
+
+.uploadSecondary {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.uploadedFile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadedIcon {
+  height: 2rem;
+  width: 2rem;
+  color: #10b981;
+  margin-right: 0.75rem;
+}
+
+.uploadedInfo {
+  text-align: left;
+}
+
+.uploadedName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #065f46;
+  margin: 0;
+}
+
+.uploadedMeta {
+  font-size: 0.75rem;
+  color: #059669;
+  margin: 0;
+}
+
+.existingDocument {
+  border: 2px solid #d1fae5;
+  background-color: #ecfdf5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.existingContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.existingLeft {
+  display: flex;
+  align-items: center;
+}
+
+.existingIcon {
+  height: 2rem;
+  width: 2rem;
+  color: #10b981;
+  margin-right: 0.75rem;
+}
+
+.existingName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #065f46;
+  margin: 0;
+}
+
+.existingStatus {
+  font-size: 0.75rem;
+  color: #059669;
+  margin: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.statusBadge.verified {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.statusBadge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.statusBadge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.validationErrors {
+  margin-top: 0.5rem;
+}
+
+.validationError {
+  font-size: 0.875rem;
+  color: #dc2626;
+  margin: 0;
+}
+
+.navigation {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navButton.primary {
+  color: white;
+  background-color: #6366f1;
+  border: 1px solid transparent;
+}
+
+.navButton.primary:hover:not(:disabled) {
+  background-color: #4f46e5;
+}
+
+.navButton.primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.navButton.success {
+  color: white;
+  background-color: #10b981;
+  border: 1px solid transparent;
+}
+
+.navButton.success:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.navButton.success:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #10b981, 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.navButton.secondary {
+  color: #374151;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.navButton.secondary:hover:not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.navButton.secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.navButton:disabled {
+  color: #9ca3af;
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.loadingSpinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16rem;
+}
+
+.spinner {
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #6366f1;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .kycForm {
+    padding: 1rem;
+  }
+  
+  .header {
+    padding: 1rem;
+  }
+  
+  .progressContainer {
+    padding: 0.75rem 1rem;
+  }
+  
+  .progressSteps {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .stepItem {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .stepContent {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .stepConnector {
+    display: none;
+  }
+  
+  .stepContent {
+    padding: 1rem;
+  }
+  
+  .navigation {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .navButton {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .uploadArea {
+    padding: 1rem;
+  }
+  
+  .uploadIcon {
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+/* Focus and accessibility improvements */
+.uploadArea:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.stepCircle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* Animation for state changes */
+.uploadArea,
+.stepCircle,
+.statusBadge {
+  transition: all 0.3s ease;
+}
+
+.existingDocument {
+  animation: slideUp 0.5s ease-out;
+}
+
+.alert {
+  animation: fadeIn 0.5s ease-in;
+}
