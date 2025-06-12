@@ -1,38 +1,556 @@
 /* src/components/documents/DocumentGrouping/DocumentGrouping.module.css */
 
-.documentGroups {
-  width: 100%;
+/* ThiQaX Brand Colors - consistent with new components */
+:root {
+  --thiqax-primary: #1e3a8a;
+  --thiqax-primary-light: #3b82f6;
+  --thiqax-primary-dark: #1e40af;
+  --thiqax-secondary: #059669;
+  --thiqax-accent: #f59e0b;
+  --thiqax-trust-gold: #d97706;
+  --thiqax-success: #10b981;
+  --thiqax-warning: #f59e0b;
+  --thiqax-error: #ef4444;
+  --thiqax-surface: #ffffff;
+  --thiqax-background: #f8fafc;
+  --thiqax-text-primary: #1f2937;
+  --thiqax-text-secondary: #6b7280;
+  --thiqax-border: #e5e7eb;
+  --thiqax-shadow: rgba(0, 0, 0, 0.1);
+  --thiqax-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --thiqax-grouping-gradient: linear-gradient(135deg, rgba(30, 58, 138, 0.02) 0%, rgba(59, 130, 246, 0.03) 100%);
 }
 
+/* Main Document Groups Container */
+.documentGroups {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Group Accordion Enhanced Styling */
 .groupAccordion {
-  border-radius: 8px !important;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.08) !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  position: relative !important;
+}
+
+/* Add subtle background pattern */
+.groupAccordion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--thiqax-gradient);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
 }
 
 .groupAccordion:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.15) !important;
 }
 
+.groupAccordion:hover::before {
+  opacity: 1;
+}
+
+.groupAccordion.Mui-expanded {
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.12) !important;
+}
+
+.groupAccordion.Mui-expanded::before {
+  opacity: 1;
+}
+
+/* Group Summary Enhanced */
 .groupSummary {
-  min-height: 48px !important;
-  padding: 0 16px !important;
+  min-height: 64px !important;
+  padding: 16px 24px !important;
+  background: var(--thiqax-grouping-gradient) !important;
+  border-bottom: 1px solid rgba(30, 58, 138, 0.08) !important;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
+.groupSummary:hover {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.04) 0%, rgba(59, 130, 246, 0.06) 100%) !important;
+}
+
+.groupSummary .MuiAccordionSummary-content {
+  margin: 0 !important;
+  align-items: center !important;
+}
+
+.groupSummary .MuiAccordionSummary-expandIconWrapper {
+  color: var(--thiqax-primary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.groupSummary .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+  transform: rotate(180deg) !important;
+}
+
+/* Badge Enhancements */
+.groupSummary .MuiBadge-root {
+  margin-right: 16px !important;
+}
+
+.groupSummary .MuiBadge-badge {
+  background: var(--thiqax-gradient) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3) !important;
+  animation: badgePulse 2s ease-in-out infinite !important;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Group Icon Styling */
+.groupSummary .MuiSvgIcon-root {
+  font-size: 28px !important;
+  transition: all 0.3s ease !important;
+}
+
+.groupSummary:hover .MuiSvgIcon-root {
+  transform: scale(1.1) !important;
+}
+
+/* Group Details Enhanced */
 .groupDetails {
-  padding: 8px 16px 16px !important;
+  padding: 24px !important;
+  background: var(--thiqax-surface) !important;
+  position: relative !important;
 }
 
+.groupDetails::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--thiqax-border), transparent);
+}
+
+/* Grid Enhancements */
+.groupDetails .MuiGrid-container {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.groupDetails .MuiGrid-item {
+  padding: 12px !important;
+  display: flex !important;
+}
+
+.groupDetails .MuiGrid-item > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* Group Action Buttons Enhanced */
+.groupSummary .MuiIconButton-root {
+  background: rgba(30, 58, 138, 0.08) !important;
+  border-radius: 8px !important;
+  margin-left: 8px !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(30, 58, 138, 0.1) !important;
+}
+
+.groupSummary .MuiIconButton-root:hover {
+  background: rgba(30, 58, 138, 0.15) !important;
+  transform: scale(1.05) !important;
+  border-color: var(--thiqax-primary) !important;
+}
+
+.groupSummary .MuiIconButton-root .MuiSvgIcon-root {
+  font-size: 20px !important;
+  color: var(--thiqax-primary) !important;
+}
+
+/* Empty State Enhanced */
 .emptyState {
-  transition: all 0.3s ease;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease !important;
+  min-height: 120px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px dashed var(--thiqax-border) !important;
+  border-radius: 16px !important;
+  background: var(--thiqax-grouping-gradient) !important;
+  padding: 32px 20px !important;
+  text-align: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.emptyState::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  border: 2px solid var(--thiqax-primary);
+  border-radius: 50%;
+  opacity: 0.1;
+  transform: translate(-50%, -50%);
+  animation: emptyStatePulse 3s ease-in-out infinite;
+}
+
+@keyframes emptyStatePulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.05;
+  }
 }
 
 .emptyState:hover {
-  background-color: rgba(0, 0, 0, 0.02) !important;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.04) 0%, rgba(59, 130, 246, 0.06) 100%) !important;
+  border-color: var(--thiqax-primary) !important;
+  transform: scale(1.02) !important;
+}
+
+.emptyState .MuiTypography-root {
+  position: relative !important;
+  z-index: 1 !important;
+  color: var(--thiqax-text-secondary) !important;
+  font-weight: 500 !important;
+}
+
+/* Group Type Specific Styling */
+.groupAccordion[data-group-type="identity"] .groupSummary {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(59, 130, 246, 0.08) 100%) !important;
+}
+
+.groupAccordion[data-group-type="education"] .groupSummary {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.05) 0%, rgba(16, 185, 129, 0.08) 100%) !important;
+}
+
+.groupAccordion[data-group-type="professional"] .groupSummary {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.08) 100%) !important;
+}
+
+.groupAccordion[data-group-type="medical"] .groupSummary {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.08) 100%) !important;
+}
+
+.groupAccordion[data-group-type="other"] .groupSummary {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.05) 0%, rgba(75, 85, 99, 0.08) 100%) !important;
+}
+
+/* Status Specific Styling */
+.groupAccordion[data-status="verified"] {
+  border-left: 4px solid var(--thiqax-success) !important;
+}
+
+.groupAccordion[data-status="pending"] {
+  border-left: 4px solid var(--thiqax-warning) !important;
+}
+
+.groupAccordion[data-status="rejected"] {
+  border-left: 4px solid var(--thiqax-error) !important;
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .documentGroups {
+    gap: 16px;
+  }
+
+  .groupAccordion {
+    border-radius: 12px !important;
+  }
+
+  .groupSummary {
+    min-height: 56px !important;
+    padding: 12px 16px !important;
+  }
+
+  .groupSummary .MuiBadge-root {
+    margin-right: 12px !important;
+  }
+
+  .groupSummary .MuiSvgIcon-root {
+    font-size: 24px !important;
+  }
+
+  .groupSummary .MuiTypography-subtitle1 {
+    font-size: 1rem !important;
+  }
+
+  .groupDetails {
+    padding: 16px !important;
+  }
+
+  .groupDetails .MuiGrid-item {
+    padding: 8px !important;
+  }
+
+  .groupSummary .MuiIconButton-root {
+    margin-left: 4px !important;
+    padding: 6px !important;
+  }
+
+  .emptyState {
+    min-height: 100px !important;
+    padding: 24px 16px !important;
+  }
+
+  .emptyState .MuiTypography-root {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Tablet responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .groupSummary {
+    padding: 14px 20px !important;
+  }
+
+  .groupDetails {
+    padding: 20px !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  .groupAccordion {
+    border-radius: 20px !important;
+  }
+
+  .groupSummary {
+    padding: 18px 28px !important;
+  }
+
+  .groupDetails {
+    padding: 28px !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --thiqax-surface: #1f2937;
+    --thiqax-background: #111827;
+    --thiqax-text-primary: #f9fafb;
+    --thiqax-text-secondary: #d1d5db;
+    --thiqax-border: #374151;
+    --thiqax-shadow: rgba(0, 0, 0, 0.3);
+  }
+
+  .groupAccordion::before {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(30, 58, 138, 0.4) 100%);
+  }
+
+  .emptyState::before {
+    border-color: var(--thiqax-primary-light);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .groupAccordion:hover {
+    transform: none !important;
+  }
+
+  .emptyState:hover {
+    transform: none !important;
+  }
+
+  .groupSummary:hover .MuiSvgIcon-root {
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .groupAccordion {
+    border-width: 2px !important;
+    border-color: var(--thiqax-primary) !important;
+  }
+
+  .groupSummary .MuiBadge-badge {
+    border: 2px solid var(--thiqax-surface) !important;
+  }
+
+  .emptyState {
+    border-width: 3px !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.groupAccordion:focus-within,
+.groupSummary:focus-within {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+.groupSummary .MuiIconButton-root:focus {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+/* Loading State */
+.documentGroups[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.documentGroups[data-loading="true"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--thiqax-primary), transparent);
+  animation: shimmer 2s infinite;
+  z-index: 10;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Cultural Design Elements */
+.groupAccordion::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, transparent 30%, var(--thiqax-accent) 30%, var(--thiqax-accent) 70%, transparent 70%);
+  opacity: 0.1;
+  border-radius: 0 15px 0 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Smooth state transitions */
+.groupSummary .MuiBadge-badge,
+.groupSummary .MuiSvgIcon-root {
+  transition: all 0.5s ease !important;
+}
+
+/* Animation for accordion entrance */
+.groupAccordion {
+  animation: accordionSlideIn 0.3s ease-out;
+}
+
+@keyframes accordionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Group expansion animation enhancement */
+.groupAccordion .MuiCollapse-root {
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Interactive feedback for grouped documents */
+.groupDetails .MuiGrid-item:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Print styles */
+@media print {
+  .documentGroups {
+    background: white !important;
+  }
+
+  .groupAccordion {
+    break-inside: avoid;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin-bottom: 16px;
+  }
+
+  .groupSummary {
+    background: white !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .groupSummary .MuiIconButton-root {
+    display: none !important;
+  }
+
+  .groupDetails {
+    padding: 16px !important;
+  }
+
+  .emptyState {
+    border: 1px solid #000 !important;
+    background: white !important;
+  }
+}
+
+/* Enhanced typography for better readability */
+.groupSummary .MuiTypography-subtitle1 {
+  font-weight: 600 !important;
+  color: var(--thiqax-text-primary) !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Micro-interactions for better UX */
+.groupSummary .MuiBadge-badge:hover {
+  animation: badgeWiggle 0.5s ease;
+}
+
+@keyframes badgeWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+/* Enhanced visual hierarchy */
+.documentGroups > .groupAccordion:first-child {
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.12) !important;
+}
+
+.documentGroups > .groupAccordion:first-child .groupSummary {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.06) 0%, rgba(59, 130, 246, 0.09) 100%) !important;
 }
