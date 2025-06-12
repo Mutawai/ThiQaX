@@ -1,0 +1,855 @@
+/* src/components/documents/VerificationJourney/VerificationJourney.module.css */
+
+/* ThiQaX Brand Colors - consistent with other components */
+:root {
+  --thiqax-primary: #1e3a8a;
+  --thiqax-primary-light: #3b82f6;
+  --thiqax-primary-dark: #1e40af;
+  --thiqax-secondary: #059669;
+  --thiqax-accent: #f59e0b;
+  --thiqax-trust-gold: #d97706;
+  --thiqax-success: #10b981;
+  --thiqax-warning: #f59e0b;
+  --thiqax-error: #ef4444;
+  --thiqax-surface: #ffffff;
+  --thiqax-background: #f8fafc;
+  --thiqax-text-primary: #1f2937;
+  --thiqax-text-secondary: #6b7280;
+  --thiqax-border: #e5e7eb;
+  --thiqax-shadow: rgba(0, 0, 0, 0.1);
+  --thiqax-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --thiqax-success-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --thiqax-journey-gradient: linear-gradient(135deg, rgba(30, 58, 138, 0.02) 0%, rgba(59, 130, 246, 0.05) 100%);
+}
+
+/* Main Journey Container */
+.journey {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--thiqax-background);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Add journey progression background */
+.journey::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.03) 0%, rgba(59, 130, 246, 0.05) 100%);
+  z-index: 0;
+  border-radius: 0 0 50px 50px;
+}
+
+.journey > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Compact variant */
+.compact {
+  padding: 16px;
+}
+
+.compact .header {
+  margin-bottom: 16px;
+}
+
+.compact .requirementsGrid {
+  margin-top: 16px !important;
+}
+
+/* Header Section */
+.header {
+  border-radius: 20px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  margin-bottom: 32px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08) !important;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: var(--thiqax-journey-gradient);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.journeyAvatar {
+  width: 64px !important;
+  height: 64px !important;
+  background: var(--thiqax-gradient) !important;
+  border: 3px solid var(--thiqax-surface) !important;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3) !important;
+}
+
+.title {
+  font-weight: 700 !important;
+  color: var(--thiqax-text-primary) !important;
+  background: var(--thiqax-gradient);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text;
+  margin: 0 !important;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trustChip {
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  padding: 4px 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.trustChip:hover {
+  transform: scale(1.05) !important;
+}
+
+/* Progress Overview */
+.progressOverview {
+  padding: 20px 24px 24px;
+  border-top: 1px solid rgba(30, 58, 138, 0.08);
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progressBar {
+  height: 12px !important;
+  border-radius: 6px !important;
+  background-color: rgba(30, 58, 138, 0.1) !important;
+  margin-bottom: 8px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.progressBar .MuiLinearProgress-bar {
+  border-radius: 6px !important;
+  background: var(--thiqax-success-gradient) !important;
+  position: relative !important;
+}
+
+/* Add shine effect to progress bar */
+.progressBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Celebration Animation */
+.celebration {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1300 !important;
+  padding: 32px !important;
+  border-radius: 20px !important;
+  text-align: center !important;
+  background: var(--thiqax-surface) !important;
+  border: 2px solid var(--thiqax-success) !important;
+  animation: celebrationPulse 0.6s ease-out !important;
+}
+
+.celebrationIcon {
+  font-size: 64px !important;
+  color: var(--thiqax-success) !important;
+  margin-bottom: 16px !important;
+  animation: celebrationSpin 1s ease-in-out !important;
+}
+
+@keyframes celebrationPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes celebrationSpin {
+  0% { transform: rotate(0deg) scale(0.8); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Next Action Card */
+.nextActionCard {
+  border-radius: 16px !important;
+  border: 2px solid var(--thiqax-warning) !important;
+  margin-bottom: 32px !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.02) 0%, rgba(217, 119, 6, 0.05) 100%) !important;
+  animation: nextActionPulse 3s infinite !important;
+}
+
+.nextActionContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.nextActionLeft {
+  flex: 1;
+}
+
+.nextActionButton {
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.nextActionButton:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+}
+
+@keyframes nextActionPulse {
+  0%, 100% {
+    border-color: var(--thiqax-warning);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    border-color: var(--thiqax-accent);
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+  }
+}
+
+/* Requirements Grid */
+.requirementsGrid {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+}
+
+.requirementCard {
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden !important;
+  position: relative !important;
+  height: 100% !important;
+}
+
+.requirementCard:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px rgba(30, 58, 138, 0.15) !important;
+}
+
+/* Status-specific styling */
+.requirementCard.status-verified {
+  border-left: 4px solid var(--thiqax-success) !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.02) 0%, rgba(5, 150, 105, 0.05) 100%) !important;
+}
+
+.requirementCard.status-pending {
+  border-left: 4px solid var(--thiqax-warning) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.02) 0%, rgba(217, 119, 6, 0.05) 100%) !important;
+}
+
+.requirementCard.status-rejected {
+  border-left: 4px solid var(--thiqax-error) !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, rgba(220, 38, 38, 0.05) 100%) !important;
+}
+
+.requirementCard.status-missing {
+  border-left: 4px solid var(--thiqax-border) !important;
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.02) 0%, rgba(75, 85, 99, 0.05) 100%) !important;
+}
+
+.requirementCard.status-uploaded {
+  border-left: 4px solid var(--thiqax-primary) !important;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.02) 0%, rgba(59, 130, 246, 0.05) 100%) !important;
+}
+
+/* Requirement Header */
+.requirementHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.requirementLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.requirementIcon {
+  width: 48px !important;
+  height: 48px !important;
+  border: 2px solid var(--thiqax-surface) !important;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2) !important;
+}
+
+.requirementRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.statusChip {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.pointsBadge {
+  background: var(--thiqax-gradient) !important;
+  color: white !important;
+  padding: 2px 8px !important;
+  border-radius: 10px !important;
+  font-weight: bold !important;
+  font-size: 0.75rem !important;
+}
+
+/* Requirement Details */
+.requirementDetails {
+  margin: 16px 0;
+  padding: 12px;
+  background: rgba(30, 58, 138, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(30, 58, 138, 0.08);
+}
+
+.embeddedCard {
+  margin-bottom: 8px !important;
+}
+
+.embeddedCard:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Requirement Actions */
+.requirementActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.requirementActions .MuiButton-root {
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.requirementActions .MuiButton-root:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* Requirement Tips */
+.requirementTips {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(30, 58, 138, 0.02);
+  border-radius: 8px;
+  border-left: 3px solid var(--thiqax-primary);
+}
+
+.tip {
+  margin-bottom: 4px !important;
+  line-height: 1.4 !important;
+}
+
+.tip:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* History Section */
+.historySection {
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  margin-bottom: 32px !important;
+  overflow: hidden !important;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--thiqax-journey-gradient);
+  border-bottom: 1px solid rgba(30, 58, 138, 0.08);
+}
+
+.historyContent {
+  padding: 24px;
+}
+
+.documentHistory {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--thiqax-border);
+}
+
+.documentHistory:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.historyLog {
+  margin-top: 8px;
+}
+
+/* Upload Dialog */
+.uploadDialog .MuiDialog-paper {
+  border-radius: 20px !important;
+  max-width: 700px !important;
+}
+
+/* Floating Action Button */
+.fab {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  background: var(--thiqax-gradient) !important;
+  box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  z-index: 1000 !important;
+}
+
+.fab:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 12px 40px rgba(30, 58, 138, 0.4) !important;
+}
+
+.fab:active {
+  transform: scale(0.95) !important;
+}
+
+/* Completion Actions */
+.completionActions {
+  border-radius: 20px !important;
+  border: 2px solid var(--thiqax-success) !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.08) 100%) !important;
+  margin-top: 32px !important;
+  animation: completionGlow 2s ease-in-out infinite alternate !important;
+}
+
+.completionContent {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+}
+
+.completionIcon {
+  font-size: 64px !important;
+  color: var(--thiqax-success) !important;
+  animation: completionPulse 2s ease-in-out infinite !important;
+}
+
+.completionText {
+  flex: 1;
+}
+
+.completionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.completionButtons .MuiButton-root {
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+@keyframes completionGlow {
+  0% {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  100% {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+  }
+}
+
+@keyframes completionPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .journey {
+    padding: 16px;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .headerLeft {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .journeyAvatar {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .title {
+    font-size: 1.5rem !important;
+  }
+
+  .progressOverview {
+    padding: 16px 20px 20px;
+  }
+
+  .progressHeader {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .nextActionContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .nextActionButton {
+    width: 100% !important;
+  }
+
+  .requirementsGrid {
+    margin-top: 24px !important;
+  }
+
+  .requirementHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .requirementLeft {
+    align-items: center;
+    text-align: center;
+  }
+
+  .requirementRight {
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .requirementActions {
+    justify-content: center;
+  }
+
+  .requirementActions .MuiButton-root {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .historyHeader {
+    padding: 16px 20px;
+  }
+
+  .historyContent {
+    padding: 20px;
+  }
+
+  .completionContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .completionButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .completionButtons .MuiButton-root {
+    width: 100%;
+  }
+
+  .fab {
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+}
+
+/* Tablet responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .journey {
+    padding: 20px;
+  }
+
+  .headerContent {
+    padding: 22px;
+  }
+
+  .requirementsGrid .MuiGrid-item {
+    flex-basis: 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  .journey {
+    padding: 32px;
+  }
+
+  .header {
+    border-radius: 24px !important;
+  }
+
+  .requirementCard {
+    border-radius: 20px !important;
+  }
+
+  .progressBar {
+    height: 14px !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --thiqax-surface: #1f2937;
+    --thiqax-background: #111827;
+    --thiqax-text-primary: #f9fafb;
+    --thiqax-text-secondary: #d1d5db;
+    --thiqax-border: #374151;
+    --thiqax-shadow: rgba(0, 0, 0, 0.3);
+  }
+
+  .journey::before {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(30, 58, 138, 0.12) 100%);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .requirementCard:hover {
+    transform: none !important;
+  }
+
+  .fab:hover {
+    transform: none !important;
+  }
+
+  .nextActionButton:hover {
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .requirementCard {
+    border-width: 2px !important;
+  }
+
+  .header {
+    border-width: 2px !important;
+  }
+
+  .progressBar {
+    height: 16px !important;
+  }
+
+  .statusChip {
+    border-width: 2px !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.requirementCard:focus-within,
+.header:focus-within,
+.nextActionCard:focus-within {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+.fab:focus,
+.nextActionButton:focus,
+.requirementActions .MuiButton-root:focus {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+/* Loading State */
+.journey[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.journey[data-loading="true"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--thiqax-primary), transparent);
+  animation: shimmer 2s infinite;
+  z-index: 10;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Cultural Design Elements */
+.requirementCard::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(45deg, transparent 30%, var(--thiqax-accent) 30%, var(--thiqax-accent) 70%, transparent 70%);
+  opacity: 0.1;
+  border-radius: 0 15px 0 0;
+  pointer-events: none;
+}
+
+/* Journey progression animation */
+.requirementCard[data-index="0"] {
+  animation: cardSlideIn 0.3s ease-out;
+}
+
+.requirementCard[data-index="1"] {
+  animation: cardSlideIn 0.3s ease-out 0.1s both;
+}
+
+.requirementCard[data-index="2"] {
+  animation: cardSlideIn 0.3s ease-out 0.2s both;
+}
+
+.requirementCard[data-index="3"] {
+  animation: cardSlideIn 0.3s ease-out 0.3s both;
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Status-specific animations */
+.requirementCard.status-verified .requirementIcon {
+  animation: verifiedPulse 2s ease-in-out infinite;
+}
+
+@keyframes verifiedPulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Smooth state transitions */
+.statusChip,
+.requirementIcon,
+.pointsBadge {
+  transition: all 0.5s ease !important;
+}
+
+/* Print styles */
+@media print {
+  .journey {
+    background: white !important;
+    padding: 20px !important;
+  }
+
+  .journey::before {
+    display: none !important;
+  }
+
+  .fab,
+  .nextActionButton,
+  .requirementActions,
+  .completionButtons {
+    display: none !important;
+  }
+
+  .requirementCard {
+    break-inside: avoid;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    margin-bottom: 16px;
+  }
+
+  .header {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+}
