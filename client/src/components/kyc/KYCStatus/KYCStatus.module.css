@@ -1,0 +1,677 @@
+/* KYCStatus.module.css */
+
+.kycStatus {
+  width: 100%;
+}
+
+.compactView {
+  border-radius: 0.5rem;
+  border: 1px solid;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.compactView:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.compactHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.compactLeft {
+  display: flex;
+  align-items: center;
+}
+
+.compactIcon {
+  margin-right: 0.5rem;
+}
+
+.compactTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.compactProgress {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.compactAction {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.compactProgressBar {
+  margin-top: 0.75rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.progressBar {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-in-out;
+}
+
+.fullView {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+}
+
+.headerIcon {
+  margin-right: 0.75rem;
+}
+
+.headerInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.headerDescription {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0 0;
+}
+
+.spinner {
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #6366f1;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.progressSection {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.progressBarFull {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  height: 0.75rem;
+  overflow: hidden;
+}
+
+.progressFillFull {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease-in-out;
+  background: linear-gradient(90deg, var(--progress-color) 0%, var(--progress-color-light) 100%);
+}
+
+.errorAlert {
+  margin: 1rem 1.5rem 0;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.errorContent {
+  display: flex;
+  align-items: flex-start;
+}
+
+.errorIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #f87171;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.errorInfo {
+  flex: 1;
+}
+
+.errorTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #991b1b;
+  margin: 0;
+}
+
+.errorMessage {
+  font-size: 0.875rem;
+  color: #b91c1c;
+  margin: 0.5rem 0 0 0;
+}
+
+.documentsSection {
+  padding: 1.5rem;
+}
+
+.documentsTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0 0 1rem 0;
+}
+
+.documentCategory {
+  margin-bottom: 1rem;
+}
+
+.categoryTitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem 0;
+}
+
+.documentItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.documentItem:last-child {
+  border-bottom: none;
+}
+
+.documentName {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #111827;
+}
+
+.documentStatusContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.statusVerified {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.statusPending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.statusRejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.statusExpired {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
+
+.statusNotUploaded {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.verifiedIcon {
+  height: 1rem;
+  width: 1rem;
+  color: #10b981;
+}
+
+.footer {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lastUpdated {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.buttonSecondary {
+  color: #374151;
+  background-color: white;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.buttonSecondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.buttonSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttonPrimary {
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.buttonIndigo {
+  background-color: #6366f1;
+}
+
+.buttonIndigo:hover:not(:disabled) {
+  background-color: #4f46e5;
+}
+
+.buttonIndigo:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6366f1, 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.buttonGreen {
+  background-color: #10b981;
+}
+
+.buttonGreen:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.buttonGreen:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #10b981, 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.buttonYellow {
+  background-color: #f59e0b;
+}
+
+.buttonYellow:hover:not(:disabled) {
+  background-color: #d97706;
+}
+
+.buttonYellow:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #f59e0b, 0 0 0 4px rgba(245, 158, 11, 0.1);
+}
+
+.buttonRed {
+  background-color: #ef4444;
+}
+
+.buttonRed:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.buttonRed:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #ef4444, 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.buttonOrange {
+  background-color: #f97316;
+}
+
+.buttonOrange:hover:not(:disabled) {
+  background-color: #ea580c;
+}
+
+.buttonOrange:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #f97316, 0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 8rem;
+}
+
+.loadingSpinner {
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #6366f1;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+/* Status-specific styles */
+.notStarted {
+  --progress-color: #6b7280;
+  --progress-color-light: #9ca3af;
+}
+
+.incomplete {
+  --progress-color: #f59e0b;
+  --progress-color-light: #fbbf24;
+}
+
+.pending {
+  --progress-color: #3b82f6;
+  --progress-color-light: #60a5fa;
+}
+
+.verified {
+  --progress-color: #10b981;
+  --progress-color-light: #34d399;
+}
+
+.rejected {
+  --progress-color: #ef4444;
+  --progress-color-light: #f87171;
+}
+
+.expired {
+  --progress-color: #f97316;
+  --progress-color-light: #fb923c;
+}
+
+/* Border colors for different statuses */
+.borderGray {
+  border-color: #e5e7eb;
+}
+
+.borderYellow {
+  border-color: #fde047;
+}
+
+.borderBlue {
+  border-color: #93c5fd;
+}
+
+.borderGreen {
+  border-color: #86efac;
+}
+
+.borderRed {
+  border-color: #fca5a5;
+}
+
+.borderOrange {
+  border-color: #fdba74;
+}
+
+/* Background colors for different statuses */
+.bgGray {
+  background-color: #f9fafb;
+}
+
+.bgYellow {
+  background-color: #fefce8;
+}
+
+.bgBlue {
+  background-color: #eff6ff;
+}
+
+.bgGreen {
+  background-color: #ecfdf5;
+}
+
+.bgRed {
+  background-color: #fef2f2;
+}
+
+.bgOrange {
+  background-color: #fff7ed;
+}
+
+/* Text colors for different statuses */
+.textGray {
+  color: #6b7280;
+}
+
+.textYellow {
+  color: #92400e;
+}
+
+.textBlue {
+  color: #1e40af;
+}
+
+.textGreen {
+  color: #065f46;
+}
+
+.textRed {
+  color: #991b1b;
+}
+
+.textOrange {
+  color: #9a3412;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .headerContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .headerLeft {
+    width: 100%;
+  }
+  
+  .progressSection {
+    padding: 0.75rem 1rem;
+  }
+  
+  .documentsSection {
+    padding: 1rem;
+  }
+  
+  .footer {
+    padding: 0.75rem 1rem;
+  }
+  
+  .footerContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .button {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .compactView {
+    padding: 0.75rem;
+  }
+  
+  .compactHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .compactAction {
+    align-self: flex-end;
+  }
+}
+
+/* Animation for state changes */
+.compactView,
+.statusBadge,
+.button {
+  transition: all 0.3s ease;
+}
+
+.documentsSection {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility improvements */
+.button:focus-visible {
+  outline: 2px solid;
+  outline-offset: 2px;
+}
+
+.compactView:focus-within {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .statusBadge {
+    border: 1px solid currentColor;
+  }
+  
+  .progressFill,
+  .progressFillFull {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .compactView,
+  .statusBadge,
+  .button,
+  .progressFill,
+  .progressFillFull,
+  .spinner {
+    transition: none;
+    animation: none;
+  }
+  
+  .compactView:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .compactView,
+  .fullView {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .button {
+    display: none;
+  }
+  
+  .spinner {
+    display: none;
+  }
+}
