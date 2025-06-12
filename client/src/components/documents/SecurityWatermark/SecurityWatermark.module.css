@@ -1,5 +1,29 @@
 /* src/components/documents/SecurityWatermark/SecurityWatermark.module.css */
 
+/* ThiQaX Brand Colors - consistent with new components */
+:root {
+  --thiqax-primary: #1e3a8a;
+  --thiqax-primary-light: #3b82f6;
+  --thiqax-primary-dark: #1e40af;
+  --thiqax-secondary: #059669;
+  --thiqax-accent: #f59e0b;
+  --thiqax-trust-gold: #d97706;
+  --thiqax-success: #10b981;
+  --thiqax-warning: #f59e0b;
+  --thiqax-error: #ef4444;
+  --thiqax-surface: #ffffff;
+  --thiqax-background: #f8fafc;
+  --thiqax-text-primary: #1f2937;
+  --thiqax-text-secondary: #6b7280;
+  --thiqax-border: #e5e7eb;
+  --thiqax-shadow: rgba(0, 0, 0, 0.1);
+  --thiqax-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --thiqax-success-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --thiqax-warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --thiqax-error-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Main Watermark Container */
 .watermark {
   display: flex;
   flex-direction: column;
@@ -7,11 +31,691 @@
   justify-content: center;
   pointer-events: none;
   white-space: nowrap;
-  will-change: transform;
-  font-family: 'Arial', sans-serif;
-  transition: opacity 0.3s ease;
+  will-change: transform, opacity;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  z-index: 10;
+  position: absolute;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Enhanced hover effect */
 .watermark:hover {
-  opacity: 0.3 !important;
+  opacity: 0.4 !important;
+  transform: scale(1.05) !important;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Icon styling with enhanced effects */
+.watermark .MuiSvgIcon-root {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: watermarkPulse 3s ease-in-out infinite;
+}
+
+.watermark:hover .MuiSvgIcon-root {
+  transform: rotate(5deg) scale(1.1);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+}
+
+/* Text styling with enhanced readability */
+.watermark .MuiTypography-root {
+  text-shadow: 
+    0 1px 0 rgba(0, 0, 0, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+  transition: all 0.3s ease;
+  line-height: 1.2;
+  margin-top: 8px;
+}
+
+.watermark:hover .MuiTypography-root {
+  transform: scale(1.05);
+  text-shadow: 
+    0 1px 0 rgba(0, 0, 0, 0.9),
+    0 3px 6px rgba(0, 0, 0, 0.6),
+    0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Status-specific styling with enhanced gradients */
+
+/* Verified Status */
+.watermark[data-status="verified"],
+.watermark[data-status="VERIFIED"] {
+  color: var(--thiqax-success);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(5, 150, 105, 0.08) 50%,
+    transparent 70%
+  );
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+}
+
+.watermark[data-status="verified"] .MuiSvgIcon-root,
+.watermark[data-status="VERIFIED"] .MuiSvgIcon-root {
+  color: var(--thiqax-success);
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+}
+
+/* Pending Status */
+.watermark[data-status="pending"],
+.watermark[data-status="PENDING"] {
+  color: var(--thiqax-warning);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(245, 158, 11, 0.15) 0%,
+    rgba(217, 119, 6, 0.08) 50%,
+    transparent 70%
+  );
+  border: 2px solid rgba(245, 158, 11, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  animation: pendingPulse 2s ease-in-out infinite;
+}
+
+.watermark[data-status="pending"] .MuiSvgIcon-root,
+.watermark[data-status="PENDING"] .MuiSvgIcon-root {
+  color: var(--thiqax-warning);
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+  animation: pendingRotate 3s linear infinite;
+}
+
+/* Rejected Status */
+.watermark[data-status="rejected"],
+.watermark[data-status="REJECTED"] {
+  color: var(--thiqax-error);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(220, 38, 38, 0.08) 50%,
+    transparent 70%
+  );
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  animation: rejectedShake 0.5s ease-in-out;
+}
+
+.watermark[data-status="rejected"] .MuiSvgIcon-root,
+.watermark[data-status="REJECTED"] .MuiSvgIcon-root {
+  color: var(--thiqax-error);
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+}
+
+/* Expired Status */
+.watermark[data-status="expired"],
+.watermark[data-status="EXPIRED"] {
+  color: var(--thiqax-error);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(239, 68, 68, 0.12) 0%,
+    rgba(220, 38, 38, 0.06) 50%,
+    transparent 70%
+  );
+  border: 2px dashed rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  opacity: 0.8;
+}
+
+.watermark[data-status="expired"] .MuiSvgIcon-root,
+.watermark[data-status="EXPIRED"] .MuiSvgIcon-root {
+  color: var(--thiqax-error);
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6)) grayscale(0.3);
+}
+
+/* Under Review Status */
+.watermark[data-status="under_review"],
+.watermark[data-status="underReview"],
+.watermark[data-status="UNDER_REVIEW"] {
+  color: var(--thiqax-primary);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(30, 58, 138, 0.15) 0%,
+    rgba(59, 130, 246, 0.08) 50%,
+    transparent 70%
+  );
+  border: 2px solid rgba(30, 58, 138, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  animation: reviewingPulse 2.5s ease-in-out infinite;
+}
+
+.watermark[data-status="under_review"] .MuiSvgIcon-root,
+.watermark[data-status="underReview"] .MuiSvgIcon-root,
+.watermark[data-status="UNDER_REVIEW"] .MuiSvgIcon-root {
+  color: var(--thiqax-primary);
+  filter: drop-shadow(0 0 8px rgba(30, 58, 138, 0.6));
+  animation: reviewingBlink 1.5s ease-in-out infinite;
+}
+
+/* Unverified/Default Status */
+.watermark[data-status="unverified"],
+.watermark[data-status=""],
+.watermark:not([data-status]) {
+  color: var(--thiqax-text-secondary);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(107, 114, 128, 0.12) 0%,
+    rgba(75, 85, 99, 0.06) 50%,
+    transparent 70%
+  );
+  border: 2px dashed rgba(107, 114, 128, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+  opacity: 0.7;
+}
+
+.watermark[data-status="unverified"] .MuiSvgIcon-root,
+.watermark[data-status=""] .MuiSvgIcon-root,
+.watermark:not([data-status]) .MuiSvgIcon-root {
+  color: var(--thiqax-text-secondary);
+  filter: drop-shadow(0 0 4px rgba(107, 114, 128, 0.4)) grayscale(0.5);
+}
+
+/* Position-specific styling */
+
+/* Center Position */
+.watermark[data-position="center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-size: 4rem;
+}
+
+.watermark[data-position="center"] .MuiSvgIcon-root {
+  font-size: 6rem;
+}
+
+/* Top-left Position */
+.watermark[data-position="top-left"] {
+  top: 15%;
+  left: 15%;
+  transform: translate(-15%, -15%) rotate(-35deg);
+  font-size: 3rem;
+}
+
+.watermark[data-position="top-left"] .MuiSvgIcon-root {
+  font-size: 4rem;
+}
+
+/* Top-right Position */
+.watermark[data-position="top-right"] {
+  top: 15%;
+  right: 15%;
+  transform: translate(15%, -15%) rotate(35deg);
+  font-size: 3rem;
+}
+
+.watermark[data-position="top-right"] .MuiSvgIcon-root {
+  font-size: 4rem;
+}
+
+/* Bottom-left Position */
+.watermark[data-position="bottom-left"] {
+  bottom: 15%;
+  left: 15%;
+  transform: translate(-15%, 15%) rotate(35deg);
+  font-size: 3rem;
+}
+
+.watermark[data-position="bottom-left"] .MuiSvgIcon-root {
+  font-size: 4rem;
+}
+
+/* Bottom-right Position */
+.watermark[data-position="bottom-right"] {
+  bottom: 15%;
+  right: 15%;
+  transform: translate(15%, 15%) rotate(-35deg);
+  font-size: 3rem;
+}
+
+.watermark[data-position="bottom-right"] .MuiSvgIcon-root {
+  font-size: 4rem;
+}
+
+/* Scale-specific adjustments */
+.watermark[data-scale="0.5"] {
+  font-size: 2rem;
+}
+
+.watermark[data-scale="0.5"] .MuiSvgIcon-root {
+  font-size: 3rem;
+}
+
+.watermark[data-scale="0.6"] {
+  font-size: 2.4rem;
+}
+
+.watermark[data-scale="0.6"] .MuiSvgIcon-root {
+  font-size: 3.6rem;
+}
+
+.watermark[data-scale="0.8"] {
+  font-size: 3.2rem;
+}
+
+.watermark[data-scale="0.8"] .MuiSvgIcon-root {
+  font-size: 4.8rem;
+}
+
+.watermark[data-scale="1.2"] {
+  font-size: 4.8rem;
+}
+
+.watermark[data-scale="1.2"] .MuiSvgIcon-root {
+  font-size: 7.2rem;
+}
+
+/* Animations for different states */
+
+/* Verified glow effect */
+@keyframes verifiedGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.9));
+  }
+}
+
+.watermark[data-status="verified"] .MuiSvgIcon-root,
+.watermark[data-status="VERIFIED"] .MuiSvgIcon-root {
+  animation: verifiedGlow 3s ease-in-out infinite;
+}
+
+/* Pending pulse */
+@keyframes pendingPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pendingRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Rejected shake */
+@keyframes rejectedShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Reviewing pulse */
+@keyframes reviewingPulse {
+  0%, 100% {
+    opacity: 0.7;
+    border-color: rgba(30, 58, 138, 0.2);
+  }
+  50% {
+    opacity: 0.9;
+    border-color: rgba(30, 58, 138, 0.4);
+  }
+}
+
+@keyframes reviewingBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* General watermark pulse */
+@keyframes watermarkPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .watermark {
+    letter-spacing: 2px;
+    font-size: 2rem !important;
+  }
+
+  .watermark .MuiSvgIcon-root {
+    font-size: 3rem !important;
+  }
+
+  .watermark .MuiTypography-root {
+    margin-top: 6px;
+    font-size: 0.7rem !important;
+  }
+
+  /* Adjust positions for mobile */
+  .watermark[data-position="center"] {
+    transform: translate(-50%, -50%) rotate(-20deg);
+  }
+
+  .watermark[data-position="top-left"] {
+    top: 10%;
+    left: 10%;
+    transform: translate(-10%, -10%) rotate(-30deg);
+  }
+
+  .watermark[data-position="top-right"] {
+    top: 10%;
+    right: 10%;
+    transform: translate(10%, -10%) rotate(30deg);
+  }
+
+  .watermark[data-position="bottom-left"] {
+    bottom: 10%;
+    left: 10%;
+    transform: translate(-10%, 10%) rotate(30deg);
+  }
+
+  .watermark[data-position="bottom-right"] {
+    bottom: 10%;
+    right: 10%;
+    transform: translate(10%, 10%) rotate(-30deg);
+  }
+
+  /* Reduce padding for mobile */
+  .watermark[data-status] {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  /* Disable hover effects on mobile */
+  .watermark:hover {
+    opacity: inherit !important;
+    transform: inherit !important;
+    filter: inherit !important;
+  }
+
+  .watermark:hover .MuiSvgIcon-root {
+    transform: inherit !important;
+  }
+
+  .watermark:hover .MuiTypography-root {
+    transform: inherit !important;
+  }
+}
+
+/* Tablet responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .watermark {
+    font-size: 3rem;
+  }
+
+  .watermark .MuiSvgIcon-root {
+    font-size: 4.5rem;
+  }
+
+  .watermark[data-status] {
+    padding: 16px;
+    border-radius: 16px;
+  }
+}
+
+/* Large screen enhancements */
+@media (min-width: 1200px) {
+  .watermark {
+    font-size: 5rem;
+    letter-spacing: 4px;
+  }
+
+  .watermark .MuiSvgIcon-root {
+    font-size: 7.5rem;
+  }
+
+  .watermark[data-status] {
+    padding: 24px;
+    border-radius: 24px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --thiqax-surface: #1f2937;
+    --thiqax-background: #111827;
+    --thiqax-text-primary: #f9fafb;
+    --thiqax-text-secondary: #d1d5db;
+    --thiqax-border: #374151;
+    --thiqax-shadow: rgba(0, 0, 0, 0.3);
+  }
+
+  .watermark {
+    text-shadow: 
+      0 1px 0 rgba(0, 0, 0, 0.9),
+      0 2px 4px rgba(0, 0, 0, 0.7),
+      0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .watermark .MuiTypography-root {
+    text-shadow: 
+      0 1px 0 rgba(0, 0, 0, 0.95),
+      0 3px 6px rgba(0, 0, 0, 0.8),
+      0 6px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Enhanced glow effects in dark mode */
+  .watermark[data-status="verified"] .MuiSvgIcon-root,
+  .watermark[data-status="VERIFIED"] .MuiSvgIcon-root {
+    filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.8));
+  }
+
+  .watermark[data-status="pending"] .MuiSvgIcon-root,
+  .watermark[data-status="PENDING"] .MuiSvgIcon-root {
+    filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8));
+  }
+
+  .watermark[data-status="rejected"] .MuiSvgIcon-root,
+  .watermark[data-status="REJECTED"] .MuiSvgIcon-root {
+    filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.8));
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .watermark:hover {
+    transform: inherit !important;
+  }
+
+  .watermark:hover .MuiSvgIcon-root {
+    transform: inherit !important;
+  }
+
+  .watermark:hover .MuiTypography-root {
+    transform: inherit !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .watermark[data-status] {
+    border-width: 3px !important;
+    font-weight: 900 !important;
+  }
+
+  .watermark .MuiTypography-root {
+    font-weight: 900 !important;
+    text-shadow: 
+      0 1px 0 rgba(0, 0, 0, 1),
+      0 2px 0 rgba(0, 0, 0, 1),
+      0 3px 0 rgba(0, 0, 0, 1);
+  }
+
+  .watermark .MuiSvgIcon-root {
+    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 1)) !important;
+  }
+}
+
+/* Focus States for Accessibility (if clickable) */
+.watermark[tabindex]:focus,
+.watermark[role="button"]:focus {
+  outline: 3px solid var(--thiqax-primary);
+  outline-offset: 4px;
+}
+
+/* Cultural Design Elements */
+.watermark::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, transparent 30%, rgba(245, 158, 11, 0.3) 30%, rgba(245, 158, 11, 0.3) 70%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: culturalSparkle 4s ease-in-out infinite;
+}
+
+@keyframes culturalSparkle {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+/* Enhanced Security Visual Cues */
+.watermark[data-security="high"]::after {
+  content: '🔒';
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  font-size: 1rem;
+  opacity: 0.7;
+  animation: securityPulse 2s ease-in-out infinite;
+}
+
+@keyframes securityPulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Trust Level Indicators */
+.watermark[data-trust="verified"] {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(16, 185, 129, 0.2) 0%,
+    rgba(5, 150, 105, 0.1) 50%,
+    transparent 70%
+  );
+}
+
+.watermark[data-trust="trusted"] {
+  border-color: rgba(30, 58, 138, 0.5);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(30, 58, 138, 0.2) 0%,
+    rgba(59, 130, 246, 0.1) 50%,
+    transparent 70%
+  );
+}
+
+/* Print styles */
+@media print {
+  .watermark {
+    opacity: 0.3 !important;
+    color: #666 !important;
+    background: none !important;
+    border: 1px dashed #666 !important;
+    animation: none !important;
+    transform: translate(-50%, -50%) rotate(-30deg) !important;
+  }
+
+  .watermark .MuiSvgIcon-root {
+    color: #666 !important;
+    filter: none !important;
+    animation: none !important;
+  }
+
+  .watermark .MuiTypography-root {
+    color: #666 !important;
+    text-shadow: none !important;
+    animation: none !important;
+  }
+
+  .watermark::before,
+  .watermark::after {
+    display: none !important;
+  }
+}
+
+/* Enhanced layering for complex backgrounds */
+.watermark {
+  mix-blend-mode: multiply;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .watermark[data-status] {
+    backdrop-filter: blur(1px) saturate(1.2);
+  }
+}
+
+/* Smooth appearance transition */
+.watermark {
+  animation: watermarkAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes watermarkAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-25deg) scale(0.8);
+  }
+  100% {
+    opacity: var(--watermark-opacity, 0.15);
+    transform: translate(-50%, -50%) rotate(-25deg) scale(1);
+  }
 }
