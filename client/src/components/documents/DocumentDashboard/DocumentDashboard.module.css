@@ -1,0 +1,444 @@
+/* src/components/documents/DocumentDashboard/DocumentDashboard.module.css */
+
+/* ThiQaX Brand Colors - derived from "thiqa" (trust) concept */
+:root {
+  --thiqax-primary: #1e3a8a;
+  --thiqax-primary-light: #3b82f6;
+  --thiqax-primary-dark: #1e40af;
+  --thiqax-secondary: #059669;
+  --thiqax-accent: #f59e0b;
+  --thiqax-trust-gold: #d97706;
+  --thiqax-success: #10b981;
+  --thiqax-warning: #f59e0b;
+  --thiqax-error: #ef4444;
+  --thiqax-surface: #ffffff;
+  --thiqax-background: #f8fafc;
+  --thiqax-text-primary: #1f2937;
+  --thiqax-text-secondary: #6b7280;
+  --thiqax-border: #e5e7eb;
+  --thiqax-shadow: rgba(0, 0, 0, 0.1);
+  --thiqax-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --thiqax-trust-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+/* Main Dashboard Container */
+.dashboard {
+  min-height: 100vh;
+  background: var(--thiqax-background);
+  padding: 16px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Add subtle pattern background for cultural element */
+.dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.03) 0%, rgba(59, 130, 246, 0.05) 100%);
+  z-index: 0;
+}
+
+.dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titleSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.titleWithAvatar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 700 !important;
+  color: var(--thiqax-text-primary) !important;
+  background: var(--thiqax-gradient);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text;
+  margin: 0 !important;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Stats Grid */
+.statsGrid {
+  margin-bottom: 24px !important;
+}
+
+.statCard {
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: var(--thiqax-surface) !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--thiqax-gradient);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 24px rgba(30, 58, 138, 0.15) !important;
+}
+
+.statCard:hover::before {
+  opacity: 1;
+}
+
+.statContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statNumber {
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  color: var(--thiqax-text-primary) !important;
+  margin: 0 !important;
+}
+
+/* Progress Card */
+.progressCard {
+  padding: 24px !important;
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  margin-bottom: 24px !important;
+  background: var(--thiqax-surface) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.progressBar {
+  height: 8px !important;
+  border-radius: 4px !important;
+  background-color: rgba(30, 58, 138, 0.1) !important;
+}
+
+.progressBar .MuiLinearProgress-bar {
+  background: var(--thiqax-gradient) !important;
+  border-radius: 4px !important;
+}
+
+/* Alerts */
+.expiryAlert {
+  margin-bottom: 24px !important;
+  border-radius: 12px !important;
+  border-left: 4px solid var(--thiqax-warning) !important;
+}
+
+.errorAlert {
+  margin-bottom: 24px !important;
+  border-radius: 12px !important;
+  border-left: 4px solid var(--thiqax-error) !important;
+}
+
+/* Loading State */
+.loadingState {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--thiqax-text-secondary);
+}
+
+/* Documents Section */
+.documentsSection {
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  overflow: hidden !important;
+  margin-bottom: 80px; /* Space for FAB */
+}
+
+.sectionHeader {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.02) 0%, rgba(59, 130, 246, 0.03) 100%);
+}
+
+.viewControls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.documentsContent {
+  padding: 24px;
+  min-height: 200px;
+}
+
+.documentGrouping {
+  width: 100%;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--thiqax-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Floating Action Button */
+.fab {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  background: var(--thiqax-gradient) !important;
+  box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  z-index: 1000 !important;
+}
+
+.fab:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 12px 40px rgba(30, 58, 138, 0.4) !important;
+}
+
+.fab:active {
+  transform: scale(0.95) !important;
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 12px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .titleWithAvatar {
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .headerActions {
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .title {
+    font-size: 1.75rem !important;
+    text-align: center;
+  }
+
+  .statsGrid .MuiGrid-item {
+    padding: 8px !important;
+  }
+
+  .statCard .MuiCardContent-root {
+    padding: 16px !important;
+  }
+
+  .statContent {
+    gap: 12px;
+  }
+
+  .statIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .statNumber {
+    font-size: 1.75rem !important;
+  }
+
+  .progressCard {
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .progressHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .sectionHeader {
+    padding: 20px;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .viewControls {
+    justify-content: center;
+  }
+
+  .documentsContent {
+    padding: 20px;
+  }
+
+  .emptyState {
+    padding: 40px 20px;
+  }
+
+  .fab {
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard {
+    padding: 20px;
+  }
+
+  .statsGrid .MuiGrid-item[class*="lg-3"] {
+    flex-basis: 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+/* Dark Mode Support (for future implementation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --thiqax-surface: #1f2937;
+    --thiqax-background: #111827;
+    --thiqax-text-primary: #f9fafb;
+    --thiqax-text-secondary: #d1d5db;
+    --thiqax-border: #374151;
+    --thiqax-shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .statCard {
+    border: 2px solid var(--thiqax-primary) !important;
+  }
+  
+  .fab {
+    border: 2px solid var(--thiqax-surface) !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.statCard:focus-within,
+.progressCard:focus-within,
+.documentsSection:focus-within {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+/* Cultural Design Elements - Subtle Geometric Patterns */
+.statCard:nth-child(4n+1)::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, transparent 30%, var(--thiqax-accent) 30%, var(--thiqax-accent) 70%, transparent 70%);
+  opacity: 0.1;
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.loadingState::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--thiqax-primary), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Trust Score Special Styling */
+.statCard:first-child .statNumber {
+  background: var(--thiqax-trust-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
