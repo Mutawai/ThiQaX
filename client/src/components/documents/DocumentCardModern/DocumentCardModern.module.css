@@ -1,0 +1,678 @@
+/* src/components/documents/DocumentCardModern/DocumentCardModern.module.css */
+
+/* ThiQaX Brand Colors - consistent with other components */
+:root {
+  --thiqax-primary: #1e3a8a;
+  --thiqax-primary-light: #3b82f6;
+  --thiqax-primary-dark: #1e40af;
+  --thiqax-secondary: #059669;
+  --thiqax-accent: #f59e0b;
+  --thiqax-trust-gold: #d97706;
+  --thiqax-success: #10b981;
+  --thiqax-warning: #f59e0b;
+  --thiqax-error: #ef4444;
+  --thiqax-surface: #ffffff;
+  --thiqax-background: #f8fafc;
+  --thiqax-text-primary: #1f2937;
+  --thiqax-text-secondary: #6b7280;
+  --thiqax-border: #e5e7eb;
+  --thiqax-shadow: rgba(0, 0, 0, 0.1);
+  --thiqax-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  --thiqax-trust-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --thiqax-card-gradient: linear-gradient(135deg, rgba(30, 58, 138, 0.02) 0%, rgba(59, 130, 246, 0.03) 100%);
+}
+
+/* Main Card Container */
+.card {
+  border-radius: 16px !important;
+  border: 1px solid var(--thiqax-border) !important;
+  background: var(--thiqax-surface) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden !important;
+  position: relative !important;
+  cursor: default !important;
+}
+
+/* Add subtle background pattern for cultural element */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--thiqax-card-gradient);
+  z-index: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Interactive card hover effects */
+.interactive {
+  cursor: pointer !important;
+}
+
+.interactive:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 28px rgba(30, 58, 138, 0.15) !important;
+}
+
+.interactive:hover::before {
+  opacity: 1;
+}
+
+/* Compact variant */
+.compact {
+  border-radius: 12px !important;
+}
+
+.compact .cardHeader {
+  padding: 12px 16px !important;
+}
+
+.compact .previewContainer {
+  height: 80px !important;
+}
+
+.compact .content {
+  padding: 12px 16px !important;
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.01) 0%, rgba(59, 130, 246, 0.02) 100%);
+  border-bottom: 1px solid rgba(30, 58, 138, 0.08);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.typeAvatar {
+  width: 48px !important;
+  height: 48px !important;
+  border: 2px solid var(--thiqax-surface) !important;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2) !important;
+}
+
+.trustBadge {
+  background: var(--thiqax-trust-gradient) !important;
+  color: white !important;
+  font-size: 10px !important;
+  font-weight: bold !important;
+  padding: 2px 4px !important;
+  border-radius: 6px !important;
+  min-width: 20px !important;
+  text-align: center !important;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.documentName {
+  font-weight: 600 !important;
+  color: var(--thiqax-text-primary) !important;
+  line-height: 1.3 !important;
+  margin-bottom: 2px !important;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusChip {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.statusChip:hover {
+  transform: scale(1.05) !important;
+}
+
+.menuButton {
+  transition: all 0.2s ease !important;
+}
+
+.menuButton:hover {
+  background-color: rgba(30, 58, 138, 0.08) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Preview Container */
+.previewContainer {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.03) 0%, rgba(59, 130, 246, 0.05) 100%);
+  overflow: hidden;
+}
+
+.imagePreview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.interactive:hover .previewImage {
+  transform: scale(1.05);
+}
+
+.imageLoading {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.filePreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.05) 0%, rgba(59, 130, 246, 0.08) 100%);
+}
+
+.fileIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: var(--thiqax-surface);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+  color: var(--thiqax-primary);
+}
+
+.fileIcon .MuiSvgIcon-root {
+  font-size: 40px !important;
+}
+
+/* Preview Overlay */
+.previewOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 58, 138, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.interactive:hover .previewOverlay {
+  opacity: 1;
+}
+
+.overlayButton {
+  background: var(--thiqax-surface) !important;
+  color: var(--thiqax-primary) !important;
+  width: 56px !important;
+  height: 56px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.overlayButton:hover {
+  transform: scale(1.1) !important;
+  background: var(--thiqax-primary) !important;
+  color: var(--thiqax-surface) !important;
+}
+
+/* Content Section */
+.content {
+  padding: 20px !important;
+}
+
+.compactContent {
+  padding: 12px 16px !important;
+}
+
+/* Expiration Notice */
+.expirationNotice {
+  margin-bottom: 16px !important;
+}
+
+/* Document Details */
+.details {
+  margin-bottom: 16px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detailRow:last-child {
+  margin-bottom: 0;
+}
+
+/* Trust Score */
+.trustScore {
+  margin-bottom: 16px;
+}
+
+.trustHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.trustProgress {
+  height: 6px !important;
+  border-radius: 3px !important;
+  background-color: rgba(30, 58, 138, 0.1) !important;
+}
+
+.trustProgress .MuiLinearProgress-bar {
+  border-radius: 3px !important;
+}
+
+/* Verification Notes */
+.notes {
+  font-style: italic !important;
+  line-height: 1.4 !important;
+  padding: 8px 12px !important;
+  background: rgba(30, 58, 138, 0.03) !important;
+  border-radius: 8px !important;
+  border-left: 3px solid var(--thiqax-primary) !important;
+}
+
+/* Card Actions */
+.actions {
+  padding: 12px 20px !important;
+  border-top: 1px solid rgba(30, 58, 138, 0.08) !important;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.01) 0%, rgba(59, 130, 246, 0.02) 100%) !important;
+}
+
+.actions .MuiIconButton-root {
+  transition: all 0.2s ease !important;
+  border-radius: 8px !important;
+}
+
+.actions .MuiIconButton-root:hover {
+  background-color: rgba(30, 58, 138, 0.08) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Status-specific styling */
+.card[data-status="verified"] {
+  border-left: 4px solid var(--thiqax-success) !important;
+}
+
+.card[data-status="pending"] {
+  border-left: 4px solid var(--thiqax-warning) !important;
+}
+
+.card[data-status="rejected"] {
+  border-left: 4px solid var(--thiqax-error) !important;
+}
+
+.card[data-status="expired"] {
+  border-left: 4px solid var(--thiqax-error) !important;
+  opacity: 0.9;
+}
+
+/* Document type specific colors */
+.typeAvatar[data-type="identity"] {
+  background: var(--thiqax-primary) !important;
+}
+
+.typeAvatar[data-type="education"] {
+  background: var(--thiqax-secondary) !important;
+}
+
+.typeAvatar[data-type="medical"] {
+  background: var(--thiqax-error) !important;
+}
+
+.typeAvatar[data-type="financial"] {
+  background: var(--thiqax-trust-gold) !important;
+}
+
+.typeAvatar[data-type="professional"] {
+  background: var(--thiqax-success) !important;
+}
+
+/* Animation for card entrance */
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: cardSlideIn 0.3s ease-out;
+}
+
+/* Trust score animation */
+@keyframes trustPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.trustBadge:hover {
+  animation: trustPulse 0.6s ease;
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    border-radius: 12px !important;
+    margin-bottom: 16px;
+  }
+
+  .cardHeader {
+    padding: 12px 16px !important;
+  }
+
+  .headerLeft {
+    gap: 8px;
+  }
+
+  .typeAvatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .documentName {
+    font-size: 0.9rem !important;
+  }
+
+  .headerActions {
+    gap: 4px;
+  }
+
+  .statusChip {
+    font-size: 0.75rem !important;
+  }
+
+  .previewContainer {
+    height: 150px !important;
+  }
+
+  .fileIcon {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .fileIcon .MuiSvgIcon-root {
+    font-size: 32px !important;
+  }
+
+  .content,
+  .compactContent {
+    padding: 16px !important;
+  }
+
+  .detailRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+
+  .trustHeader {
+    margin-bottom: 6px;
+  }
+
+  .actions {
+    padding: 8px 16px !important;
+    justify-content: center;
+  }
+
+  .overlayButton {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  /* Touch-friendly menu */
+  .menuButton {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
+/* Tablet responsive */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .previewContainer {
+    height: 180px !important;
+  }
+
+  .content {
+    padding: 18px !important;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+  .card {
+    border-radius: 20px !important;
+  }
+
+  .previewContainer {
+    height: 220px !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --thiqax-surface: #1f2937;
+    --thiqax-background: #111827;
+    --thiqax-text-primary: #f9fafb;
+    --thiqax-text-secondary: #d1d5db;
+    --thiqax-border: #374151;
+    --thiqax-shadow: rgba(0, 0, 0, 0.3);
+  }
+
+  .card::before {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(30, 58, 138, 0.12) 100%);
+  }
+
+  .filePreview {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(30, 58, 138, 0.20) 100%);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .interactive:hover {
+    transform: none !important;
+  }
+
+  .previewImage {
+    transition: none !important;
+  }
+
+  .interactive:hover .previewImage {
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px !important;
+    border-color: var(--thiqax-primary) !important;
+  }
+
+  .statusChip {
+    border-width: 2px !important;
+  }
+
+  .trustProgress {
+    height: 8px !important;
+  }
+}
+
+/* Focus States for Accessibility */
+.card:focus-within,
+.interactive:focus {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+.menuButton:focus,
+.overlayButton:focus,
+.actions .MuiIconButton-root:focus {
+  outline: 2px solid var(--thiqax-primary);
+  outline-offset: 2px;
+}
+
+/* Loading State */
+.card[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.card[data-loading="true"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--thiqax-primary), transparent);
+  animation: shimmer 2s infinite;
+  z-index: 10;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Cultural Design Elements */
+.card::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, transparent 30%, var(--thiqax-accent) 30%, var(--thiqax-accent) 70%, transparent 70%);
+  opacity: 0.1;
+  border-radius: 0 15px 0 0;
+  pointer-events: none;
+}
+
+/* Expiring document animation */
+.card[data-expiring="true"] {
+  animation: gentlePulse 3s infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+  }
+}
+
+/* Success state for verified documents */
+.card[data-status="verified"] .typeAvatar {
+  animation: verifiedGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes verifiedGlow {
+  from {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+  to {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Smooth state transitions */
+.statusChip,
+.trustProgress .MuiLinearProgress-bar,
+.typeAvatar {
+  transition: all 0.5s ease !important;
+}
+
+/* Grid layout support */
+.card {
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+}
+
+/* Print styles */
+@media print {
+  .card {
+    break-inside: avoid;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+
+  .headerActions,
+  .actions,
+  .previewOverlay {
+    display: none !important;
+  }
+
+  .previewContainer {
+    height: auto !important;
+  }
+}
